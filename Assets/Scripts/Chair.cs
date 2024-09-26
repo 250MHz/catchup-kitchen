@@ -60,7 +60,8 @@ public class Chair : MonoBehaviour, IInteractable
     // Start is called before the first frame update
     void Start()
     {
-        outline = gameObject.GetComponent<Outline>();
+        outline = gameObject.GetComponentInChildren<Outline>();
+        Debug.Log(outline);
     }
 
     // Update is called once per frame

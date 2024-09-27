@@ -1,10 +1,31 @@
 using UnityEngine;
 
-public class NPCController : MonoBehaviour
+public class NPCController : MonoBehaviour, IInteractable
 {
     private Chair targetChair;
     public float moveSpeed = 2f;
     private bool isLeaving = false;
+    private Outline outline;
+
+    public void Interact()
+    {
+        Debug.Log("NPCController Interact() called");
+    }
+
+    public void EnableOutline()
+    {
+        outline.enabled = true;
+    }
+
+    public void DisableOutline()
+    {
+        outline.enabled = false;
+    }
+
+    private void Start()
+    {
+        outline = gameObject.GetComponent<Outline>();
+    }
 
     public void SetTargetChair(Chair chair)
     {
@@ -44,7 +65,7 @@ public class NPCController : MonoBehaviour
 
     private void MoveAway()
     {
-        
+
         transform.position += Vector3.back * moveSpeed * Time.deltaTime;
 
         if (transform.position.z < -10f)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NPCController : MonoBehaviour
+public class NPCController : MonoBehaviour, IInteractable
 {
     private Chair targetChair;
     public float moveSpeed = 2f;
@@ -8,6 +8,27 @@ public class NPCController : MonoBehaviour
     private bool isSitting = false;
 
     private Animator animator;  // Reference to Animator component
+    private Outline outline;
+
+    public void Interact()
+    {
+        Debug.Log("NPCController Interact() called");
+    }
+
+    public void EnableOutline()
+    {
+        outline.enabled = true;
+    }
+
+    public void DisableOutline()
+    {
+        outline.enabled = false;
+    }
+
+    private void Start()
+    {
+        outline = gameObject.GetComponent<Outline>();
+    }
 
     public void SetTargetChair(Chair chair)
     {

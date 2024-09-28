@@ -28,7 +28,7 @@ public class NPCSpawner : MonoBehaviour
         }
         else
         {
-            Debug.Log("No available chairs!");
+            // Debug.Log("No available chairs!");
         }
     }
 }

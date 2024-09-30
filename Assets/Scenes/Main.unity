@@ -237,7 +237,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &311497772
 AudioListener:
   m_ObjectHideFlags: 0
@@ -480,6 +480,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2923206105664633823, guid: 9d8db778c8311f74cad058b3ef6d22ce,
+        type: 3}
+      propertyPath: rotateSpeed
+      value: 720
+      objectReference: {fileID: 0}
     - target: {fileID: 5555275815800568550, guid: 9d8db778c8311f74cad058b3ef6d22ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -529,6 +534,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546376291873615193, guid: 9d8db778c8311f74cad058b3ef6d22ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

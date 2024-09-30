@@ -7,14 +7,15 @@ public class Player : MonoBehaviour
 {
     public bool IsWalking { get; private set; }
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float rotateSpeed = 10f;
+    [SerializeField] private float rotateSpeed = 720f;
+    private Rigidbody playerRigidbody;
     private Vector2 moveAmount;
 
 
     // Start is called before the first frame update
     private void Start()
     {
-
+        playerRigidbody = GetComponent<Rigidbody>();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -24,14 +25,26 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
-        Vector3 moveDir = new Vector3(moveAmount.x, 0, moveAmount.y);
-        transform.position += moveDir * moveSpeed * Time.deltaTime;
-
-        IsWalking = moveDir != Vector3.zero;
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        HandleMovement();
     }
 
+    private void HandleMovement()
+    {
+        Vector3 moveDir = new Vector3(moveAmount.x, 0, moveAmount.y);
+        playerRigidbody.MovePosition(
+            transform.position + moveDir * moveSpeed * Time.fixedDeltaTime
+        );
 
+        IsWalking = moveDir != Vector3.zero;
+        if (IsWalking)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(moveDir, Vector3.up);
+            playerRigidbody.MoveRotation(Quaternion.RotateTowards(
+                playerRigidbody.rotation, toRotation,
+                rotateSpeed * Time.fixedDeltaTime
+            ));
+        }
+    }
 }

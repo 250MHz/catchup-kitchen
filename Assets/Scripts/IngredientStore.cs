@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KitchenCabinet : MonoBehaviour, IInteractable, IUsableObjectParent
+public class IngredientStore : MonoBehaviour, IInteractable, IUsableObjectParent
 {
     [SerializeField] private UsableObjectSO usableObjectSO;
     [SerializeField] private Transform topPoint;
@@ -11,36 +11,13 @@ public class KitchenCabinet : MonoBehaviour, IInteractable, IUsableObjectParent
 
     public void Interact(Player player)
     {
-        if (!HasUsableObject())
-        {
-            // There is no UsableObject here
-            if (player.HasUsableObject())
-            {
-                // Player is carrying something
-                player.GetUsableObject().SetUsableObjectParent(this);
-            }
-            else
-            {
-                // Player not carrying anything
-            }
-        }
-        else
-        {
-            // There is a UsableObject here
-            if (player.HasUsableObject())
-            {
-                // Player is carrying something
-            }
-            else
-            {
-                // Player is not carrying anything
-                GetUsableObject().SetUsableObjectParent(player);
-            }
+        if (!player.HasUsableObject()) {
+            GameObject usableGameObject = Instantiate(usableObjectSO.GetPrefab());
+            usableGameObject.GetComponent<UsableObject>().SetUsableObjectParent(player);
         }
     }
 
-    public IInteractable GetOutlineableObject()
-    {
+    public IInteractable GetOutlineableObject() {
         return usableObject;
     }
 

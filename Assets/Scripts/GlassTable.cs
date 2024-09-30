@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GlassTable : MonoBehaviour, IInteractable
+public class GlassTable : MonoBehaviour, IInteractable_
 {
     private Outline outline;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Plate : MonoBehaviour, IInteractable
+public class Plate : MonoBehaviour, IInteractable_
 {
     private Outline outline;
 

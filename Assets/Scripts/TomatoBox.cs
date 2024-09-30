@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TomatoBox : MonoBehaviour, IInteractable
+public class TomatoBox : MonoBehaviour, IInteractable_
 {
     private Outline outline;
 

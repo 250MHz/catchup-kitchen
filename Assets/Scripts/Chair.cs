@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Chair : MonoBehaviour, IInteractable
+public class Chair : MonoBehaviour, IInteractable_
 {
     private bool isOccupied = false;
     private NPCController occupyingNPC;

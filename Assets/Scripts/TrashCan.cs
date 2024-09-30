@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrashCan : MonoBehaviour, IInteractable
+public class TrashCan : MonoBehaviour, IInteractable_
 {
     private Outline outline;
 

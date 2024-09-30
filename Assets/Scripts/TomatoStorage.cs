@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TomatoStorage : MonoBehaviour, IInteractable
+public class TomatoStorage : MonoBehaviour, IInteractable_
 {
     private Outline outline;
 

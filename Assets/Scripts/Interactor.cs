@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-interface IInteractable
+interface IInteractable_
 {
     public void Interact();
     public void EnableOutline();
@@ -13,10 +13,10 @@ interface IInteractable
 public class Interactor : MonoBehaviour
 {
     public Transform InteractorSource;
-    public LayerMask InteractableLayermask;
+    public LayerMask InteractableLayerMask;
     public float InteractRange;
 
-    IInteractable interactable;
+    IInteractable_ interactable;
 
     // Start is called before the first frame update
     void Start()
@@ -27,9 +27,9 @@ public class Interactor : MonoBehaviour
     public void OnUse(InputValue value)
     {
         Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
-        if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, InteractableLayermask))
+        if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, InteractableLayerMask))
         {
-            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
+            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable_ interactObj))
             {
                 if (value.isPressed)
                 {
@@ -43,9 +43,9 @@ public class Interactor : MonoBehaviour
     void Update()
     {
         Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
-        if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, InteractableLayermask))
+        if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, InteractableLayerMask))
         {
-            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
+            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable_ interactObj))
             {
                 if (interactable == null || !interactable.Equals(interactObj))
                 {

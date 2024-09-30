@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CuttingBoard : MonoBehaviour, IInteractable
+public class CuttingBoard : MonoBehaviour, IInteractable_
 {
     private Outline outline;
 

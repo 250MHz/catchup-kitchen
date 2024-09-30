@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sink : MonoBehaviour, IInteractable
+public class KitchenSink : MonoBehaviour, IInteractable_
 {
     private Outline outline;
 
     public void Interact()
     {
-        Debug.Log("Sink Interact() called");
+        Debug.Log("Kitchen Sink Interact() called");
     }
 
     public void EnableOutline()

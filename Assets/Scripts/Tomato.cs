@@ -6,9 +6,14 @@ public class Tomato : MonoBehaviour, IInteractable
 {
     private Outline outline;
 
-    public void Interact()
+    public void Interact(Player player)
     {
         Debug.Log("Tomato Interact() called");
+    }
+
+    public IInteractable GetOutlineableObject()
+    {
+        return null;
     }
 
     public void EnableOutline()

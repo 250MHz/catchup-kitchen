@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FryingPan : MonoBehaviour, IInteractable
+public class FryingPan : MonoBehaviour, IInteractable_
 {
     private Outline outline;
 

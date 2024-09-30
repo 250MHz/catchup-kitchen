@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KitchenStove : MonoBehaviour, IInteractable
+public class KitchenStove : MonoBehaviour, IInteractable_
 {
     private Outline outline;
 

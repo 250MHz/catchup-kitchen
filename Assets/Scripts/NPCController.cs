@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NPCController : MonoBehaviour, IInteractable_
+public class NPCController : MonoBehaviour
 {
     private Chair targetChair;
     public float moveSpeed = 2f;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NPCController : MonoBehaviour
+public class NPCController : MonoBehaviour, IInteractable
 {
     private Chair targetChair;
     public float moveSpeed = 2f;
@@ -10,7 +10,7 @@ public class NPCController : MonoBehaviour
     private Animator animator;  // Reference to Animator component
     private Outline outline;
 
-    public void Interact()
+    public void Interact(Player player)
     {
         Debug.Log("NPCController Interact() called");
     }

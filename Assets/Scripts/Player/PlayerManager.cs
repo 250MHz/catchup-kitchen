@@ -22,9 +22,9 @@ public class PlayerManager : MonoBehaviour
             playerPrefab, playerIndex: 2, controlScheme: "Arrows",
             pairWithDevice: Keyboard.current
         );
-        player1.transform.position = new Vector3(0, 0, -3);
-        player2.transform.position = new Vector3(-3, 0, -1.5f);
-        player3.transform.position = new Vector3(-3, 0, -3);
+        player1.transform.parent.transform.position = new Vector3(0, 0, -3);
+        player2.transform.parent.transform.position = new Vector3(-3, 0, -1.5f);
+        player3.transform.parent.transform.position = new Vector3(-3, 0, -3);
 
     }
 

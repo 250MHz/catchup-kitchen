@@ -10,7 +10,7 @@ public class NPCController : MonoBehaviour, IInteractable
     private Animator animator;  // Reference to Animator component
     private Outline outline;
 
-    public void Interact()
+    public void Interact(Player player)
     {
         Debug.Log("NPCController Interact() called");
     }

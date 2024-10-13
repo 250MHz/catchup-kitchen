@@ -5,8 +5,10 @@ using UnityEngine;
 public class CuttingBoard : BaseFurniture, IInteractable
 {
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOs;
+    [SerializeField] private ProgressBar progressBar;
 
     private Outline outline;
+    private int cuttingProgress;
 
     public void Interact(Player player)
     {
@@ -22,6 +24,10 @@ public class CuttingBoard : BaseFurniture, IInteractable
                 if (HasRecipeWithInput(heldObject.GetUsableObjectSO()))
                 {
                     heldObject.SetUsableObjectParent(this);
+                    cuttingProgress = 0;
+                    // It doesn't matter what value we pass here, just that it's not 0.
+                    // cuttingProgress is now 0 so it'll always set the progress to 0
+                    UpdateProgressBar(1);
                 }
             }
         }
@@ -42,8 +48,17 @@ public class CuttingBoard : BaseFurniture, IInteractable
                 );
                 if (outputUsableObjectSO != null)
                 {
-                    currentUsableObject.DestroySelf();
-                    UsableObject.SpawnUsableObject(outputUsableObjectSO, this);
+                    cuttingProgress++;
+                    CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(
+                        currentUsableObject.GetUsableObjectSO()
+                    );
+                    int progressMax = cuttingRecipeSO.GetCuttingProgressMax();
+                    UpdateProgressBar(progressMax);
+                    if (cuttingProgress >= progressMax)
+                    {
+                        currentUsableObject.DestroySelf();
+                        UsableObject.SpawnUsableObject(outputUsableObjectSO, this);
+                    }
                 }
                 else
                 {
@@ -55,21 +70,31 @@ public class CuttingBoard : BaseFurniture, IInteractable
         }
     }
 
-    private UsableObjectSO GetOutputForInput(UsableObjectSO input)
+    private void UpdateProgressBar(int max)
+    {
+        progressBar.SetBarFillAmount((float)cuttingProgress / max);
+    }
+
+    private CuttingRecipeSO GetCuttingRecipeSOWithInput(UsableObjectSO input)
     {
         foreach (CuttingRecipeSO so in cuttingRecipeSOs)
         {
             if (so.GetInput() == input)
             {
-                return so.GetOutput();
+                return so;
             }
         }
         return null;
     }
 
+    private UsableObjectSO GetOutputForInput(UsableObjectSO input)
+    {
+        return GetCuttingRecipeSOWithInput(input)?.GetOutput();
+    }
+
     private bool HasRecipeWithInput(UsableObjectSO input)
     {
-        return GetOutputForInput(input) != null;
+        return GetCuttingRecipeSOWithInput(input) != null;
     }
 
     public void EnableOutline()

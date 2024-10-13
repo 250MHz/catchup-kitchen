@@ -1,18 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCController : MonoBehaviour, IInteractable
 {
-    private Chair targetChair;
     public float moveSpeed = 2f;
-    private bool isLeaving = false;
-    private bool isSitting = false;
-
-    private Animator animator;  // Reference to Animator component
+    public float followDistance = 1.5f;  // Minimum distance to maintain from the player
+    private bool isFollowing = false;  // To track if NPCs are following the player
+    private Vector3 spawnPoint;  // To store the NPC's spawn point
+    private Animator animator;
     private Outline outline;
 
-    public void Interact(Player player)
+    // Reference to the NPCSpawner
+    private NPCSpawner npcSpawner;
+
+    private void Awake()
     {
-        Debug.Log("NPCController Interact() called");
+        // Get the Animator component attached to the NPC
+        animator = GetComponent<Animator>();
+        spawnPoint = transform.position;  // Store the spawn point on awake
+        // Get the NPCSpawner component in the scene
+        npcSpawner = FindObjectOfType<NPCSpawner>();
     }
 
     public void EnableOutline()
@@ -25,95 +33,98 @@ public class NPCController : MonoBehaviour, IInteractable
         outline.enabled = false;
     }
 
+    public void Interact(Player player)
+    {
+        Debug.Log("NPCController Interact() called");
+
+        // Get the parent of this NPC, which is the NPCGroup
+        Transform npcGroupTransform = transform.parent;
+
+        // Check if the group of NPCs exists
+        if (npcGroupTransform != null)
+        {
+            // Get all NPCs in the group
+            NPCController[] groupNPCs = npcGroupTransform.GetComponentsInChildren<NPCController>();
+
+            // Check if this NPC is following the player
+            if (isFollowing)
+            {
+                // If already following, return all NPCs to spawn point
+                foreach (var npc in groupNPCs)
+                {
+                    npc.ReturnToSpawn();
+                }
+            }
+            else
+            {
+                // If not following, start following for all NPCs in the group
+                foreach (var npc in groupNPCs)
+                {
+                    npc.FollowPlayer(player);
+                }
+            }
+        }
+    }
+
+    public void FollowPlayer(Player player)
+    {
+        isFollowing = true;
+        StartCoroutine(FollowCoroutine(player));
+    }
+
+    public void StopFollowing()
+    {
+        isFollowing = false;
+        StopAllCoroutines();
+        animator.SetBool("isWalking", false);
+    }
+
+    private void ReturnToSpawn()
+    {
+        isFollowing = false;
+        Debug.Log("NPCs are returning to spawn point.");
+        transform.position = spawnPoint;  // Directly set the position to spawn point
+    }
+
+    private IEnumerator FollowCoroutine(Player player)
+    {
+        while (isFollowing)
+        {
+            // Calculate the distance to the player
+            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+
+            if (distanceToPlayer > followDistance)
+            {
+                // Move towards the player's position if outside the follow distance
+                Vector3 direction = (player.transform.position - transform.position).normalized;
+                transform.position += direction * moveSpeed * Time.deltaTime;
+
+                animator.SetBool("isWalking", true);
+            }
+            else
+            {
+                // Stop moving when within follow distance
+                animator.SetBool("isWalking", false);
+            }
+
+            yield return null;  // Wait for the next frame
+        }
+
+        animator.SetBool("isWalking", false);  // Stop walking animation when not following
+    }
+
     private void Start()
     {
-        outline = gameObject.GetComponent<Outline>();
+        outline = GetComponent<Outline>();
     }
 
-    public void SetTargetChair(Chair chair)
+    public void Sitting()
     {
-        targetChair = chair;
-        targetChair.OccupyChair(this);  // Pass this NPC to the chair
-        Debug.Log("NPC has set the target chair: " + chair.name + " and occupied it.");
-    }
-
-
-    private void Awake()
-    {
-        // Get the Animator component attached to the NPC
-        animator = GetComponent<Animator>();
-    }
-
-    private void Update()
-    {
-        if (targetChair != null && !isLeaving && !isSitting)
-        {
-            MoveToChair();
-        }
-        else if (isLeaving)
-        {
-            MoveAway();
-        }
-    }
-
-    private void MoveToChair()
-    {
-        // Move towards the target chair
-        transform.position = Vector3.MoveTowards(transform.position, targetChair.transform.position, moveSpeed * Time.deltaTime);
-
-        // Check if NPC has reached the chair
-        if (Vector3.Distance(transform.position, targetChair.transform.position) < 0.1f)
-        {
-            // NPC reaches the chair, align with the chair and sit
-            SitOnChair();
-        }
-        else
-        {
-            // Trigger walking animation while moving
-            animator.SetBool("isWalking", true);
-        }
-    }
-
-    private void SitOnChair()
-    {
-        Debug.Log("NPC has reached and is sitting on the chair: " + targetChair.name);
-        // Stop walking animation
-        animator.SetBool("isWalking", false);
-
-        // Trigger sitting animation
         animator.SetBool("isSitting", true);
-
-        // Align NPC's position and rotation to match the chair
-        transform.position = targetChair.transform.position;
-        transform.rotation = targetChair.transform.rotation * Quaternion.Euler(0, 180, 0);
-
-        // Mark NPC as sitting
-        isSitting = true;
-        // Occupy the chair
-        targetChair.OccupyChair(this);
-        Debug.Log("NPC has called OccupyChair on the chair.");
     }
 
-    public void LeaveChair()
+    internal bool IsFollowingPlayer(Player player)
     {
-        isLeaving = true;
-        isSitting = false;  // NPC is no longer sitting
-        animator.SetBool("isSitting", false);  // Disable sitting animation
-        Debug.Log("NPC is leaving the chair.");
-    }
-
-    private void MoveAway()
-    {
-        // Move NPC backward
-        transform.position += Vector3.back * moveSpeed * Time.deltaTime;
-
-        // Trigger walking animation
-        animator.SetBool("isWalking", true);
-
-        // Destroy the NPC when they move far enough away
-        if (transform.position.z < -10f)
-        {
-            Destroy(gameObject);
-        }
+        return isFollowing;
     }
 }

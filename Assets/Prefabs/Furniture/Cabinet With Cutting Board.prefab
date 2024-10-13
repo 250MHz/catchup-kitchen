@@ -88,8 +88,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   topPoint: {fileID: 6874251971449696811}
-  allowedUsableObjectSO:
-  - {fileID: 11400000, guid: 792cb3b302d914649a007e3a78be8ff7, type: 2}
+  cuttingRecipeSOs:
+  - {fileID: 11400000, guid: 65ed526d6ab04e64784572ebcca3c8ae, type: 2}
 --- !u!1 &6634802814128594775
 GameObject:
   m_ObjectHideFlags: 0

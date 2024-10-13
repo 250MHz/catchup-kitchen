@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CuttingBoard : BaseFurniture, IInteractable
 {
-    [SerializeField] private UsableObjectSO[] allowedUsableObjectSO;
+    [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOs;
+
     private Outline outline;
 
     public void Interact(Player player)
@@ -15,17 +16,12 @@ public class CuttingBoard : BaseFurniture, IInteractable
             // Cutting board doesn't have something on top of it
             if (player.HasUsableObject())
             {
-                UsableObject heldObject = player.GetUsableObject();
-                UsableObjectSO heldObjectSO = heldObject.GetUsableObjectSO();
                 // If the object the player is holding can be on top of the board,
                 // then make board the owner of the object
-                foreach (UsableObjectSO so in allowedUsableObjectSO)
+                UsableObject heldObject = player.GetUsableObject();
+                if (HasRecipeWithInput(heldObject.GetUsableObjectSO()))
                 {
-                    if (heldObjectSO.GetObjectName() == so.GetObjectName())
-                    {
-                        heldObject.SetUsableObjectParent(this);
-                        break;
-                    }
+                    heldObject.SetUsableObjectParent(this);
                 }
             }
         }
@@ -39,10 +35,41 @@ public class CuttingBoard : BaseFurniture, IInteractable
             else
             {
                 // Player is not holding something
-                // Give the player the object on top of the board
-                GetUsableObject().SetUsableObjectParent(player);
+                UsableObject currentUsableObject = GetUsableObject();
+                // If the current object can be cut, then cut it
+                UsableObjectSO outputUsableObjectSO = GetOutputForInput(
+                    currentUsableObject.GetUsableObjectSO()
+                );
+                if (outputUsableObjectSO != null)
+                {
+                    currentUsableObject.DestroySelf();
+                    UsableObject.SpawnUsableObject(outputUsableObjectSO, this);
+                }
+                else
+                {
+                    // Else, the current object is already cut, so make the
+                    // player hold it.
+                    currentUsableObject.SetUsableObjectParent(player);
+                }
             }
         }
+    }
+
+    private UsableObjectSO GetOutputForInput(UsableObjectSO input)
+    {
+        foreach (CuttingRecipeSO so in cuttingRecipeSOs)
+        {
+            if (so.GetInput() == input)
+            {
+                return so.GetOutput();
+            }
+        }
+        return null;
+    }
+
+    private bool HasRecipeWithInput(UsableObjectSO input)
+    {
+        return GetOutputForInput(input) != null;
     }
 
     public void EnableOutline()

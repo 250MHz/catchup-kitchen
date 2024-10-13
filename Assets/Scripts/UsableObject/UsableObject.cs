@@ -94,4 +94,20 @@ public class UsableObject : MonoBehaviour, IInteractable
             transform.parent = null;
         }
     }
+
+    public void DestroySelf()
+    {
+        usableObjectParent?.ClearUsableObject();
+        Destroy(gameObject);
+    }
+
+    public static UsableObject SpawnUsableObject(
+        UsableObjectSO usableObjectSO,
+        IUsableObjectParent parent)
+    {
+        GameObject usableGameObject = Instantiate(usableObjectSO.GetPrefab());
+        UsableObject usableObject = usableGameObject.GetComponent<UsableObject>();
+        usableObject.SetUsableObjectParent(parent);
+        return usableObject;
+    }
 }

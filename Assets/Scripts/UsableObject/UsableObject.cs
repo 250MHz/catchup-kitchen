@@ -11,7 +11,7 @@ public class UsableObject : MonoBehaviour, IInteractable
     private Rigidbody rb;
     private Collider _collider;
 
-    public void Interact(Player player)
+    public virtual void Interact(Player player)
     {
         // TODO: this should eventually depend on what player is holding...
         if (!player.HasUsableObject())
@@ -99,6 +99,20 @@ public class UsableObject : MonoBehaviour, IInteractable
     {
         usableObjectParent?.ClearUsableObject();
         Destroy(gameObject);
+    }
+
+    public bool TryGetPot(out PotUsableObject potUsableObject)
+    {
+        if (this is PotUsableObject)
+        {
+            potUsableObject = this as PotUsableObject;
+            return true;
+        }
+        else
+        {
+            potUsableObject = null;
+            return false;
+        }
     }
 
     public static UsableObject SpawnUsableObject(

@@ -16,7 +16,20 @@ public class UsableObject : MonoBehaviour, IInteractable
         // TODO: this should eventually depend on what player is holding...
         if (!player.HasUsableObject())
         {
+            // Player is not holding something
             SetUsableObjectParent(player);
+        }
+        else
+        {
+            // Player is holding something
+            // If player is holding a pot, try to add the object into the pot.
+            if (player.GetUsableObject().TryGetPot(out PotUsableObject potUsableObject))
+            {
+                if (potUsableObject.TryAddIngredient(usableObjectSO))
+                {
+                    DestroySelf();
+                }
+            }
         }
     }
 
@@ -27,15 +40,20 @@ public class UsableObject : MonoBehaviour, IInteractable
 
     public void EnableOutline()
     {
-        outline.enabled = true;
+        if (outline != null)
+        {
+            outline.enabled = true;
+        }
     }
 
     public void DisableOutline()
     {
-        outline.enabled = false;
+        if (outline != null)
+        {
+            outline.enabled = false;
+        }
     }
 
-    // Start is called before the first frame update
     void Awake()
     {
         outline = gameObject.GetComponent<Outline>();

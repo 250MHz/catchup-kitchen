@@ -35,6 +35,15 @@ public class KitchenStove : BaseFurniture, IInteractable
             if (player.HasUsableObject())
             {
                 // Player is holding something
+                // If player is holding on an ingredient and the UsableObject
+                // on the cabinet is a pot, try to add the ingredient to the pot
+                if (GetUsableObject().TryGetPot(out PotUsableObject potUsableObject))
+                {
+                    if (potUsableObject.TryAddIngredient(player.GetUsableObject().GetUsableObjectSO()))
+                    {
+                        player.GetUsableObject().DestroySelf();
+                    }
+                }
             }
             else
             {

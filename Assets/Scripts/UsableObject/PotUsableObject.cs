@@ -1,23 +1,118 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class PotUsableObject : UsableObject
 {
+    private enum State
+    {
+        Idle,
+        Cooking,
+        Cooked,
+        Burned,
+    }
+
     [SerializeField] private PotVisual potVisual;
     // Array of possible recipes the pot can handle
     [SerializeField] private CookingRecipeSO[] cookingRecipeSOArray;
+    [SerializeField] private ProgressBar progressBar;
+
     // Histogram of ingredients currently inside the pot
     private Dictionary<UsableObjectSO, int> currentIngredients;
+    // Initialize fields here instead of in Start() so we can set the state of
+    // the new object created in Update()'s switch-case for Cooking
+    private CookingRecipeSO currentFullRecipeSO = null;
+    private State state = State.Idle;
+    private float cookingTimer;
+    private float burningTimer;
+
 
     private void Start()
     {
         currentIngredients = new Dictionary<UsableObjectSO, int>();
+        cookingTimer = 0f;
+    }
+
+    private void Update()
+    {
+        if (GetUsableObjectParent() is KitchenStove)
+        {
+            switch (state)
+            {
+                case State.Idle:
+                    state = currentFullRecipeSO != null ? State.Cooking : State.Idle;
+                    break;
+                case State.Cooking:
+                    cookingTimer += Time.deltaTime;
+                    progressBar.SetSafeColor();
+                    progressBar.SetBarFillAmount(cookingTimer / currentFullRecipeSO.GetCookingTimerMax());
+                    if (cookingTimer > currentFullRecipeSO.GetCookingTimerMax())
+                    {
+                        // Cooked
+                        IUsableObjectParent _parent = GetUsableObjectParent();
+                        DestroySelf();
+                        PotUsableObject newPotUsableObject = SpawnUsableObject(
+                            currentFullRecipeSO.GetOutput(),
+                            _parent
+                        ) as PotUsableObject;
+                        newPotUsableObject.state = State.Cooked;
+                        newPotUsableObject.burningTimer = 0f;
+                        newPotUsableObject.currentFullRecipeSO = currentFullRecipeSO;
+                        progressBar.SetBarFillAmount(0f);
+                    }
+                    break;
+                case State.Cooked:
+                    burningTimer += Time.deltaTime;
+                    progressBar.SetDangerColor();
+                    progressBar.SetBarFillAmount(burningTimer / currentFullRecipeSO.GetBurningTimerMax());
+                    if (burningTimer > currentFullRecipeSO.GetBurningTimerMax())
+                    {
+                        // Burned
+                        IUsableObjectParent _parent = GetUsableObjectParent();
+                        DestroySelf();
+                        PotUsableObject newPotUsableObject = SpawnUsableObject(
+                            currentFullRecipeSO.GetBurningOutput(),
+                            _parent
+                        ) as PotUsableObject;
+                        newPotUsableObject.state = State.Burned;
+                        progressBar.SetBarFillAmount(0f);
+                    }
+                    break;
+                case State.Burned:
+                    break;
+            }
+        }
+    }
+
+    public bool TryFindCompleteRecipe()
+    {
+        // We already have a match, and since there won't be recipes that
+        // overlap, just return early
+        if (currentFullRecipeSO != null)
+        {
+            return true;
+        }
+        // If currentIngredients completely matches with a CookingRecipeSO,
+        // then we have a full recipe completed
+        foreach (CookingRecipeSO recipeSO in cookingRecipeSOArray)
+        {
+            if (recipeSO.MatchesFullRecipe(currentIngredients))
+            {
+                currentFullRecipeSO = recipeSO;
+                return true;
+            }
+        }
+        return false;
     }
 
     public bool TryAddIngredient(UsableObjectSO usableObjectSO)
     {
+        if (currentFullRecipeSO != null)
+        {
+            return false;
+        }
         foreach (CookingRecipeSO recipeSO in cookingRecipeSOArray)
         {
             Dictionary<UsableObjectSO, int> recipeIngredients = recipeSO.GetIngredients();
@@ -54,6 +149,8 @@ public class PotUsableObject : UsableObject
                 currentIngredients[usableObjectSO]
                     = currentIngredients.GetValueOrDefault(usableObjectSO, 0) + 1;
                 potVisual.UpdateVisual(currentIngredients);
+                // Set the complete recipe when we add the last ingredient
+                TryFindCompleteRecipe();
                 // Debug.Log("TryAddIngredient true");
                 return true;
             }

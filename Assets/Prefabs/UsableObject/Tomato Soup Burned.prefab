@@ -223,7 +223,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 0.15686275}
+      maxColor: {r: 0, g: 0, b: 0, a: 0.15686275}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -990,16 +990,16 @@ ParticleSystem:
           value: 1
           inSlope: 0
           outSlope: 0
-          tangentMode: 0
+          tangentMode: 34
           weightedMode: 0
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
           time: 1
-          value: 0
-          inSlope: -2
-          outSlope: -2
-          tangentMode: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
           weightedMode: 0
           inWeight: 0
           outWeight: 0
@@ -4891,7 +4891,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3815b4f48c09f5a4cbc2dccc6b49ff9c, type: 2}
+  - {fileID: 2100000, guid: 2b1f8dbeb0b1da64cab7a63aa9195bd0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9307,11 +9307,6 @@ PrefabInstance:
       propertyPath: bakeValues.Array.data[0].data.Array.data[247].z
       value: 0.33299056
       objectReference: {fileID: 0}
-    - target: {fileID: 896633585549484842, guid: 2790a8fab90666c4283e4dd3692dccb3,
-        type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1162640047034288795, guid: 2790a8fab90666c4283e4dd3692dccb3,
         type: 3}
       propertyPath: m_VersionIndex
@@ -9331,7 +9326,7 @@ PrefabInstance:
     - target: {fileID: 5698215784351052557, guid: 2790a8fab90666c4283e4dd3692dccb3,
         type: 3}
       propertyPath: m_Name
-      value: Tomato Soup Cooked
+      value: Tomato Soup Burned
       objectReference: {fileID: 0}
     - target: {fileID: 5887892819107458157, guid: 2790a8fab90666c4283e4dd3692dccb3,
         type: 3}

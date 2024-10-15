@@ -154,6 +154,8 @@ MonoBehaviour:
   topPoint: {fileID: 9163990001166492701}
   allowedUsableObjectSO:
   - {fileID: 11400000, guid: b3918d4d5fcde284ba54d22bc703daff, type: 2}
+  - {fileID: 11400000, guid: 6903d0d12cc9b234bb58f5d544a0deb1, type: 2}
+  - {fileID: 11400000, guid: 04734dd70ab7f014ca980e55960449bf, type: 2}
 --- !u!1001 &5467522149446541025
 PrefabInstance:
   m_ObjectHideFlags: 0

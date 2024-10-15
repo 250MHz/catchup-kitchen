@@ -16,4 +16,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 30dedf15731ea794094f4f8341353d18, type: 2}
   inputValues: 03000000
   output: {fileID: 11400000, guid: 04734dd70ab7f014ca980e55960449bf, type: 2}
+  burningOutput: {fileID: 11400000, guid: 24f475e1f1498414b83faaebae48391a, type: 2}
   cookingTimerMax: 10
+  burningTimerMax: 10

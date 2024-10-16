@@ -4,42 +4,80 @@ using UnityEngine;
 public class GlassTable : BaseFurniture, IInteractable
 {
     private Outline outline;
-    private List<Transform> chairs = new List<Transform>(); // List to store chair transforms
+    private List<Transform> chairs = new List<Transform>();
     private List<NPCController> seatedNPCs = new List<NPCController>();
+
+    public GameObject orderCardPrefab;
+    private GameObject activeOrderCard;
+
+    public Canvas canvas;
+
+    // Enum to manage interaction phases
+    private enum OrderState { Seating, Ordering, Serving, Complete }
+    private OrderState currentOrderState = OrderState.Seating;
 
     private void Start()
     {
         outline = gameObject.GetComponent<Outline>();
-        // Populate the chairs list with child objects that represent chairs
         foreach (Transform child in transform)
         {
-            if (child.CompareTag("Chair")) // Add the child that tagged "chair" to the list
+            if (child.CompareTag("Chair"))
             {
                 chairs.Add(child);
             }
         }
     }
 
+    private void Update()
+    {
+        if (activeOrderCard != null)
+        {
+            // Rotate the order card slowly around the Y-axis
+            activeOrderCard.transform.Rotate(0, 30 * Time.deltaTime, 0);
+        }
+    }
+
     public void Interact(Player player)
     {
-        Debug.Log("Glass Table Interact() called");
+        switch (currentOrderState)
+        {
+            case OrderState.Seating:
+                SeatNPCs(player);
+                ShowOrderUI();
+                currentOrderState = OrderState.Ordering;  // Move to next state
+                break;
 
-        // Find the first NPC following the player
+            case OrderState.Ordering:
+                PlaceOrder();
+                currentOrderState = OrderState.Serving;  // Ready for serving
+                break;
+
+            case OrderState.Serving:
+                ServeOrder();
+                currentOrderState = OrderState.Complete;  // Order is complete
+                break;
+
+            case OrderState.Complete:
+                Debug.Log("Order already complete.");
+                break;
+        }
+    }
+
+    private void SeatNPCs(Player player)
+    {
         NPCController[] npcs = FindObjectsOfType<NPCController>();
         List<NPCController> followingNPCs = new List<NPCController>();
 
         foreach (var npc in npcs)
         {
-            if (npc != null && npc.IsFollowingPlayer(player) && !seatedNPCs.Contains(npc)) // Check if the NPC is following the player and not already seated
+            if (npc != null && npc.IsFollowingPlayer(player) && !seatedNPCs.Contains(npc))
             {
-                followingNPCs.Add(npc); // Add to the list of NPCs to be seated
+                followingNPCs.Add(npc);
             }
         }
 
-        // Check if we have any following NPCs to seat
         if (followingNPCs.Count > 0)
         {
-            // Seat all NPCs in the following NPCs list, up to the number of available chairs
             for (int i = 0; i < followingNPCs.Count && chairs.Count > 0; i++)
             {
                 SeatNPC(followingNPCs[i]);
@@ -51,56 +89,52 @@ public class GlassTable : BaseFurniture, IInteractable
     {
         if (chairs.Count > 0)
         {
-            // Choose a random chair from the available chairs
             int randomIndex = Random.Range(0, chairs.Count);
             Transform selectedChair = chairs[randomIndex];
-
-            // Find the seat point
             Transform seatingPoint = selectedChair.Find("SeatPoint");
+
             if (seatingPoint != null)
             {
-                // Move the NPC to the seating point position
                 npc.transform.position = seatingPoint.position;
+                npc.transform.rotation = Quaternion.LookRotation(-selectedChair.forward);
 
-                // Adjust the NPC's rotation to face the front of the chair
-                Vector3 chairForwardDirection = selectedChair.forward;
-                Vector3 desiredForwardDirection = -chairForwardDirection;
-                npc.transform.rotation = Quaternion.LookRotation(desiredForwardDirection);
-
-                // Stop the NPC, and perform sitting animation
                 npc.StopFollowing();
                 npc.Sitting();
-
-                Debug.Log(npc.name + " has seated at " + selectedChair.name);
-
-                // Mark the chair as occupied by removing it from the list
-                chairs.RemoveAt(randomIndex); // Remove chair from available list
-
-                // Add NPC to the seated list
+                chairs.RemoveAt(randomIndex);
                 seatedNPCs.Add(npc);
             }
-            else
-            {
-                Debug.LogWarning("SeatingPoint not found on " + selectedChair.name);
-            }
         }
-        else
+    }
+
+    private void ShowOrderUI()
+    {
+        if (activeOrderCard == null)
         {
-            Debug.LogWarning("No available chairs for seating.");
+            // Position the order card slightly above the table
+            Vector3 orderCardPosition = transform.position + Vector3.up * 1.0f;
+            Quaternion orderCardRotation = Quaternion.Euler(0, 180, 0);
+
+            // Instantiate the order card as a 3D object
+            activeOrderCard = Instantiate(orderCardPrefab, orderCardPosition, orderCardRotation);
+            
+            activeOrderCard.transform.SetParent(transform, true);
         }
     }
 
-    public void EnableOutline()
+
+
+    private void PlaceOrder()
     {
-        outline.enabled = true;
+        Debug.Log("Order placed! Preparing for service...");
+        
     }
 
-    public void DisableOutline()
+    private void ServeOrder()
     {
-        outline.enabled = false;
+        Debug.Log("Order served! Task complete.");
+        Destroy(activeOrderCard);
     }
 
-    void Update()
-    {
-    }
+    public void EnableOutline() => outline.enabled = true;
+    public void DisableOutline() => outline.enabled = false;
 }

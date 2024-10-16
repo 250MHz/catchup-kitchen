@@ -68,7 +68,6 @@ public class Chair : MonoBehaviour, IInteractable
     void Start()
     {
         outline = gameObject.GetComponentInChildren<Outline>();
-        Debug.Log(outline);
     }
 
     // Update is called once per frame

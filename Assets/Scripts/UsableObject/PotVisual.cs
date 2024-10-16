@@ -24,8 +24,14 @@ public class PotVisual : MonoBehaviour
 
     private void SetAllInactive()
     {
-        tomatoSoup1.SetActive(false);
-        tomatoSoup2.SetActive(false);
-        tomatoSoup3.SetActive(false);
+        GameObject[] objects = {
+            tomatoSoup1,
+            tomatoSoup2,
+            tomatoSoup3
+        };
+        foreach (GameObject o in objects)
+        {
+            o.SetActive(false);
+        }
     }
 }

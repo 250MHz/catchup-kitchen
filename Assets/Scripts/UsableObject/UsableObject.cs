@@ -30,6 +30,17 @@ public class UsableObject : MonoBehaviour, IInteractable
                     DestroySelf();
                 }
             }
+            // If player is holding a plate, try to add the object into the plate
+            // Don't handle the Pot interaction here, that's overriden in PotUsableObject
+            // TODO: NOT TESTED YET. Wrote this before we had a recipe that
+            // takes non-pot UsableObjects onto a plate
+            // else if (player.GetUsableObject().TryGetPlate(out PlateUsableObject plateUsableObject))
+            // {
+            //     if (plateUsableObject.TryAddIngredient(usableObjectSO))
+            //     {
+            //         DestroySelf();
+            //     }
+            // }
         }
     }
 
@@ -108,7 +119,14 @@ public class UsableObject : MonoBehaviour, IInteractable
         {
             _collider.enabled = true;
             rb.isKinematic = false;
-            rb.position = transform.parent.parent.position + transform.forward;
+            // transform.parent.parent is meant to get the position of the player,
+            // but when we spawn an object in (e.g., to replace a pot with soup on
+            // the floor with an empty pot), transform.parent.parent is null, so
+            // perform this check
+            if (transform.parent.parent != null)
+            {
+                rb.position = transform.parent.parent.position + transform.forward;
+            }
             transform.parent = null;
         }
     }
@@ -133,11 +151,34 @@ public class UsableObject : MonoBehaviour, IInteractable
         }
     }
 
+    public bool TryGetPlate(out PlateUsableObject plateUsableObject)
+    {
+        if (this is PlateUsableObject)
+        {
+            plateUsableObject = this as PlateUsableObject;
+            return true;
+        }
+        else
+        {
+            plateUsableObject = null;
+            return false;
+        }
+    }
+
     public static UsableObject SpawnUsableObject(
         UsableObjectSO usableObjectSO,
-        IUsableObjectParent parent)
+        IUsableObjectParent parent,
+        Transform optionalTransform = null)
     {
-        GameObject usableGameObject = Instantiate(usableObjectSO.GetPrefab());
+        GameObject usableGameObject;
+        if (optionalTransform == null)
+        {
+            usableGameObject = Instantiate(usableObjectSO.GetPrefab());
+        }
+        else
+        {
+            usableGameObject = Instantiate(usableObjectSO.GetPrefab(), optionalTransform);
+        }
         UsableObject usableObject = usableGameObject.GetComponent<UsableObject>();
         usableObject.SetUsableObjectParent(parent);
         return usableObject;

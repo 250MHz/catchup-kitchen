@@ -46,6 +46,17 @@ public class CuttingBoard : BaseFurniture, IInteractable
                         GetUsableObject().DestroySelf();
                     }
                 }
+                // If player is holding a plate, try to add the object on the
+                // cutting board onto the plate
+                // TODO: NOT TESTED YET. Wrote this before we had a recipe that
+                // takes stuff directly from a cutting board onto a plate
+                // else if (player.GetUsableObject().TryGetPlate(out PlateUsableObject plateUsableObject))
+                // {
+                //     if (plateUsableObject.TryAddIngredient(GetUsableObject().GetUsableObjectSO()))
+                //     {
+                //         GetUsableObject().DestroySelf();
+                //     }
+                // }
             }
             else
             {

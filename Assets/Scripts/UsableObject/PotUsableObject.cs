@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class PotUsableObject : UsableObject
@@ -18,6 +16,7 @@ public class PotUsableObject : UsableObject
     // Array of possible recipes the pot can handle
     [SerializeField] private CookingRecipeSO[] cookingRecipeSOArray;
     [SerializeField] private ProgressBar progressBar;
+    [SerializeField] private UsableObjectSO potUsableObjectSO;
 
     // Histogram of ingredients currently inside the pot
     private Dictionary<UsableObjectSO, int> currentIngredients;
@@ -90,6 +89,7 @@ public class PotUsableObject : UsableObject
     {
         // We already have a match, and since there won't be recipes that
         // overlap, just return early
+        // Remove this if there are recipes with overlapping ingredients
         if (currentFullRecipeSO != null)
         {
             return true;
@@ -109,6 +109,7 @@ public class PotUsableObject : UsableObject
 
     public bool TryAddIngredient(UsableObjectSO usableObjectSO)
     {
+        // Remove this if there are recipes with overlapping ingredients
         if (currentFullRecipeSO != null)
         {
             return false;
@@ -168,9 +169,21 @@ public class PotUsableObject : UsableObject
         else
         {
             // Player is holding a UsableObject
-            // If holding a plate, try to take food out from the pot
-            // Otherwise, place the UsableObject in the pot if possible
             UsableObject playerHeldObject = player.GetUsableObject();
+            // If holding a plate, try to take food out from the pot
+            if (playerHeldObject is PlateUsableObject)
+            {
+                PlateUsableObject plate = playerHeldObject as PlateUsableObject;
+                if (plate.TryAddIngredient(GetUsableObjectSO()))
+                {
+                    // If the ingredient was added, replace this pot with an empty pot
+                    IUsableObjectParent potParent = GetUsableObjectParent();
+                    Transform currentTransform = transform;
+                    DestroySelf();
+                    SpawnUsableObject(potUsableObjectSO, potParent, currentTransform);
+                }
+            }
+            // Otherwise, place the UsableObject in the pot if possible
             if (TryAddIngredient(playerHeldObject.GetUsableObjectSO()))
             {
                 playerHeldObject.DestroySelf();

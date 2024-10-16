@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class KitchenStove : BaseFurniture, IInteractable
 {
+    [SerializeField] private UsableObjectSO potUsableObjectSO;
     [SerializeField] private UsableObjectSO[] allowedUsableObjectSO;
     private Outline outline;
 
     public void Interact(Player player)
     {
-        // TODO: Should make it so only certain items can be set in `usableObject`
         if (!HasUsableObject())
         {
-            // Stove does not have sommething on top of it
+            // Stove does not have something on top of it
             if (player.HasUsableObject())
             {
                 UsableObject heldObject = player.GetUsableObject();
@@ -35,14 +35,28 @@ public class KitchenStove : BaseFurniture, IInteractable
             if (player.HasUsableObject())
             {
                 // Player is holding something
-                // If player is holding on an ingredient and the UsableObject
-                // on the cabinet is a pot, try to add the ingredient to the pot
+                // If the object on the stove is a pot
                 if (GetUsableObject().TryGetPot(out PotUsableObject potUsableObject))
                 {
+                    // If player is holding on an ingredient, try to add it to
+                    // the pot
                     if (potUsableObject.TryAddIngredient(player.GetUsableObject().GetUsableObjectSO()))
                     {
                         player.GetUsableObject().DestroySelf();
                     }
+                    // If the player is holding on a plate, try to take the ingredient
+                    // from the pot anad put it in the plate
+                    else if (player.GetUsableObject().TryGetPlate(out PlateUsableObject plateUsableObject))
+                    {
+                        if (plateUsableObject.TryAddIngredient(GetUsableObject().GetUsableObjectSO()))
+                        {
+                            UsableObject objectOnStove = GetUsableObject();
+                            objectOnStove.DestroySelf();
+                            // Replace the pot with an empty pot
+                            UsableObject.SpawnUsableObject(potUsableObjectSO, this);
+                        }
+                    }
+
                 }
             }
             else

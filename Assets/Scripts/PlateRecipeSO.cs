@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class CookingRecipeSO : ScriptableObject
+public class PlateRecipeSO : ScriptableObject
 {
     // Unity doesn't serialize Dictionary, so we map array elements of
     // `inputKeys` with the number of that ingredient in `inputValues`
     [SerializeField] private UsableObjectSO[] inputKeys;
     [SerializeField] private int[] inputValues;
     [SerializeField] private UsableObjectSO output;
-    [SerializeField] private UsableObjectSO burningOutput;
-    [SerializeField] private float cookingTimerMax;
-    [SerializeField] private float burningTimerMax;
 
     public Dictionary<UsableObjectSO, int> GetIngredients()
     {
@@ -52,20 +49,5 @@ public class CookingRecipeSO : ScriptableObject
     public UsableObjectSO GetOutput()
     {
         return output;
-    }
-
-    public UsableObjectSO GetBurningOutput()
-    {
-        return burningOutput;
-    }
-
-    public float GetCookingTimerMax()
-    {
-        return cookingTimerMax;
-    }
-
-    public float GetBurningTimerMax()
-    {
-        return burningTimerMax;
     }
 }

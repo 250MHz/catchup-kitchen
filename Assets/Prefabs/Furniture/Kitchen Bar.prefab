@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   topPoint: {fileID: 4497895502219136107}
+  potUsableObjectSO: {fileID: 11400000, guid: 6903d0d12cc9b234bb58f5d544a0deb1, type: 2}
 --- !u!1 &8152793617795721299
 GameObject:
   m_ObjectHideFlags: 0

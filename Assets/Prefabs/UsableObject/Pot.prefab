@@ -1155,6 +1155,7 @@ MonoBehaviour:
   cookingRecipeSOArray:
   - {fileID: 11400000, guid: 4d3ac43be7e7bbd4a9c83d011745b28c, type: 2}
   progressBar: {fileID: 3117124820414344587}
+  potUsableObjectSO: {fileID: 11400000, guid: 6903d0d12cc9b234bb58f5d544a0deb1, type: 2}
 --- !u!1 &5957920452821418386
 GameObject:
   m_ObjectHideFlags: 0

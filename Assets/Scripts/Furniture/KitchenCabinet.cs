@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class KitchenCabinet : BaseFurniture, IInteractable
 {
+    [SerializeField] private UsableObjectSO potUsableObjectSO;
     private Outline outline;
 
     public void Interact(Player player)
@@ -34,6 +35,21 @@ public class KitchenCabinet : BaseFurniture, IInteractable
                     if (potUsableObject.TryAddIngredient(GetUsableObject().GetUsableObjectSO()))
                     {
                         GetUsableObject().DestroySelf();
+                    }
+                }
+                // If player is holding a plate, try to add the object on the
+                // cabinet onto the plate
+                else if (player.GetUsableObject().TryGetPlate(out PlateUsableObject plateUsableObject))
+                {
+                    if (plateUsableObject.TryAddIngredient(GetUsableObject().GetUsableObjectSO()))
+                    {
+                        UsableObject objectOnCabinet = GetUsableObject();
+                        objectOnCabinet.DestroySelf();
+                        // If the object was a pot, we need to replace it with an empty pot
+                        if (objectOnCabinet is PotUsableObject)
+                        {
+                            UsableObject.SpawnUsableObject(potUsableObjectSO, this);
+                        }
                     }
                 }
                 // If player is holding on an ingredient and the UsableObject

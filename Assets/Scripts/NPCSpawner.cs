@@ -4,31 +4,53 @@ using UnityEngine;
 public class NPCSpawner : MonoBehaviour
 {
     public GameObject npcPrefab;
-    public List<Chair> chairs;  // List of available chairs
+    public int maxGroups = 3; // Maximum number of groups that can exist at a time
+    public float groupSpacing = 5f; // Distance between groups
+    public int minGroupSize = 1; // Minimum number of NPCs in a group
+    public int maxGroupSize = 4; // Maximum number of NPCs in a group
+
+    private List<GameObject> npcGroups = new List<GameObject>();
 
     private void Start()
     {
-        InvokeRepeating(nameof(SpawnNPC), 0f, 5f);  // Spawn every 5 seconds
+        // Start spawning NPC groups at regular intervals
+        InvokeRepeating(nameof(SpawnNPCGroup), 0f, 5f);
     }
 
-    private void SpawnNPC()
+    private void SpawnNPCGroup()
     {
-        // Find unoccupied chairs
-        List<Chair> availableChairs = chairs.FindAll(chair => !chair.IsOccupied());
-
-        if (availableChairs.Count > 0)
+        // Check if we've reached the maximum group limit
+        if (npcGroups.Count >= maxGroups)
         {
-            // Select a random unoccupied chair
-            Chair randomChair = availableChairs[Random.Range(0, availableChairs.Count)];
+            Debug.Log("Max groups reached, cannot spawn more.");
+            return;
+        }
 
-            // Spawn NPC and assign it to the selected chair
-            GameObject npc = Instantiate(npcPrefab, transform.position, Quaternion.identity);
-            NPCController npcController = npc.GetComponent<NPCController>();
-            npcController.SetTargetChair(randomChair);
-        }
-        else
+        // Create an empty GameObject to hold the NPC group
+        GameObject npcGroup = new GameObject("NPCGroup");
+
+        // Determine the number of NPCs for this group
+        int npcCount = Random.Range(minGroupSize, maxGroupSize + 1);
+
+        // Determine the position for the new group with spacing
+        Vector3 spawnPosition = transform.position + (Vector3.right * npcGroups.Count * groupSpacing);
+
+        // Spawn NPCs and add them as children of the group object
+        for (int i = 0; i < npcCount; i++)
         {
-            // Debug.Log("No available chairs!");
+            Vector3 npcPosition = spawnPosition + new Vector3(i * 1.5f, 0, 0); // Space out NPCs within the group
+            GameObject npc = Instantiate(npcPrefab, npcPosition, Quaternion.identity);
+            npc.transform.parent = npcGroup.transform;
         }
+
+        // Add the group to the list and place it in the world
+        npcGroups.Add(npcGroup);
+        Debug.Log($"Spawned a group of {npcCount} NPCs at position: {spawnPosition}");
+    }
+
+    public void RemoveGroup(GameObject group)
+    {
+        npcGroups.Remove(group);
+        Destroy(group);
     }
 }

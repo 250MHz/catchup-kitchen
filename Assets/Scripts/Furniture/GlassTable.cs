@@ -1,37 +1,140 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GlassTable : BaseFurniture, IInteractable
 {
     private Outline outline;
+    private List<Transform> chairs = new List<Transform>();
+    private List<NPCController> seatedNPCs = new List<NPCController>();
+
+    public GameObject orderCardPrefab;
+    private GameObject activeOrderCard;
+
+    public Canvas canvas;
+
+    // Enum to manage interaction phases
+    private enum OrderState { Seating, Ordering, Serving, Complete }
+    private OrderState currentOrderState = OrderState.Seating;
+
+    private void Start()
+    {
+        outline = gameObject.GetComponent<Outline>();
+        foreach (Transform child in transform)
+        {
+            if (child.CompareTag("Chair"))
+            {
+                chairs.Add(child);
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (activeOrderCard != null)
+        {
+            // Rotate the order card slowly around the Y-axis
+            activeOrderCard.transform.Rotate(0, 30 * Time.deltaTime, 0);
+        }
+    }
 
     public void Interact(Player player)
     {
-        // TODO: handle delivery code here
-        Debug.Log("Glass Table Interact() called");
+        switch (currentOrderState)
+        {
+            case OrderState.Seating:
+                SeatNPCs(player);
+                ShowOrderUI();
+                currentOrderState = OrderState.Ordering;  // Move to next state
+                break;
+
+            case OrderState.Ordering:
+                PlaceOrder();
+                currentOrderState = OrderState.Serving;  // Ready for serving
+                break;
+
+            case OrderState.Serving:
+                ServeOrder();
+                currentOrderState = OrderState.Complete;  // Order is complete
+                break;
+
+            case OrderState.Complete:
+                Debug.Log("Order already complete.");
+                break;
+        }
     }
 
-    public void EnableOutline()
+    private void SeatNPCs(Player player)
     {
-        outline.enabled = true;
+        NPCController[] npcs = FindObjectsOfType<NPCController>();
+        List<NPCController> followingNPCs = new List<NPCController>();
+
+        foreach (var npc in npcs)
+        {
+            if (npc != null && npc.IsFollowingPlayer(player) && !seatedNPCs.Contains(npc))
+            {
+                followingNPCs.Add(npc);
+            }
+        }
+
+        if (followingNPCs.Count > 0)
+        {
+            for (int i = 0; i < followingNPCs.Count && chairs.Count > 0; i++)
+            {
+                SeatNPC(followingNPCs[i]);
+            }
+        }
     }
 
-    public void DisableOutline()
+    private void SeatNPC(NPCController npc)
     {
-        outline.enabled = false;
+        if (chairs.Count > 0)
+        {
+            int randomIndex = Random.Range(0, chairs.Count);
+            Transform selectedChair = chairs[randomIndex];
+            Transform seatingPoint = selectedChair.Find("SeatPoint");
+
+            if (seatingPoint != null)
+            {
+                npc.transform.position = seatingPoint.position;
+                npc.transform.rotation = Quaternion.LookRotation(-selectedChair.forward);
+
+                npc.StopFollowing();
+                npc.Sitting();
+                chairs.RemoveAt(randomIndex);
+                seatedNPCs.Add(npc);
+            }
+        }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void ShowOrderUI()
     {
-        outline = gameObject.GetComponent<Outline>();
+        if (activeOrderCard == null)
+        {
+            // Position the order card slightly above the table
+            Vector3 orderCardPosition = transform.position + Vector3.up * 1.0f;
+            Quaternion orderCardRotation = Quaternion.Euler(0, 180, 0);
+
+            // Instantiate the order card as a 3D object
+            activeOrderCard = Instantiate(orderCardPrefab, orderCardPosition, orderCardRotation);
+            
+            activeOrderCard.transform.SetParent(transform, true);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+
+
+    private void PlaceOrder()
     {
-
+        Debug.Log("Order placed! Preparing for service...");
+        
     }
+
+    private void ServeOrder()
+    {
+        Debug.Log("Order served! Task complete.");
+        Destroy(activeOrderCard);
+    }
+
+    public void EnableOutline() => outline.enabled = true;
+    public void DisableOutline() => outline.enabled = false;
 }
-

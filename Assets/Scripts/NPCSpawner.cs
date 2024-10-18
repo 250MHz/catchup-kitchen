@@ -22,7 +22,7 @@ public class NPCSpawner : MonoBehaviour
         // Check if we've reached the maximum group limit
         if (npcGroups.Count >= maxGroups)
         {
-            Debug.Log("Max groups reached, cannot spawn more.");
+            // Debug.Log("Max groups reached, cannot spawn more.");
             return;
         }
 

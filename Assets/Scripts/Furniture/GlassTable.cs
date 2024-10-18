@@ -3,14 +3,15 @@ using UnityEngine;
 
 public class GlassTable : BaseFurniture, IInteractable
 {
-    private Outline outline;
-    private List<Transform> chairs = new List<Transform>();
-    private List<NPCController> seatedNPCs = new List<NPCController>();
+    [SerializeField] private List<Transform> chairs = new List<Transform>();
+    [SerializeField] private GameObject orderCardPrefab;
 
-    public GameObject orderCardPrefab;
+    private Outline outline;
+    private List<NPCController> seatedNPCs = new List<NPCController>();
     private GameObject activeOrderCard;
 
-    public Canvas canvas;
+    // TODO: unused reference??
+    // public Canvas canvas;
 
     // Enum to manage interaction phases
     private enum OrderState { Seating, Ordering, Serving, Complete }
@@ -19,13 +20,6 @@ public class GlassTable : BaseFurniture, IInteractable
     private void Start()
     {
         outline = gameObject.GetComponent<Outline>();
-        foreach (Transform child in transform)
-        {
-            if (child.CompareTag("Chair"))
-            {
-                chairs.Add(child);
-            }
-        }
     }
 
     private void Update()
@@ -116,7 +110,7 @@ public class GlassTable : BaseFurniture, IInteractable
 
             // Instantiate the order card as a 3D object
             activeOrderCard = Instantiate(orderCardPrefab, orderCardPosition, orderCardRotation);
-            
+
             activeOrderCard.transform.SetParent(transform, true);
         }
     }
@@ -126,7 +120,6 @@ public class GlassTable : BaseFurniture, IInteractable
     private void PlaceOrder()
     {
         Debug.Log("Order placed! Preparing for service...");
-        
     }
 
     private void ServeOrder()

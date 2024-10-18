@@ -65,10 +65,10 @@ Transform:
   m_Children:
   - {fileID: 8378186038375973533}
   - {fileID: 5864210964779034161}
-  - {fileID: 2433857786094093854}
-  - {fileID: 8733821759711218218}
   - {fileID: 2033519953907651457}
+  - {fileID: 8733821759711218218}
   - {fileID: 5422150834705023250}
+  - {fileID: 2433857786094093854}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &3204384316670655576
@@ -122,9 +122,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a77f2086947c794981da7eac709370f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  topPoint: {fileID: 0}
-  orderCardPrefab: {fileID: 0}
-  canvas: {fileID: 0}
+  topPoint: {fileID: 5864210964779034161}
+  chairs:
+  - {fileID: 2033519953907651457}
+  - {fileID: 8733821759711218218}
+  - {fileID: 5422150834705023250}
+  - {fileID: 2433857786094093854}
+  orderCardPrefab: {fileID: 3717141785449944301, guid: ce3036a9e6f3ca542bf190752aed220d,
+    type: 3}
 --- !u!1001 &102683921839633850
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -186,11 +191,6 @@ PrefabInstance:
     - target: {fileID: 5806427046518921510, guid: 9348982cfbe03b143b5e15bd7da71233,
         type: 3}
       propertyPath: m_Name
-      value: Chair
-      objectReference: {fileID: 0}
-    - target: {fileID: 5806427046518921510, guid: 9348982cfbe03b143b5e15bd7da71233,
-        type: 3}
-      propertyPath: m_TagString
       value: Chair
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -267,11 +267,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chair
       objectReference: {fileID: 0}
-    - target: {fileID: 5806427046518921510, guid: 9348982cfbe03b143b5e15bd7da71233,
-        type: 3}
-      propertyPath: m_TagString
-      value: Chair
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -346,11 +341,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chair
       objectReference: {fileID: 0}
-    - target: {fileID: 5806427046518921510, guid: 9348982cfbe03b143b5e15bd7da71233,
-        type: 3}
-      propertyPath: m_TagString
-      value: Chair
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -423,11 +413,6 @@ PrefabInstance:
     - target: {fileID: 5806427046518921510, guid: 9348982cfbe03b143b5e15bd7da71233,
         type: 3}
       propertyPath: m_Name
-      value: Chair
-      objectReference: {fileID: 0}
-    - target: {fileID: 5806427046518921510, guid: 9348982cfbe03b143b5e15bd7da71233,
-        type: 3}
-      propertyPath: m_TagString
       value: Chair
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -22,7 +22,6 @@ public class KitchenSink : BaseFurniture, IInteractable
                 // If the object the player is holding is a dirty plate, then
                 // make the sink the owner of the dirty plate
                 UsableObject heldObject = player.GetUsableObject();
-                Debug.Log(heldObject.GetUsableObjectSO() == plateDirtySO);
                 if (heldObject.GetUsableObjectSO() == plateDirtySO)
                 {
                     heldObject.SetUsableObjectParent(this);

@@ -86,6 +86,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f6694b6f398e8a4d9e62d7337618ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  plateUsableObjectSO: {fileID: 11400000, guid: fd344a9cd57d51545b1f09c7957cc859,
+    type: 2}
+  potUsableObjectSO: {fileID: 11400000, guid: 6903d0d12cc9b234bb58f5d544a0deb1, type: 2}
 --- !u!1 &2727019743631674113
 GameObject:
   m_ObjectHideFlags: 0

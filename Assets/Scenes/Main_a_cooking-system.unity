@@ -4657,8 +4657,8 @@ MonoBehaviour:
     type: 3}
   maxGroups: 3
   groupSpacing: 5
-  minGroupSize: 2
-  maxGroupSize: 2
+  minGroupSize: 1
+  maxGroupSize: 4
 --- !u!4 &236838392
 Transform:
   m_ObjectHideFlags: 0

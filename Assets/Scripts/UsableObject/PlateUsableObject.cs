@@ -34,6 +34,11 @@ public class PlateUsableObject : UsableObject
         return false;
     }
 
+    public UsableObjectSO GetCurrentFullPlateRecipeSO()
+    {
+        return currentFullPlateRecipeSO.GetOutput();
+    }
+
     public bool TryAddIngredient(UsableObjectSO usableObjectSO)
     {
         foreach (PlateRecipeSO recipeSO in plateRecipeSOArray)

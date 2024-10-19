@@ -47,7 +47,7 @@ Animator:
   m_GameObject: {fileID: 3411112562135843781}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 0c225d360759e3744846ef4f74be54d4, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7f0be64f6d7314944b960fa6ba98c125, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6d8a299934759c84896102319b1acbc6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
+  followDistance: 1.5
 --- !u!114 &5962623899007977470
 MonoBehaviour:
   m_ObjectHideFlags: 0

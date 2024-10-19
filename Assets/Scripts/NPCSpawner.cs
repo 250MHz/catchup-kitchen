@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class NPCSpawner : MonoBehaviour
 {
-    public GameObject npcPrefab;
+    public NPCController npcPrefab;
     public int maxGroups = 3; // Maximum number of groups that can exist at a time
     public float groupSpacing = 5f; // Distance between groups
     public int minGroupSize = 1; // Minimum number of NPCs in a group
@@ -22,7 +22,7 @@ public class NPCSpawner : MonoBehaviour
         // Check if we've reached the maximum group limit
         if (npcGroups.Count >= maxGroups)
         {
-            Debug.Log("Max groups reached, cannot spawn more.");
+            // Debug.Log("Max groups reached, cannot spawn more.");
             return;
         }
 
@@ -39,7 +39,8 @@ public class NPCSpawner : MonoBehaviour
         for (int i = 0; i < npcCount; i++)
         {
             Vector3 npcPosition = spawnPosition + new Vector3(i * 1.5f, 0, 0); // Space out NPCs within the group
-            GameObject npc = Instantiate(npcPrefab, npcPosition, Quaternion.identity);
+            NPCController npc = Instantiate(npcPrefab, npcPosition, Quaternion.identity);
+            npc.SetNPCGroup(npcGroup);
             npc.transform.parent = npcGroup.transform;
         }
 

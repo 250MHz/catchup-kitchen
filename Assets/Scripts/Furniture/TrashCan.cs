@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TrashCan : MonoBehaviour, IInteractable
 {
+    [SerializeField] private UsableObjectSO plateUsableObjectSO;
+    [SerializeField] private UsableObjectSO potUsableObjectSO;
     private Outline outline;
 
     public void Interact(Player player)
@@ -13,6 +15,16 @@ public class TrashCan : MonoBehaviour, IInteractable
             UsableObject usableObject = player.GetUsableObject();
             player.ClearUsableObject();
             Destroy(usableObject.gameObject);
+            if (usableObject is PlateUsableObject)
+            {
+                // Replace what player is holding with empty plate
+                UsableObject.SpawnUsableObject(plateUsableObjectSO, player);
+            }
+            else if (usableObject is PotUsableObject)
+            {
+                // Replace what palyer is holding with empty pot
+                UsableObject.SpawnUsableObject(potUsableObjectSO, player);
+            }
         }
     }
 

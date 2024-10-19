@@ -18,14 +18,14 @@ public class AnimationController : MonoBehaviour
     {
         moveInput = input;
 
-        // Set the "isWalking" parameter based on whether the player is walking
+        // Set the "IsWalking" parameter based on whether the player is walking
         if (moveInput != Vector2.zero)
         {
-            animator.SetBool("isWalking", true);
+            animator.SetBool("IsWalking", true);
         }
         else
         {
-            animator.SetBool("isWalking", false);
+            animator.SetBool("IsWalking", false);
         }
     }
 }

@@ -118,7 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36f2fbadc5230064590287cc3c88b6b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SeatPoint: {fileID: 0}
+  seatPoint: {fileID: 2793591833909739666}
+  topPoint: {fileID: 0}
 --- !u!1001 &524090285371741940
 PrefabInstance:
   m_ObjectHideFlags: 0

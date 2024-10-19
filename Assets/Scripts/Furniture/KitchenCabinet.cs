@@ -28,14 +28,26 @@ public class KitchenCabinet : BaseFurniture, IInteractable
             if (player.HasUsableObject())
             {
                 // Player is carrying something
-                // If player is holding a pot, try to add the object on the
-                // cabinet into the pot.
+                // If player is holding a pot...
                 if (player.GetUsableObject().TryGetPot(out PotUsableObject potUsableObject))
                 {
-                    if (potUsableObject.TryAddIngredient(GetUsableObject().GetUsableObjectSO()))
+                    UsableObject objectOnCabinet = GetUsableObject();
+                    // Try to add the object on the cabinet into the pot.
+                    if (potUsableObject.TryAddIngredient(objectOnCabinet.GetUsableObjectSO()))
                     {
-                        GetUsableObject().DestroySelf();
+                        objectOnCabinet.DestroySelf();
                     }
+                    // If the object on the cabinet is a plate, try to fill the
+                    // plate with the pot's contents
+                    else if (objectOnCabinet.TryGetPlate(out PlateUsableObject plateUsableObject))
+                    {
+                        if (plateUsableObject.TryAddIngredient(potUsableObject.GetUsableObjectSO()))
+                        {
+                            potUsableObject.DestroySelf();
+                            UsableObject.SpawnUsableObject(potUsableObjectSO, player);
+                        }
+                    }
+
                 }
                 // If player is holding a plate, try to add the object on the
                 // cabinet onto the plate

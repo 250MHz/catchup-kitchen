@@ -80,7 +80,7 @@ public class NPCController : MonoBehaviour, IInteractable
     {
         isFollowing = false;
         StopAllCoroutines();
-        animator.SetBool("isWalking", false);
+        animator.SetBool("IsWalking", false);
     }
 
     private void ReturnToSpawn()
@@ -103,18 +103,18 @@ public class NPCController : MonoBehaviour, IInteractable
                 Vector3 direction = (player.transform.position - transform.position).normalized;
                 transform.position += direction * moveSpeed * Time.deltaTime;
 
-                animator.SetBool("isWalking", true);
+                animator.SetBool("IsWalking", true);
             }
             else
             {
                 // Stop moving when within follow distance
-                animator.SetBool("isWalking", false);
+                animator.SetBool("IsWalking", false);
             }
 
             yield return null;  // Wait for the next frame
         }
 
-        animator.SetBool("isWalking", false);  // Stop walking animation when not following
+        animator.SetBool("IsWalking", false);  // Stop walking animation when not following
     }
 
     private void Start()
@@ -133,7 +133,7 @@ public class NPCController : MonoBehaviour, IInteractable
 
     public void Sitting()
     {
-        animator.SetBool("isSitting", true);
+        animator.SetBool("IsSitting", true);
     }
 
     public void WalkAway()

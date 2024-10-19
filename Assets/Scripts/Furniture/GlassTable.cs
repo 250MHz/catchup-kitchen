@@ -188,7 +188,12 @@ public class GlassTable : BaseFurniture, IInteractable
     {
         if (playerHeldObject is PlateUsableObject)
         {
-            UsableObjectSO playerHeldObjectSO = playerHeldObject.GetUsableObjectSO();
+            // N.b. playerHeldObject.GetUsableObjectSO() will always just return
+            // a plate, you need to look at the currentFullPlateRecipeSO field
+            // to know what recipe is met by the ingredients on the plate
+            UsableObjectSO playerHeldObjectSO =
+                (playerHeldObject as PlateUsableObject)
+                .GetCurrentFullPlateRecipeSO();
             foreach (UsableObjectSO order in currentOrders)
             {
                 if (order.GetObjectName() == playerHeldObjectSO.GetObjectName())

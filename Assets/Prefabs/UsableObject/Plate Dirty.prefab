@@ -3366,7 +3366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dca2be8311059a0488a01cbcad84cc64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usableObjectSO: {fileID: 11400000, guid: fd344a9cd57d51545b1f09c7957cc859, type: 2}
+  usableObjectSO: {fileID: 11400000, guid: 3632e02f165c8774fa53e2dc4e10e7bd, type: 2}
   plateVisual: {fileID: 597800595689769925}
   plateRecipeSOArray:
   - {fileID: 11400000, guid: 91dea113953c1fa42968f7765978ee8b, type: 2}

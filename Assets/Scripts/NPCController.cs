@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class NPCController : MonoBehaviour, IInteractable
 {
-    public float moveSpeed = 2f;
-    public float followDistance = 1.5f;  // Minimum distance to maintain from the player
+    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float followDistance = 1.5f;  // Minimum distance to maintain from the player
+
     private bool isFollowing = false;  // To track if NPCs are following the player
     private Vector3 spawnPoint;  // To store the NPC's spawn point
     private Animator animator;
     private Outline outline;
+    private Collider _collider;
+    private GameObject npcGroup;
 
     // Reference to the NPCSpawner
     private NPCSpawner npcSpawner;
@@ -21,6 +24,7 @@ public class NPCController : MonoBehaviour, IInteractable
         spawnPoint = transform.position;  // Store the spawn point on awake
         // Get the NPCSpawner component in the scene
         npcSpawner = FindObjectOfType<NPCSpawner>();
+        _collider = GetComponent<Collider>();
     }
 
     public void EnableOutline()
@@ -76,7 +80,7 @@ public class NPCController : MonoBehaviour, IInteractable
     {
         isFollowing = false;
         StopAllCoroutines();
-        animator.SetBool("isWalking", false);
+        animator.SetBool("IsWalking", false);
     }
 
     private void ReturnToSpawn()
@@ -99,18 +103,18 @@ public class NPCController : MonoBehaviour, IInteractable
                 Vector3 direction = (player.transform.position - transform.position).normalized;
                 transform.position += direction * moveSpeed * Time.deltaTime;
 
-                animator.SetBool("isWalking", true);
+                animator.SetBool("IsWalking", true);
             }
             else
             {
                 // Stop moving when within follow distance
-                animator.SetBool("isWalking", false);
+                animator.SetBool("IsWalking", false);
             }
 
             yield return null;  // Wait for the next frame
         }
 
-        animator.SetBool("isWalking", false);  // Stop walking animation when not following
+        animator.SetBool("IsWalking", false);  // Stop walking animation when not following
     }
 
     private void Start()
@@ -118,13 +122,44 @@ public class NPCController : MonoBehaviour, IInteractable
         outline = GetComponent<Outline>();
     }
 
+    public void SitAt(Transform chairSeatPoint, Quaternion forward)
+    {
+        transform.position = chairSeatPoint.position;
+        transform.rotation = forward;
+        _collider.enabled = false;
+        StopFollowing();
+        Sitting();
+    }
+
     public void Sitting()
     {
-        animator.SetBool("isSitting", true);
+        animator.SetBool("IsSitting", true);
     }
+
+    public void WalkAway()
+    {
+        // TODO: make NPC walk away, for now, we'll just destroy it
+        Destroy(gameObject);
+    }
+
 
     internal bool IsFollowingPlayer(Player player)
     {
         return isFollowing;
+    }
+
+    public void SetNPCGroup(GameObject group)
+    {
+        npcGroup = group;
+    }
+
+    public GameObject GetNPCGroup()
+    {
+        return npcGroup;
+    }
+
+    public NPCSpawner GetNPCSpawner()
+    {
+        return npcSpawner;
     }
 }

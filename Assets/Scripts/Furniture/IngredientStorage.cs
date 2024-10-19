@@ -11,8 +11,7 @@ public class IngredientStorage : BaseFurniture, IInteractable
     {
         if (!player.HasUsableObject())
         {
-            GameObject usableGameObject = Instantiate(usableObjectSO.GetPrefab());
-            usableGameObject.GetComponent<UsableObject>().SetUsableObjectParent(player);
+            UsableObject.SpawnUsableObject(usableObjectSO, player);
         }
     }
 

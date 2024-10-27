@@ -209,8 +209,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barImage: {fileID: 1767700444366004183}
-  safeColor: {r: 97.13458, g: 133.30635, b: 81.115654, a: 1}
-  dangerColor: {r: 204, g: 0, b: 0, a: 1}
 --- !u!114 &5881592035941300580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,7 +292,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.5
+  m_FillAmount: 0.6207603
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0

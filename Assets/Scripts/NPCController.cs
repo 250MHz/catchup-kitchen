@@ -19,10 +19,8 @@ public class NPCController : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        // Get the Animator component attached to the NPC
         animator = GetComponent<Animator>();
         spawnPoint = transform.position;  // Store the spawn point on awake
-        // Get the NPCSpawner component in the scene
         npcSpawner = FindObjectOfType<NPCSpawner>();
         _collider = GetComponent<Collider>();
     }
@@ -41,19 +39,14 @@ public class NPCController : MonoBehaviour, IInteractable
     {
         Debug.Log("NPCController Interact() called");
 
-        // Get the parent of this NPC, which is the NPCGroup
         Transform npcGroupTransform = transform.parent;
 
-        // Check if the group of NPCs exists
         if (npcGroupTransform != null)
         {
-            // Get all NPCs in the group
             NPCController[] groupNPCs = npcGroupTransform.GetComponentsInChildren<NPCController>();
 
-            // Check if this NPC is following the player
             if (isFollowing)
             {
-                // If already following, return all NPCs to spawn point
                 foreach (var npc in groupNPCs)
                 {
                     npc.ReturnToSpawn();
@@ -61,7 +54,6 @@ public class NPCController : MonoBehaviour, IInteractable
             }
             else
             {
-                // If not following, start following for all NPCs in the group
                 foreach (var npc in groupNPCs)
                 {
                     npc.FollowPlayer(player);
@@ -87,34 +79,30 @@ public class NPCController : MonoBehaviour, IInteractable
     {
         isFollowing = false;
         Debug.Log("NPCs are returning to spawn point.");
-        transform.position = spawnPoint;  // Directly set the position to spawn point
+        transform.position = spawnPoint;
     }
 
     private IEnumerator FollowCoroutine(Player player)
     {
         while (isFollowing)
         {
-            // Calculate the distance to the player
             float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
             if (distanceToPlayer > followDistance)
             {
-                // Move towards the player's position if outside the follow distance
                 Vector3 direction = (player.transform.position - transform.position).normalized;
                 transform.position += direction * moveSpeed * Time.deltaTime;
-
                 animator.SetBool("IsWalking", true);
             }
             else
             {
-                // Stop moving when within follow distance
                 animator.SetBool("IsWalking", false);
             }
 
-            yield return null;  // Wait for the next frame
+            yield return null;
         }
 
-        animator.SetBool("IsWalking", false);  // Stop walking animation when not following
+        animator.SetBool("IsWalking", false);
     }
 
     private void Start()
@@ -129,6 +117,9 @@ public class NPCController : MonoBehaviour, IInteractable
         _collider.enabled = false;
         StopFollowing();
         Sitting();
+
+        // Notify NPCSpawner to update group order
+        npcSpawner.RemoveGroupAndReorder(npcGroup);
     }
 
     public void Sitting()
@@ -138,10 +129,8 @@ public class NPCController : MonoBehaviour, IInteractable
 
     public void WalkAway()
     {
-        // TODO: make NPC walk away, for now, we'll just destroy it
         Destroy(gameObject);
     }
-
 
     internal bool IsFollowingPlayer(Player player)
     {

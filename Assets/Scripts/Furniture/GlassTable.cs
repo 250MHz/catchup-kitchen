@@ -91,17 +91,41 @@ public class GlassTable : BaseFurniture, IInteractable
         }
     }
 
+    //private IEnumerator EatCoroutine()
+    //{
+    //    // TODO: Eating animation
+    //    // Customers eat for 5 seconds
+    //    yield return new WaitForSeconds(eatingSeconds);
+    //    // Make customers walk away
+    //    foreach (NPCController npc in seatedNPCs)
+    //    {
+    //        // TODO: this currently just destroys the customers
+    //        npc.WalkAway();
+    //    }
+    //    // Replace dishes with dirty plates
+    //    foreach (Chair c in chairs)
+    //    {
+    //        if (c.GetUsableObject() != null)
+    //        {
+    //            c.GetUsableObject().DestroySelf();
+    //            dirtyPlates.Add(UsableObject.SpawnUsableObject(plateDirtySO, c));
+    //        }
+    //    }
+    //}
+
     private IEnumerator EatCoroutine()
     {
         // TODO: Eating animation
         // Customers eat for 5 seconds
         yield return new WaitForSeconds(eatingSeconds);
+
         // Make customers walk away
         foreach (NPCController npc in seatedNPCs)
         {
             // TODO: this currently just destroys the customers
             npc.WalkAway();
         }
+
         // Replace dishes with dirty plates
         foreach (Chair c in chairs)
         {
@@ -111,7 +135,22 @@ public class GlassTable : BaseFurniture, IInteractable
                 dirtyPlates.Add(UsableObject.SpawnUsableObject(plateDirtySO, c));
             }
         }
+
+        // Clear current orders to prepare for new ones
+        currentOrders.Clear();
+
+        // Wait until dirty plates are removed from table before allowing new seating
+        if (dirtyPlates.Count == 0)
+        {
+            seatedNPCs.Clear();
+            npcSpawner.RemoveGroup(npcGroup);  // Remove the NPC group
+            npcGroup = null;  // Reset the NPC group reference
+
+            // Reset OrderState to allow new seating
+            currentOrderState = OrderState.Seating;
+        }
     }
+
 
     private void SeatNPCs(Player player)
     {

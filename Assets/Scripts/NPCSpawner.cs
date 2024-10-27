@@ -22,7 +22,8 @@ public class NPCSpawner : MonoBehaviour
         // Check if we've reached the maximum group limit
         if (npcGroups.Count >= maxGroups)
         {
-            // Debug.Log("Max groups reached, cannot spawn more.");
+            Debug.Log("Max groups reached, stopping NPC spawn.");
+            CancelInvoke(nameof(SpawnNPCGroup)); // Stop spawning new groups
             return;
         }
 
@@ -53,5 +54,38 @@ public class NPCSpawner : MonoBehaviour
     {
         npcGroups.Remove(group);
         Destroy(group);
+
+        if (npcGroups.Count < maxGroups && !IsInvoking(nameof(SpawnNPCGroup)))
+        {
+            InvokeRepeating(nameof(SpawnNPCGroup), 0f, 5f);
+        }
     }
+
+    public void RemoveGroupAndReorder(GameObject seatedGroup)
+    {
+        npcGroups.Remove(seatedGroup);  // Remove the seated group from the list
+
+
+        // Reorder remaining groups
+        for (int i = 0; i < npcGroups.Count; i++)
+        {
+            GameObject npcGroup = npcGroups[i];
+            NPCController[] npcsInGroup = npcGroup.GetComponentsInChildren<NPCController>();
+
+            for (int j = 0; j < npcsInGroup.Length; j++)
+            {
+                // Calculate a new position for each NPC within the group
+                Vector3 newPosition = CalculatePosition(i) + new Vector3(j * 1.5f, 0, 0); // Space out each NPC within the group
+                npcsInGroup[j].transform.position = newPosition;
+            }
+        }
+    }
+
+
+    private Vector3 CalculatePosition(int index)
+    {
+        // Offset based on the NPCSpawner's starting position
+        return transform.position + new Vector3(index * groupSpacing, 0, 0); // Spacing based on group index
+    }
+
 }

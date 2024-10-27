@@ -3628,7 +3628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71af77e2a35ae944286234917e5fa44a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcPrefab: {fileID: 2962295582018674436, guid: 6e4000ecb6bfe714e96d401f2bedfad4,
+  npcPrefab: {fileID: 1832584618280736654, guid: 8dd0c54f892d12548a04b63ac783d614,
     type: 3}
   maxGroups: 3
   groupSpacing: 5

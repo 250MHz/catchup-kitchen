@@ -256,6 +256,7 @@ MonoBehaviour:
     type: 3}
   dishes:
   - {fileID: 11400000, guid: 6d99be3d49a50704cb9fbb5252aa5fb4, type: 2}
+  - {fileID: 11400000, guid: 009d4f1298a97e048aec34067f2ee9a3, type: 2}
   eatingSeconds: 5
   plateDirtySO: {fileID: 11400000, guid: 3632e02f165c8774fa53e2dc4e10e7bd, type: 2}
 --- !u!1001 &102683921839633850

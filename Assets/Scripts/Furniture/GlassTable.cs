@@ -179,7 +179,7 @@ public class GlassTable : BaseFurniture, IInteractable
         // order and then assign dishes in the same order.
         for (int i = 0; i < seatedNPCs.Count; i++)
         {
-            currentOrders.Add(dishes[Random.Range(0, dishes.Length - 1)]);
+            currentOrders.Add(dishes[Random.Range(0, dishes.Length)]);
         }
         Debug.Log("Order placed! Preparing for service...");
     }
@@ -190,10 +190,14 @@ public class GlassTable : BaseFurniture, IInteractable
         {
             // N.b. playerHeldObject.GetUsableObjectSO() will always just return
             // a plate, you need to look at the currentFullPlateRecipeSO field
-            // to know what recipe is met by the ingredients on the plate
+            // to know what recipe is met by the ingredients on the plate.
             UsableObjectSO playerHeldObjectSO =
                 (playerHeldObject as PlateUsableObject)
                 .GetCurrentFullPlateRecipeSO();
+            if (playerHeldObjectSO == null)
+            {
+                return;
+            }
             foreach (UsableObjectSO order in currentOrders)
             {
                 if (order.GetObjectName() == playerHeldObjectSO.GetObjectName())

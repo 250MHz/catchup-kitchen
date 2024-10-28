@@ -7,10 +7,10 @@ public class PlateUsableObject : UsableObject
     [SerializeField] private PlateVisual plateVisual;
     [SerializeField] private PlateRecipeSO[] plateRecipeSOArray;
     [SerializeField] private UsableObjectSO potUsableObjectSO;
+    [SerializeField] private PlateRecipeSO currentFullPlateRecipeSO;
 
     // Histogram of ingredients currently on the plate
     private Dictionary<UsableObjectSO, int> currentIngredients;
-    private PlateRecipeSO currentFullPlateRecipeSO = null;
 
     private void Start()
     {
@@ -36,7 +36,7 @@ public class PlateUsableObject : UsableObject
 
     public UsableObjectSO GetCurrentFullPlateRecipeSO()
     {
-        return currentFullPlateRecipeSO.GetOutput();
+        return currentFullPlateRecipeSO?.GetOutput();
     }
 
     public bool TryAddIngredient(UsableObjectSO usableObjectSO)

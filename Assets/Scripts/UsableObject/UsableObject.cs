@@ -32,15 +32,13 @@ public class UsableObject : MonoBehaviour, IInteractable
             }
             // If player is holding a plate, try to add the object into the plate
             // Don't handle the Pot interaction here, that's overriden in PotUsableObject
-            // TODO: NOT TESTED YET. Wrote this before we had a recipe that
-            // takes non-pot UsableObjects onto a plate
-            // else if (player.GetUsableObject().TryGetPlate(out PlateUsableObject plateUsableObject))
-            // {
-            //     if (plateUsableObject.TryAddIngredient(usableObjectSO))
-            //     {
-            //         DestroySelf();
-            //     }
-            // }
+            else if (player.GetUsableObject().TryGetPlate(out PlateUsableObject plateUsableObject))
+            {
+                if (plateUsableObject.TryAddIngredient(usableObjectSO))
+                {
+                    DestroySelf();
+                }
+            }
         }
     }
 

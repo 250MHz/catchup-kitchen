@@ -91,6 +91,7 @@ MonoBehaviour:
   topPoint: {fileID: 6874251971449696811}
   cuttingRecipeSOs:
   - {fileID: 11400000, guid: 65ed526d6ab04e64784572ebcca3c8ae, type: 2}
+  - {fileID: 11400000, guid: 2e6eb5ade8b43c54aa614cf222fac827, type: 2}
   progressBar: {fileID: 3087599199123613291}
 --- !u!1 &6634802814128594775
 GameObject:

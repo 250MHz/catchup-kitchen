@@ -54,6 +54,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 6d99be3d49a50704cb9fbb5252aa5fb4,
         type: 2}
+    - target: {fileID: 5971501214627877243, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: currentFullPlateRecipeSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 91dea113953c1fa42968f7765978ee8b,
+        type: 2}
+    - target: {fileID: 5971501214627877243, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: plateRecipeSOArray.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7742099070674489199, guid: 78b6efce3aac97d4983d034b43c9b81d,
         type: 3}
       propertyPath: m_IsActive

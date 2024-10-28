@@ -36,7 +36,7 @@ public class PlateUsableObject : UsableObject
 
     public UsableObjectSO GetCurrentFullPlateRecipeSO()
     {
-        return currentFullPlateRecipeSO.GetOutput();
+        return currentFullPlateRecipeSO?.GetOutput();
     }
 
     public bool TryAddIngredient(UsableObjectSO usableObjectSO)

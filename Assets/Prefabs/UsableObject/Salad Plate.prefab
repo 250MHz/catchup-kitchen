@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &590276589177456240
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 9473091208724914, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9473091208724914, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9473091208724914, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9473091208724914, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9473091208724914, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9473091208724914, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9473091208724914, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9473091208724914, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9473091208724914, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9473091208724914, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 597800595689769925, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: tomatoSoup
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 597800595689769925, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: tomatoSoupVisual
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 892341204427185518, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2843534548932629238, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5971501214627877243, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: usableObjectSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 009d4f1298a97e048aec34067f2ee9a3,
+        type: 2}
+    - target: {fileID: 5971501214627877243, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: currentFullPlateRecipeSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 39c2a6fd1d49e8d49a12be0dc7ff81e4,
+        type: 2}
+    - target: {fileID: 5971501214627877243, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: plateRecipeSOArray.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5971501214627877243, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: plateRecipeSOArray.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 91dea113953c1fa42968f7765978ee8b,
+        type: 2}
+    - target: {fileID: 7742099070674489199, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039224547573100239, guid: 78b6efce3aac97d4983d034b43c9b81d,
+        type: 3}
+      propertyPath: m_Name
+      value: Salad Plate
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 7742099070674489199, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}

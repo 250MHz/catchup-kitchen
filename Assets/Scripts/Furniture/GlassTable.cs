@@ -11,6 +11,7 @@ public class GlassTable : BaseFurniture, IInteractable
     [SerializeField] private UsableObjectSO plateDirtySO;
 
     [SerializeField] private ProgressBar progressBar;
+    [SerializeField] private ProgressBar servingProgressBar;
 
     private Outline outline;
     private List<UsableObjectSO> currentOrders = new List<UsableObjectSO>();
@@ -31,6 +32,7 @@ public class GlassTable : BaseFurniture, IInteractable
     private OrderState currentOrderState = OrderState.Seating;
 
     private Coroutine orderCountdownCoroutine;
+    private Coroutine servingCountdownCoroutine;
 
     private void Start()
     {
@@ -61,6 +63,7 @@ public class GlassTable : BaseFurniture, IInteractable
                 PlaceOrder();
                 currentOrderState = OrderState.Serving;  // Ready for serving
                 StopOrderCountdown();
+                StartServingCountdown();
                 break;
 
             case OrderState.Serving:
@@ -68,6 +71,7 @@ public class GlassTable : BaseFurniture, IInteractable
                 if (currentOrders.Count == 0)
                 {
                     currentOrderState = OrderState.Complete;  // Order is complete
+                    StopServingCountdown();
                     StartCoroutine(EatCoroutine());
                 }
                 break;
@@ -187,6 +191,41 @@ public class GlassTable : BaseFurniture, IInteractable
         ResetTable();  // Reset table and remove NPCs after timeout
     }
 
+    private void StartServingCountdown()
+    {
+        if (servingCountdownCoroutine != null)
+        {
+            StopCoroutine(servingCountdownCoroutine);
+        }
+        servingCountdownCoroutine = StartCoroutine(ServingCountdownCoroutine());
+    }
+
+    private void StopServingCountdown()
+    {
+        if (servingCountdownCoroutine != null)
+        {
+            StopCoroutine(servingCountdownCoroutine);
+            servingCountdownCoroutine = null;
+        }
+    }
+
+    private IEnumerator ServingCountdownCoroutine()
+    {
+        float countdown = 30f; // Serving wait time
+        servingProgressBar.gameObject.SetActive(true);
+
+        while (countdown > 0)
+        {
+            countdown -= Time.deltaTime;
+            servingProgressBar.SetBarFillAmount(countdown / 30f); // Update progress bar
+            yield return null;
+        }
+
+        ResetTable();  // Reset table and remove NPCs after serving timeout
+    }
+
+    
+
     private void ResetTable()
     {
         foreach (NPCController npc in seatedNPCs)
@@ -200,6 +239,7 @@ public class GlassTable : BaseFurniture, IInteractable
         npcGroup = null;
         currentOrderState = OrderState.Seating;
         progressBar.SetBarFillAmount(0);  // Reset progress bar
+        servingProgressBar.gameObject.SetActive(false);  // Hide the serving progress bar
         Debug.Log("Order timed out, resetting table.");
     }
 

@@ -4212,6 +4212,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 223686166}
     m_Modifications:
+    - target: {fileID: 504269233029774863, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4099343377072166183, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4251901002804194192, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5006309957939005162, guid: 15ff78635bc32e44486ffb3e035f2f15,
         type: 3}
       propertyPath: progressBar
@@ -4222,6 +4237,16 @@ PrefabInstance:
       propertyPath: servingProgressBar
       value: 
       objectReference: {fileID: 554665591}
+    - target: {fileID: 5266731207675393800, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266731207675393800, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5266731207675393800, guid: 15ff78635bc32e44486ffb3e035f2f15,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4272,10 +4297,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5906572998585756828, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6291102912088196604, guid: 15ff78635bc32e44486ffb3e035f2f15,
         type: 3}
       propertyPath: m_Name
       value: Glass Table
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291102912088196604, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7202312641108928420, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5919,6 +5959,69 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf2f37c6d3f0e004c9e98e5dc8adcf13, type: 3}
+--- !u!1 &331796755
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 331796756}
+  - component: {fileID: 331796757}
+  m_Layer: 0
+  m_Name: NavMesh Surface
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &331796756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331796755}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.307, y: -0.032, z: 0.396}
+  m_LocalScale: {x: 0.125, y: 0.125, z: 0.125}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 346725017}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &331796757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331796755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: b5023600c1692e54bbe5eac032fdec75, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1001 &334484738
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6366,7 +6469,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 8, y: 8, z: 8}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 331796756}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &346725018
@@ -11999,6 +12103,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 223686166}
     m_Modifications:
+    - target: {fileID: 504269233029774863, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4251901002804194192, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5006309957939005162, guid: 15ff78635bc32e44486ffb3e035f2f15,
         type: 3}
       propertyPath: npcSpawner
@@ -12014,6 +12128,16 @@ PrefabInstance:
       propertyPath: servingProgressBar
       value: 
       objectReference: {fileID: 1590081702}
+    - target: {fileID: 5266731207675393800, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266731207675393800, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5266731207675393800, guid: 15ff78635bc32e44486ffb3e035f2f15,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12064,10 +12188,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5906572998585756828, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6291102912088196604, guid: 15ff78635bc32e44486ffb3e035f2f15,
         type: 3}
       propertyPath: m_Name
       value: Glass Table
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291102912088196604, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7202312641108928420, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12301,6 +12440,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Restaurant Wall Doorway Wide
+      objectReference: {fileID: 0}
+    - target: {fileID: 5074457026696447450, guid: df8cf85a2ca894f4e957fcf8f6e2abca,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18793,6 +18937,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rug Rectangle
       objectReference: {fileID: 0}
+    - target: {fileID: 8412097280370602306, guid: ad19055b58ebb3a4394af1bd2523f96a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19163,6 +19312,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 223686166}
     m_Modifications:
+    - target: {fileID: 504269233029774863, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1290468812421300170, guid: 15ff78635bc32e44486ffb3e035f2f15,
         type: 3}
       propertyPath: m_SelectedEditorRenderState
@@ -19173,6 +19327,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4300000, guid: c35e9e794174bad4fbfb590789e7231c, type: 2}
+    - target: {fileID: 4251901002804194192, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5006309957939005162, guid: 15ff78635bc32e44486ffb3e035f2f15,
         type: 3}
       propertyPath: progressBar
@@ -19183,6 +19342,16 @@ PrefabInstance:
       propertyPath: servingProgressBar
       value: 
       objectReference: {fileID: 1282528482}
+    - target: {fileID: 5266731207675393800, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266731207675393800, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5266731207675393800, guid: 15ff78635bc32e44486ffb3e035f2f15,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19233,10 +19402,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5906572998585756828, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6291102912088196604, guid: 15ff78635bc32e44486ffb3e035f2f15,
         type: 3}
       propertyPath: m_Name
       value: Glass Table
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291102912088196604, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7202312641108928420, guid: 15ff78635bc32e44486ffb3e035f2f15,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

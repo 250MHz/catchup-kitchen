@@ -19,36 +19,45 @@ public class NPCSpawner : MonoBehaviour
 
     private void SpawnNPCGroup()
     {
-        // Check if we've reached the maximum group limit
         if (npcGroups.Count >= maxGroups)
         {
             Debug.Log("Max groups reached, stopping NPC spawn.");
-            CancelInvoke(nameof(SpawnNPCGroup)); // Stop spawning new groups
+            CancelInvoke(nameof(SpawnNPCGroup));
             return;
         }
 
-        // Create an empty GameObject to hold the NPC group
         GameObject npcGroup = new GameObject("NPCGroup");
 
-        // Determine the number of NPCs for this group
         int npcCount = Random.Range(minGroupSize, maxGroupSize + 1);
-
-        // Determine the position for the new group with spacing
         Vector3 spawnPosition = transform.position + (Vector3.right * npcGroups.Count * groupSpacing);
 
-        // Spawn NPCs and add them as children of the group object
         for (int i = 0; i < npcCount; i++)
         {
-            Vector3 npcPosition = spawnPosition + new Vector3(i * 1.5f, 0, 0); // Space out NPCs within the group
+            // Spawn NPC slightly back from the spawn point
+            Vector3 npcPosition = spawnPosition + new Vector3(i * 1.5f, 0, 0) - transform.forward * 1.0f;
+
+            // Calculate and apply rotation towards spawner
+            Vector3 directionToSpawner = (transform.position - npcPosition).normalized;
+
+            if (directionToSpawner == Vector3.zero)
+            {
+                directionToSpawner = Vector3.forward;
+            }
+
+            Quaternion rotationToFaceSpawner = Quaternion.LookRotation(directionToSpawner, Vector3.up);
+
             NPCController npc = Instantiate(npcPrefab, npcPosition, Quaternion.identity);
+
             npc.SetNPCGroup(npcGroup);
             npc.transform.parent = npcGroup.transform;
+
+            // Set rotation towards the spawner
+            npc.transform.rotation = rotationToFaceSpawner;
         }
 
-        // Add the group to the list and place it in the world
         npcGroups.Add(npcGroup);
-        Debug.Log($"Spawned a group of {npcCount} NPCs at position: {spawnPosition}");
     }
+
 
     public void RemoveGroup(GameObject group)
     {

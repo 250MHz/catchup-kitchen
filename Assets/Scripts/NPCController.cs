@@ -42,7 +42,11 @@ public class NPCController : MonoBehaviour, IInteractable
             NPCController[] groupNPCs = npcGroupTransform.GetComponentsInChildren<NPCController>();
             if (isFollowing)
             {
-                foreach (var npc in groupNPCs) npc.ReturnToSpawn();
+                foreach (var npc in groupNPCs)
+                {
+                    npc.StopFollowing();
+                    npc.ReturnToSpawn();
+                }
             }
             else
             {
@@ -71,18 +75,15 @@ public class NPCController : MonoBehaviour, IInteractable
         isFollowing = false;
         targetPlayer = null;
         navMeshAgent.SetDestination(spawnPoint);  // Walk back to spawn point
+        navMeshAgent.isStopped = false;
         animator.SetBool("IsWalking", true);
-    }
-
-    private void Start()
-    {
-        outline = GetComponent<Outline>();
     }
 
     private void Update()
     {
         if (isFollowing && targetPlayer != null)
         {
+            // Follow player behavior
             float distanceToPlayer = Vector3.Distance(transform.position, targetPlayer.transform.position);
 
             if (distanceToPlayer > followDistance)
@@ -97,6 +98,28 @@ public class NPCController : MonoBehaviour, IInteractable
                 animator.SetBool("IsWalking", false);
             }
         }
+        else if (!isFollowing && Vector3.Distance(transform.position, spawnPoint) <= 0.2f)
+        {
+            // NPC reached spawn point
+            navMeshAgent.isStopped = true;
+            animator.SetBool("IsWalking", false);
+
+            // Rotate to face the spawner point
+            Vector3 directionToSpawner = (npcSpawner.transform.position - transform.position).normalized;
+
+            if (directionToSpawner != Vector3.zero)
+            {
+                Quaternion rotationToFaceSpawner = Quaternion.LookRotation(directionToSpawner);
+                transform.rotation = rotationToFaceSpawner;  // Set the rotation to face the spawner
+            }
+        }
+    }
+
+
+
+    private void Start()
+    {
+        outline = GetComponent<Outline>();
     }
 
     public void SitAt(Transform chairSeatPoint, Quaternion forward)

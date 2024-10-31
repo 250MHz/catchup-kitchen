@@ -235,7 +235,7 @@ public class GlassTable : BaseFurniture, IInteractable
 
         seatedNPCs.Clear();
         currentOrders.Clear();
-        npcSpawner.RemoveGroup(npcGroup);
+        // npcSpawner.RemoveGroup(npcGroup);
         npcGroup = null;
         currentOrderState = OrderState.Seating;
         progressBar.SetBarFillAmount(0);  // Reset progress bar
@@ -339,6 +339,10 @@ public class GlassTable : BaseFurniture, IInteractable
                     // We don't care who gets what, just that it gets on the table
                     playerHeldObject.SetUsableObjectParent(chairs[currentOrders.Count - 1]);
                     currentOrders.Remove(playerHeldObjectSO);
+
+                    // Hide the serving progress bar after serving the dish
+                    servingProgressBar.gameObject.SetActive(false);
+
                     return;
                 }
             }

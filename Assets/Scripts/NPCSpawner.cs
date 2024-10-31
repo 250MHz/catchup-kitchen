@@ -11,6 +11,8 @@ public class NPCSpawner : MonoBehaviour
 
     private List<GameObject> npcGroups = new List<GameObject>();
 
+    public Transform leavingPoint;
+
     private void Start()
     {
         // Start spawning NPC groups at regular intervals

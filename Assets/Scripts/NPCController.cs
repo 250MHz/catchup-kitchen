@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class NPCController : MonoBehaviour, IInteractable
 {
+    public Transform leavingPoint;
+
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float followDistance = 1.5f;
 
@@ -19,6 +21,7 @@ public class NPCController : MonoBehaviour, IInteractable
     private NavMeshAgent navMeshAgent;
     private Player targetPlayer;
 
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -28,6 +31,17 @@ public class NPCController : MonoBehaviour, IInteractable
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = moveSpeed;
         navMeshAgent.isStopped = true;
+
+        // Find the leaving point by name
+        GameObject leavingPointObject = GameObject.Find("LeavingPoint");
+        if (leavingPointObject != null)
+        {
+            leavingPoint = leavingPointObject.transform;
+        }
+        else
+        {
+            Debug.LogWarning("Leaving point not found in the scene.");
+        }
     }
 
     public void EnableOutline() => outline.enabled = true;
@@ -66,7 +80,7 @@ public class NPCController : MonoBehaviour, IInteractable
     {
         isFollowing = false;
         targetPlayer = null;
-        navMeshAgent.isStopped = true;
+        // navMeshAgent.isStopped = true;
         animator.SetBool("IsWalking", false);
     }
 
@@ -113,6 +127,12 @@ public class NPCController : MonoBehaviour, IInteractable
                 transform.rotation = rotationToFaceSpawner;  // Set the rotation to face the spawner
             }
         }
+        else if (Vector3.Distance(transform.position, leavingPoint.position) < 0.2f)
+        {
+            // NPC reached the leaving point
+            animator.SetBool("IsWalking", false);
+            Destroy(gameObject); // Destroy the NPC after reaching the leaving point
+        }
     }
 
 
@@ -145,7 +165,21 @@ public class NPCController : MonoBehaviour, IInteractable
 
     public void WalkAway()
     {
-        Destroy(gameObject);
+        if (leavingPoint != null)
+        {
+            // Enable the NavMeshAgent before setting the destination
+            navMeshAgent.enabled = true;
+
+            // Set the destination to the leaving point
+            navMeshAgent.SetDestination(leavingPoint.position);
+            navMeshAgent.isStopped = false;
+            animator.SetBool("IsSitting", false);
+            animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     internal bool IsFollowingPlayer(Player player) => isFollowing;

@@ -11,6 +11,8 @@ public class NPCSpawner : MonoBehaviour
 
     private List<GameObject> npcGroups = new List<GameObject>();
 
+    public Transform leavingPoint;
+
     private void Start()
     {
         // Start spawning NPC groups at regular intervals
@@ -19,39 +21,82 @@ public class NPCSpawner : MonoBehaviour
 
     private void SpawnNPCGroup()
     {
-        // Check if we've reached the maximum group limit
         if (npcGroups.Count >= maxGroups)
         {
-            // Debug.Log("Max groups reached, cannot spawn more.");
+            Debug.Log("Max groups reached, stopping NPC spawn.");
+            CancelInvoke(nameof(SpawnNPCGroup));
             return;
         }
 
-        // Create an empty GameObject to hold the NPC group
         GameObject npcGroup = new GameObject("NPCGroup");
 
-        // Determine the number of NPCs for this group
         int npcCount = Random.Range(minGroupSize, maxGroupSize + 1);
-
-        // Determine the position for the new group with spacing
         Vector3 spawnPosition = transform.position + (Vector3.right * npcGroups.Count * groupSpacing);
 
-        // Spawn NPCs and add them as children of the group object
         for (int i = 0; i < npcCount; i++)
         {
-            Vector3 npcPosition = spawnPosition + new Vector3(i * 1.5f, 0, 0); // Space out NPCs within the group
+            // Spawn NPC slightly back from the spawn point
+            Vector3 npcPosition = spawnPosition + new Vector3(i * 1.5f, 0, 0) - transform.forward * 1.0f;
+
+            // Calculate and apply rotation towards spawner
+            Vector3 directionToSpawner = (transform.position - npcPosition).normalized;
+
+            if (directionToSpawner == Vector3.zero)
+            {
+                directionToSpawner = Vector3.forward;
+            }
+
+            Quaternion rotationToFaceSpawner = Quaternion.LookRotation(directionToSpawner, Vector3.up);
+
             NPCController npc = Instantiate(npcPrefab, npcPosition, Quaternion.identity);
+
             npc.SetNPCGroup(npcGroup);
             npc.transform.parent = npcGroup.transform;
+
+            // Set rotation towards the spawner
+            npc.transform.rotation = rotationToFaceSpawner;
         }
 
-        // Add the group to the list and place it in the world
         npcGroups.Add(npcGroup);
-        Debug.Log($"Spawned a group of {npcCount} NPCs at position: {spawnPosition}");
     }
+
 
     public void RemoveGroup(GameObject group)
     {
         npcGroups.Remove(group);
         Destroy(group);
+
+        if (npcGroups.Count < maxGroups && !IsInvoking(nameof(SpawnNPCGroup)))
+        {
+            InvokeRepeating(nameof(SpawnNPCGroup), 0f, 5f);
+        }
     }
+
+    public void RemoveGroupAndReorder(GameObject seatedGroup)
+    {
+        npcGroups.Remove(seatedGroup);  // Remove the seated group from the list
+
+
+        // Reorder remaining groups
+        for (int i = 0; i < npcGroups.Count; i++)
+        {
+            GameObject npcGroup = npcGroups[i];
+            NPCController[] npcsInGroup = npcGroup.GetComponentsInChildren<NPCController>();
+
+            for (int j = 0; j < npcsInGroup.Length; j++)
+            {
+                // Calculate a new position for each NPC within the group
+                Vector3 newPosition = CalculatePosition(i) + new Vector3(j * 1.5f, 0, 0); // Space out each NPC within the group
+                npcsInGroup[j].transform.position = newPosition;
+            }
+        }
+    }
+
+
+    private Vector3 CalculatePosition(int index)
+    {
+        // Offset based on the NPCSpawner's starting position
+        return transform.position + new Vector3(index * groupSpacing, 0, 0); // Spacing based on group index
+    }
+
 }

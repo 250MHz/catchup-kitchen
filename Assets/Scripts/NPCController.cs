@@ -1,71 +1,70 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class NPCController : MonoBehaviour, IInteractable
 {
-    [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private float followDistance = 1.5f;  // Minimum distance to maintain from the player
+    public Transform leavingPoint;
 
-    private bool isFollowing = false;  // To track if NPCs are following the player
-    private Vector3 spawnPoint;  // To store the NPC's spawn point
+    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float followDistance = 1.5f;
+
+    private bool isFollowing = false;
+    private Vector3 spawnPoint;
     private Animator animator;
     private Outline outline;
     private Collider _collider;
     private GameObject npcGroup;
 
-    // Reference to the NPCSpawner
     private NPCSpawner npcSpawner;
+    private NavMeshAgent navMeshAgent;
+    private Player targetPlayer;
+
 
     private void Awake()
     {
-        // Get the Animator component attached to the NPC
         animator = GetComponent<Animator>();
-        spawnPoint = transform.position;  // Store the spawn point on awake
-        // Get the NPCSpawner component in the scene
+        spawnPoint = transform.position;
         npcSpawner = FindObjectOfType<NPCSpawner>();
         _collider = GetComponent<Collider>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.speed = moveSpeed;
+        navMeshAgent.isStopped = true;
+
+        // Find the leaving point by name
+        GameObject leavingPointObject = GameObject.Find("LeavingPoint");
+        if (leavingPointObject != null)
+        {
+            leavingPoint = leavingPointObject.transform;
+        }
+        else
+        {
+            Debug.LogWarning("Leaving point not found in the scene.");
+        }
     }
 
-    public void EnableOutline()
-    {
-        outline.enabled = true;
-    }
-
-    public void DisableOutline()
-    {
-        outline.enabled = false;
-    }
+    public void EnableOutline() => outline.enabled = true;
+    public void DisableOutline() => outline.enabled = false;
 
     public void Interact(Player player)
     {
-        Debug.Log("NPCController Interact() called");
-
-        // Get the parent of this NPC, which is the NPCGroup
         Transform npcGroupTransform = transform.parent;
 
-        // Check if the group of NPCs exists
         if (npcGroupTransform != null)
         {
-            // Get all NPCs in the group
             NPCController[] groupNPCs = npcGroupTransform.GetComponentsInChildren<NPCController>();
-
-            // Check if this NPC is following the player
             if (isFollowing)
             {
-                // If already following, return all NPCs to spawn point
                 foreach (var npc in groupNPCs)
                 {
+                    npc.StopFollowing();
                     npc.ReturnToSpawn();
                 }
             }
             else
             {
-                // If not following, start following for all NPCs in the group
-                foreach (var npc in groupNPCs)
-                {
-                    npc.FollowPlayer(player);
-                }
+                foreach (var npc in groupNPCs) npc.FollowPlayer(player);
             }
         }
     }
@@ -73,49 +72,70 @@ public class NPCController : MonoBehaviour, IInteractable
     public void FollowPlayer(Player player)
     {
         isFollowing = true;
-        StartCoroutine(FollowCoroutine(player));
+        targetPlayer = player;
+        navMeshAgent.isStopped = false;
     }
 
     public void StopFollowing()
     {
         isFollowing = false;
-        StopAllCoroutines();
+        targetPlayer = null;
+        // navMeshAgent.isStopped = true;
         animator.SetBool("IsWalking", false);
     }
 
     private void ReturnToSpawn()
     {
         isFollowing = false;
-        Debug.Log("NPCs are returning to spawn point.");
-        transform.position = spawnPoint;  // Directly set the position to spawn point
+        targetPlayer = null;
+        navMeshAgent.SetDestination(spawnPoint);  // Walk back to spawn point
+        navMeshAgent.isStopped = false;
+        animator.SetBool("IsWalking", true);
     }
 
-    private IEnumerator FollowCoroutine(Player player)
+    private void Update()
     {
-        while (isFollowing)
+        if (isFollowing && targetPlayer != null)
         {
-            // Calculate the distance to the player
-            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+            // Follow player behavior
+            float distanceToPlayer = Vector3.Distance(transform.position, targetPlayer.transform.position);
 
             if (distanceToPlayer > followDistance)
             {
-                // Move towards the player's position if outside the follow distance
-                Vector3 direction = (player.transform.position - transform.position).normalized;
-                transform.position += direction * moveSpeed * Time.deltaTime;
-
+                navMeshAgent.SetDestination(targetPlayer.transform.position);
+                navMeshAgent.isStopped = false;
                 animator.SetBool("IsWalking", true);
             }
             else
             {
-                // Stop moving when within follow distance
+                navMeshAgent.isStopped = true;
                 animator.SetBool("IsWalking", false);
             }
-
-            yield return null;  // Wait for the next frame
         }
+        else if (!isFollowing && Vector3.Distance(transform.position, spawnPoint) <= 0.2f)
+        {
+            // NPC reached spawn point
+            navMeshAgent.isStopped = true;
+            animator.SetBool("IsWalking", false);
 
-        animator.SetBool("IsWalking", false);  // Stop walking animation when not following
+            // Rotate to face the spawner point
+            Vector3 directionToSpawner = (npcSpawner.transform.position - transform.position).normalized;
+
+            if (directionToSpawner != Vector3.zero)
+            {
+                Quaternion rotationToFaceSpawner = Quaternion.LookRotation(directionToSpawner);
+                transform.rotation = rotationToFaceSpawner;  // Set the rotation to face the spawner
+            }
+        }
+        else if (Vector3.Distance(transform.position, leavingPoint.position) < 0.2f)
+        {
+            // NPC reached the leaving point
+            animator.SetBool("IsWalking", false);
+            Destroy(gameObject); // Destroy the NPC after reaching the leaving point
+        }
     }
+
+
 
     private void Start()
     {
@@ -124,12 +144,19 @@ public class NPCController : MonoBehaviour, IInteractable
 
     public void SitAt(Transform chairSeatPoint, Quaternion forward)
     {
+        navMeshAgent.enabled = false;
+
         transform.position = chairSeatPoint.position;
         transform.rotation = forward;
+
         _collider.enabled = false;
+
         StopFollowing();
         Sitting();
+
+        npcSpawner.RemoveGroupAndReorder(npcGroup);
     }
+
 
     public void Sitting()
     {
@@ -138,28 +165,26 @@ public class NPCController : MonoBehaviour, IInteractable
 
     public void WalkAway()
     {
-        // TODO: make NPC walk away, for now, we'll just destroy it
-        Destroy(gameObject);
+        if (leavingPoint != null)
+        {
+            // Enable the NavMeshAgent before setting the destination
+            navMeshAgent.enabled = true;
+
+            // Set the destination to the leaving point
+            navMeshAgent.SetDestination(leavingPoint.position);
+            navMeshAgent.isStopped = false;
+            animator.SetBool("IsSitting", false);
+            animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
+    internal bool IsFollowingPlayer(Player player) => isFollowing;
 
-    internal bool IsFollowingPlayer(Player player)
-    {
-        return isFollowing;
-    }
-
-    public void SetNPCGroup(GameObject group)
-    {
-        npcGroup = group;
-    }
-
-    public GameObject GetNPCGroup()
-    {
-        return npcGroup;
-    }
-
-    public NPCSpawner GetNPCSpawner()
-    {
-        return npcSpawner;
-    }
+    public void SetNPCGroup(GameObject group) => npcGroup = group;
+    public GameObject GetNPCGroup() => npcGroup;
+    public NPCSpawner GetNPCSpawner() => npcSpawner;
 }

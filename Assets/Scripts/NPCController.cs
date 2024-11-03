@@ -21,7 +21,6 @@ public class NPCController : MonoBehaviour, IInteractable
     private NavMeshAgent navMeshAgent;
     private Player targetPlayer;
 
-
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -88,7 +87,7 @@ public class NPCController : MonoBehaviour, IInteractable
     {
         isFollowing = false;
         targetPlayer = null;
-        navMeshAgent.SetDestination(spawnPoint);  // Walk back to spawn point
+        navMeshAgent.SetDestination(spawnPoint);
         navMeshAgent.isStopped = false;
         animator.SetBool("IsWalking", true);
     }
@@ -99,7 +98,6 @@ public class NPCController : MonoBehaviour, IInteractable
         {
             // Follow player behavior
             float distanceToPlayer = Vector3.Distance(transform.position, targetPlayer.transform.position);
-
             if (distanceToPlayer > followDistance)
             {
                 navMeshAgent.SetDestination(targetPlayer.transform.position);
@@ -118,14 +116,14 @@ public class NPCController : MonoBehaviour, IInteractable
             navMeshAgent.isStopped = true;
             animator.SetBool("IsWalking", false);
 
-            // Rotate to face the spawner point
+            // Rotate to face the spawner
             Vector3 directionToSpawner = (npcSpawner.transform.position - transform.position).normalized;
-
             if (directionToSpawner != Vector3.zero)
             {
                 Quaternion rotationToFaceSpawner = Quaternion.LookRotation(directionToSpawner);
-                transform.rotation = rotationToFaceSpawner;  // Set the rotation to face the spawner
+                transform.rotation = rotationToFaceSpawner;
             }
+            // Debug.Log("NPC reached spawn point and is facing spawner.");
         }
         else if (Vector3.Distance(transform.position, leavingPoint.position) < 0.2f)
         {
@@ -135,6 +133,28 @@ public class NPCController : MonoBehaviour, IInteractable
         }
     }
 
+    private void DestroyGroup()
+    {
+        if (npcGroup != null)
+        {
+            foreach (NPCController npc in npcGroup.GetComponentsInChildren<NPCController>())
+            {
+                if (npc.navMeshAgent != null)
+                {
+                    npc.navMeshAgent.enabled = false; // Disable the NavMeshAgent
+                }
+            }
+            Destroy(npcGroup); // Destroy the group
+        }
+        else
+        {
+            if (navMeshAgent != null)
+            {
+                navMeshAgent.enabled = false; // Disable the NavMeshAgent before destroying
+            }
+            Destroy(gameObject);
+        }
+    }
 
 
     private void Start()
@@ -157,7 +177,6 @@ public class NPCController : MonoBehaviour, IInteractable
         npcSpawner.RemoveGroupAndReorder(npcGroup);
     }
 
-
     public void Sitting()
     {
         animator.SetBool("IsSitting", true);
@@ -167,24 +186,37 @@ public class NPCController : MonoBehaviour, IInteractable
     {
         if (leavingPoint != null)
         {
-            // Enable the NavMeshAgent before setting the destination
-            navMeshAgent.enabled = true;
+            if (navMeshAgent != null) // Check if navMeshAgent is not null
+            {
+                navMeshAgent.enabled = true;
+                navMeshAgent.SetDestination(leavingPoint.position);
+                navMeshAgent.isStopped = false;
 
-            // Set the destination to the leaving point
-            navMeshAgent.SetDestination(leavingPoint.position);
-            navMeshAgent.isStopped = false;
-            animator.SetBool("IsSitting", false);
-            animator.SetBool("IsWalking", true);
+                // Update animator states
+                animator.SetBool("IsSitting", false);
+                animator.SetBool("IsWalking", true);
+            }
         }
         else
         {
+            Debug.LogWarning("Leaving point is null. Destroying the NPC.");
             Destroy(gameObject);
         }
     }
+
 
     internal bool IsFollowingPlayer(Player player) => isFollowing;
 
     public void SetNPCGroup(GameObject group) => npcGroup = group;
     public GameObject GetNPCGroup() => npcGroup;
     public NPCSpawner GetNPCSpawner() => npcSpawner;
+
+
+    public void UpdateSpawnPoint(Vector3 newSpawnPoint)
+    {
+        Vector3 offset = -transform.forward * 0.5f;
+        spawnPoint = newSpawnPoint + offset;
+    }
+
+
 }

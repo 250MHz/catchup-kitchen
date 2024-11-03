@@ -23,6 +23,7 @@ public class GlassTable : BaseFurniture, IInteractable
     private NPCSpawner npcSpawner;
     // TODO: probably shouldn't use GameObject for this
     private GameObject npcGroup;
+    private List<UsableObject> remainingDishes = new List<UsableObject>();
 
     // TODO: unused reference??
     // public Canvas canvas;
@@ -46,6 +47,8 @@ public class GlassTable : BaseFurniture, IInteractable
             // Rotate the order card slowly around the Y-axis
             activeOrderCard.transform.Rotate(0, 30 * Time.deltaTime, 0);
         }
+        Debug.Log($"Remaining Dishes: {remainingDishes.Count}, Dirty Plates: {dirtyPlates.Count}");
+
     }
 
     public void Interact(Player player)
@@ -53,10 +56,13 @@ public class GlassTable : BaseFurniture, IInteractable
         switch (currentOrderState)
         {
             case OrderState.Seating:
-                SeatNPCs(player);
-                ShowOrderUI();
-                currentOrderState = OrderState.Ordering;  // Move to next state
-                StartOrderCountdown();
+                if (HasFollowingNPCs(player))
+                {
+                    SeatNPCs(player);
+                    ShowOrderUI();
+                    currentOrderState = OrderState.Ordering;  // Move to next state
+                    StartOrderCountdown();
+                }
                 break;
 
             case OrderState.Ordering:
@@ -77,29 +83,45 @@ public class GlassTable : BaseFurniture, IInteractable
                 break;
 
             case OrderState.Complete:
-                // Interact with table to pick up dirty plates
-                if (dirtyPlates.Count > 0)
-                {
-                    if (!player.HasUsableObject())
-                    {
-                        // Player is not holding something
-                        // Give them one of the dirty plates
-                        dirtyPlates[0].SetUsableObjectParent(player);
-                        dirtyPlates.RemoveAt(0);
-                        // Set to OrderState.Seating when all dirty plates are gone
-                        if (dirtyPlates.Count == 0)
-                        {
-                            seatedNPCs.RemoveAll((NPCController npc) => true);
-                            // Reset the NPCSpawner
-                            npcSpawner.RemoveGroup(npcGroup);
-                            npcGroup = null;
-                            currentOrderState = OrderState.Seating;
-                        }
-                    }
-                }
+                HandleCompleteState(player);
+                
                 break;
         }
     }
+
+    private void HandleCompleteState(Player player)
+    {
+        // Check if there are dirty plates on the table
+        if (dirtyPlates.Count > 0)
+        {
+            Debug.Log("There are dirty plates on the table. Allowing player to pick them up.");
+            if (!player.HasUsableObject())
+            {
+                // Allow the player to pick up a dirty plate
+                dirtyPlates[0].SetUsableObjectParent(player);
+                dirtyPlates.RemoveAt(0);
+                return; // Return early if a plate was picked up
+            }
+        }
+
+        if (remainingDishes.Count > 0)
+        {
+            Debug.Log("There are remaining dishes on the table. Allowing player to pick them up.");
+            if (!player.HasUsableObject())
+            {
+                // Allow the player to pick up a remaining dish
+                remainingDishes[0].SetUsableObjectParent(player);
+                remainingDishes.RemoveAt(0);
+                return; // Return early if a dish was picked up
+            }
+        }
+
+
+        // If no dirty plates or remaining dishes, reset the table
+        ResetTable();
+        Debug.Log("Table is now reset.");
+    }
+
 
     //private IEnumerator EatCoroutine()
     //{
@@ -125,40 +147,26 @@ public class GlassTable : BaseFurniture, IInteractable
 
     private IEnumerator EatCoroutine()
     {
-        // TODO: Eating animation
-        // Customers eat for 5 seconds
         yield return new WaitForSeconds(eatingSeconds);
 
-        // Make customers walk away
         foreach (NPCController npc in seatedNPCs)
         {
-            // TODO: this currently just destroys the customers
             npc.WalkAway();
         }
 
-        // Replace dishes with dirty plates
         foreach (Chair c in chairs)
         {
             if (c.GetUsableObject() != null)
             {
-                c.GetUsableObject().DestroySelf();
+                UsableObject dish = c.GetUsableObject();
                 dirtyPlates.Add(UsableObject.SpawnUsableObject(plateDirtySO, c));
+                remainingDishes.Add(dish); // Add remaining dishes to the list
+                dish.DestroySelf(); // Remove the dish from the chair
             }
         }
 
-        // Clear current orders to prepare for new ones
         currentOrders.Clear();
-
-        // Wait until dirty plates are removed from table before allowing new seating
-        if (dirtyPlates.Count == 0)
-        {
-            seatedNPCs.Clear();
-            npcSpawner.RemoveGroup(npcGroup);  // Remove the NPC group
-            npcGroup = null;  // Reset the NPC group reference
-
-            // Reset OrderState to allow new seating
-            currentOrderState = OrderState.Seating;
-        }
+        // No need to reset the table yet, will check in HandleCompleteState
     }
 
     private void StartOrderCountdown()
@@ -221,13 +229,28 @@ public class GlassTable : BaseFurniture, IInteractable
             yield return null;
         }
 
-        ResetTable();  // Reset table and remove NPCs after serving timeout
+        currentOrderState = OrderState.Complete;
+
+        // Make NPCs walk away
+        foreach (NPCController npc in seatedNPCs)
+        {
+            if (npc != null) // Check if the npc is still valid
+            {
+                npc.WalkAway();
+            }
+        }
+
+        // yield return new WaitForSeconds(1f);
+
+        // ResetTable();
+
+        servingProgressBar.gameObject.SetActive(false);
     }
 
-    
 
     private void ResetTable()
     {
+        // Resetting NPCs and orders
         foreach (NPCController npc in seatedNPCs)
         {
             npc.WalkAway();
@@ -235,12 +258,9 @@ public class GlassTable : BaseFurniture, IInteractable
 
         seatedNPCs.Clear();
         currentOrders.Clear();
-        // npcSpawner.RemoveGroup(npcGroup);
-        npcGroup = null;
         currentOrderState = OrderState.Seating;
         progressBar.SetBarFillAmount(0);  // Reset progress bar
-        servingProgressBar.gameObject.SetActive(false);  // Hide the serving progress bar
-        Debug.Log("Order timed out, resetting table.");
+        //servingProgressBar.gameObject.SetActive(false);  // Hide the serving progress bar
     }
 
 
@@ -304,13 +324,13 @@ public class GlassTable : BaseFurniture, IInteractable
 
     private void PlaceOrder()
     {
-        // Assign a random object from `dishes` for each customer
+        // Assign a random object from dishes for each customer
         // The customer class doesn't actually need to know anything
         // about the order, we just need to assign seats in a certain
         // order and then assign dishes in the same order.
         for (int i = 0; i < seatedNPCs.Count; i++)
         {
-            currentOrders.Add(dishes[Random.Range(0, dishes.Length)]);
+            currentOrders.Add(dishes[Random.Range(0, dishes.Length - 1)]);
         }
         Debug.Log("Order placed! Preparing for service...");
 
@@ -325,24 +345,20 @@ public class GlassTable : BaseFurniture, IInteractable
     {
         if (playerHeldObject is PlateUsableObject)
         {
-            // N.b. playerHeldObject.GetUsableObjectSO() will always just return
-            // a plate, you need to look at the currentFullPlateRecipeSO field
-            // to know what recipe is met by the ingredients on the plate.
             UsableObjectSO playerHeldObjectSO =
                 (playerHeldObject as PlateUsableObject)
                 .GetCurrentFullPlateRecipeSO();
-            if (playerHeldObjectSO == null)
-            {
-                return;
-            }
+
             foreach (UsableObjectSO order in currentOrders)
             {
                 if (order.GetObjectName() == playerHeldObjectSO.GetObjectName())
                 {
-                    // Assign plates from seatedNPCs.Count - 1 to 0
-                    // We don't care who gets what, just that it gets on the table
+                    // Assign the plate to the chair of the last order
                     playerHeldObject.SetUsableObjectParent(chairs[currentOrders.Count - 1]);
-                    currentOrders.Remove(playerHeldObjectSO);
+
+                    // Add the served dish to the remaining dishes list
+                    remainingDishes.Add(playerHeldObject); // Add the plate being served to the remaining dishes list
+                    currentOrders.Remove(order); // Remove the served order
 
                     // Hide the serving progress bar after serving the dish
                     servingProgressBar.gameObject.SetActive(false);
@@ -355,4 +371,19 @@ public class GlassTable : BaseFurniture, IInteractable
 
     public void EnableOutline() => outline.enabled = true;
     public void DisableOutline() => outline.enabled = false;
+
+    // This function check any NPCs are following the player
+    // If no NPCs following, the state machine will not go to next state, fixed the NullReferenceException when interact it
+    private bool HasFollowingNPCs(Player player)
+    {
+        NPCController[] npcs = FindObjectsOfType<NPCController>();
+        foreach (var npc in npcs)
+        {
+            if (npc != null && npc.IsFollowingPlayer(player))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

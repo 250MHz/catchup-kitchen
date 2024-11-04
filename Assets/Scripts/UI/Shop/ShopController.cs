@@ -94,7 +94,11 @@ public class ShopController : MonoBehaviour
                     if (choiceIndex == 0)
                     {
                         // Yes
-                        ingredientShop.HandlePurchase(player);
+                        ingredientShop.HandlePurchase(
+                            player,
+                            shopUI.GetSelectedItem(),
+                            countSelectorUI.GetCurrentCount()
+                        );
                         Wallet.Instance.TakeMoney(totalPrice);
                     }
                     state = ShopState.Browsing;

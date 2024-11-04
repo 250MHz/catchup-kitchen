@@ -94,8 +94,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 792cb3b302d914649a007e3a78be8ff7, type: 2}
   - {fileID: 11400000, guid: 5258d9df5ac72634c942cde15a686a09, type: 2}
   dialog:
-    lines:
-    - test dialog
+    lines: []
   usableObjectSO: {fileID: 11400000, guid: efbd5d515230a574a81bcd239c8db132, type: 2}
   itemSpawnPoint: {fileID: 7395685474008565348}
 --- !u!1 &7166730008959352112

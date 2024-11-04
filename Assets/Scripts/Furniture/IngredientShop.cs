@@ -18,12 +18,17 @@ public class IngredientShop : BaseFurniture, IInteractable
         player.GetShopController().StartShopping(this);
     }
 
-    public void HandlePurchase(Player player)
+    public void HandlePurchase(Player player, UsableObjectSO ingredient, int count)
     {
         GameObject usableGameObject = Instantiate(usableObjectSO.GetPrefab());
+        IngredientBox ingredientBox = (IngredientBox)usableGameObject
+            .GetComponent<UsableObject>();
+        ingredientBox.SetIngredientSO(ingredient);
+        ingredientBox.SetCount(count);
+
         if (!player.HasUsableObject())
         {
-            usableGameObject.GetComponent<UsableObject>().SetUsableObjectParent(player);
+            ingredientBox.SetUsableObjectParent(player);
         }
         else
         {

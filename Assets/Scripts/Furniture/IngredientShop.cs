@@ -4,17 +4,42 @@ using UnityEngine;
 
 public class IngredientShop : BaseFurniture, IInteractable
 {
+    // TODO: probably should've created a new SO just for shop related stuff.
+    // Description / icon / price doesn't apply to the majority of usable objects.
+    [SerializeField] private List<UsableObjectSO> availableItems;
+    [SerializeField] private Dialog dialog;
     [SerializeField] private UsableObjectSO usableObjectSO;
+    [SerializeField] private Transform itemSpawnPoint;
+    [SerializeField] private Transform clerk;
+
     private Outline outline;
 
     public void Interact(Player player)
     {
+        clerk.LookAt(player.transform);
+        player.GetShopController().StartShopping(this);
+    }
+
+    public void HandlePurchase(Player player, UsableObjectSO ingredient, int count)
+    {
+        GameObject usableGameObject = Instantiate(usableObjectSO.GetPrefab());
+        IngredientBox ingredientBox = (IngredientBox)usableGameObject
+            .GetComponent<UsableObject>();
+        ingredientBox.SetIngredientSO(ingredient);
+        ingredientBox.SetCount(count);
+
         if (!player.HasUsableObject())
         {
-            GameObject usableGameObject = Instantiate(usableObjectSO.GetPrefab());
-            usableGameObject.GetComponent<UsableObject>().SetUsableObjectParent(player);
+            ingredientBox.SetUsableObjectParent(player);
+        }
+        else
+        {
+            // Spawn next to shop if player is already holding something
+            usableGameObject.transform.position = itemSpawnPoint.position;
         }
     }
+
+    public List<UsableObjectSO> AvailableItems => availableItems;
 
     public void EnableOutline()
     {

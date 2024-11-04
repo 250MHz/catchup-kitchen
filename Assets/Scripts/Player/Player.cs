@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public interface IInteractable
 {
@@ -14,34 +15,73 @@ public interface IInteractable
 public class Player : MonoBehaviour, IUsableObjectParent
 {
     public bool IsWalking { get; private set; }
+
+    private enum State
+    {
+        Playing,
+        Dialog,
+        Shop,
+    }
+
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotateSpeed = 720f;
     [SerializeField] private LayerMask interactableLayerMask;
     [SerializeField] private float interactRange;
     [SerializeField] private Transform usableObjectHoldPoint;
+    [SerializeField] private DialogManager dialogManager;
+    [SerializeField] private ShopController shopController;
+
     private Rigidbody playerRigidbody;
     private CapsuleCollider playerCollider;
     private Vector2 moveAmount;
     private IInteractable selectedInteractable;
-
     private UsableObject usableObject;
+    private State state;
 
     // Start is called before the first frame update
     private void Start()
     {
+        state = State.Playing;
         playerRigidbody = GetComponent<Rigidbody>();
         playerCollider = GetComponent<CapsuleCollider>();
+
+        dialogManager.OnShowDialog += () => { state = State.Dialog; };
+        // N.b. in the video https://youtu.be/2CmG7ZtrWso there are multiple
+        // states, and it's possible to jump from Dialog to a state besides the
+        // default one. In that case, you'd have if statements after closing
+        // dialog, but this doesn't apply to us (we only have 2 states)
+        dialogManager.OnCloseDialog += () => { state = State.Playing; };
+        shopController.OnStart += () => { state = State.Shop; };
+        shopController.OnFinish += () => { state = State.Playing; };
+    }
+
+    public DialogManager GetDialogManager()
+    {
+        return dialogManager;
+    }
+
+    public ShopController GetShopController()
+    {
+        return shopController;
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
         // read the value for the "move" action each event call
         moveAmount = context.ReadValue<Vector2>().normalized;
+        if (context.performed && state == State.Dialog)
+        {
+            dialogManager.OnMove(moveAmount);
+        }
+        else if (context.performed && state == State.Shop)
+        {
+            shopController.OnMove(moveAmount);
+        }
     }
 
     public void OnUse(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && state == State.Playing)
         {
             if (selectedInteractable != null)
             {
@@ -53,13 +93,40 @@ public class Player : MonoBehaviour, IUsableObjectParent
                 usableObject.SetUsableObjectParent(null);
             }
         }
+        else if (context.performed && state == State.Dialog)
+        {
+            dialogManager.OnUse();
+        }
+        else if (context.performed && state == State.Shop)
+        {
+            shopController.OnUse(this);
+        }
+    }
+
+    public void OnCancel(InputAction.CallbackContext context)
+    {
+        if (context.performed && state == State.Dialog)
+        {
+            dialogManager.OnCancel();
+        }
+        else if (context.performed && state == State.Shop)
+        {
+            shopController.OnCancel(this);
+        }
     }
 
     // Update is called once per frame
     private void FixedUpdate()
     {
-        HandleMovement();
-        HandleInteractions();
+        if (state == State.Playing)
+        {
+            HandleMovement();
+            HandleInteractions();
+        }
+        else if (state == State.Dialog)
+        {
+            dialogManager.HandleUpdate();
+        }
     }
 
     private void HandleMovement()

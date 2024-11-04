@@ -84,7 +84,7 @@ public class GlassTable : BaseFurniture, IInteractable
 
             case OrderState.Complete:
                 HandleCompleteState(player);
-                
+
                 break;
         }
     }
@@ -330,7 +330,7 @@ public class GlassTable : BaseFurniture, IInteractable
         // order and then assign dishes in the same order.
         for (int i = 0; i < seatedNPCs.Count; i++)
         {
-            currentOrders.Add(dishes[Random.Range(0, dishes.Length - 1)]);
+            currentOrders.Add(dishes[Random.Range(0, dishes.Length)]);
         }
         Debug.Log("Order placed! Preparing for service...");
 

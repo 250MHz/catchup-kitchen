@@ -21,10 +21,11 @@ public class NPCSpawner : MonoBehaviour
 
     private void SpawnNPCGroup()
     {
+        // Debug.Log("Attempting to spawn NPC group.");
+
         if (npcGroups.Count >= maxGroups)
         {
             Debug.Log("Max groups reached, stopping NPC spawn.");
-            CancelInvoke(nameof(SpawnNPCGroup));
             return;
         }
 
@@ -58,45 +59,50 @@ public class NPCSpawner : MonoBehaviour
         }
 
         npcGroups.Add(npcGroup);
+        // Debug.Log("NPC group spawned successfully.");
     }
 
+    //public void RemoveGroup(GameObject group)
+    //{
+    //    npcGroups.Remove(group);
+    //    Destroy(group);
+    //    Debug.Log("NPC group removed.");
 
-    public void RemoveGroup(GameObject group)
-    {
-        npcGroups.Remove(group);
-        Destroy(group);
-
-        if (npcGroups.Count < maxGroups && !IsInvoking(nameof(SpawnNPCGroup)))
-        {
-            InvokeRepeating(nameof(SpawnNPCGroup), 0f, 5f);
-        }
-    }
+    //    if (npcGroups.Count < maxGroups && !IsInvoking(nameof(SpawnNPCGroup)))
+    //    {
+    //        Debug.Log("Re-invoking NPC spawn.");
+    //        InvokeRepeating(nameof(SpawnNPCGroup), 0f, 5f);
+    //    }
+    //}
 
     public void RemoveGroupAndReorder(GameObject seatedGroup)
     {
         npcGroups.Remove(seatedGroup);  // Remove the seated group from the list
+        // Debug.Log("Group seated and removed, reordering remaining groups.");
 
-
-        // Reorder remaining groups
+        // Loop through each remaining group to reposition it
         for (int i = 0; i < npcGroups.Count; i++)
         {
             GameObject npcGroup = npcGroups[i];
+
+            // Calculate the new position for this group
+            Vector3 groupPosition = CalculatePosition(i);
+            npcGroup.transform.position = groupPosition;
+
+            // Adjust each NPC's local position within the group to maintain spacing
             NPCController[] npcsInGroup = npcGroup.GetComponentsInChildren<NPCController>();
 
             for (int j = 0; j < npcsInGroup.Length; j++)
             {
-                // Calculate a new position for each NPC within the group
-                Vector3 newPosition = CalculatePosition(i) + new Vector3(j * 1.5f, 0, 0); // Space out each NPC within the group
-                npcsInGroup[j].transform.position = newPosition;
+                // Set the local position of each NPC within the group
+                npcsInGroup[j].transform.localPosition = new Vector3(j * 1.5f, 0, 0);
+                npcsInGroup[j].UpdateSpawnPoint(npcsInGroup[j].transform.position);
             }
         }
     }
 
-
     private Vector3 CalculatePosition(int index)
     {
-        // Offset based on the NPCSpawner's starting position
-        return transform.position + new Vector3(index * groupSpacing, 0, 0); // Spacing based on group index
+        return transform.position + new Vector3(index * groupSpacing, 0, 0);
     }
-
 }

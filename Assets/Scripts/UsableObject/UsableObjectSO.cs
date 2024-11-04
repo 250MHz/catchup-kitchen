@@ -7,12 +7,32 @@ public class UsableObjectSO : ScriptableObject
 {
     [SerializeField] private GameObject prefab;
     [SerializeField] private string objectName;
+    [SerializeField] private string description;
+    [SerializeField] private int price;
+    [SerializeField] private Sprite icon;
 
-    public GameObject GetPrefab() {
+    public GameObject GetPrefab()
+    {
         return prefab;
     }
 
-    public string GetObjectName() {
+    public string GetObjectName()
+    {
         return objectName;
+    }
+
+    public string GetDescription()
+    {
+        return description;
+    }
+
+    public int GetPrice()
+    {
+        return price;
+    }
+
+    public Sprite GetIcon()
+    {
+        return icon;
     }
 }

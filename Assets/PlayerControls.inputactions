@@ -1,5 +1,5 @@
 {
-    "name": "_PlayerControls",
+    "name": "PlayerControls",
     "maps": [
         {
             "name": "Player",
@@ -18,6 +18,15 @@
                     "name": "Use",
                     "type": "Button",
                     "id": "179246a0-e2bc-42bb-8221-d94a39845a26",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "02894b30-3dba-4f87-b6e7-50aecc13be1f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -231,6 +240,39 @@
                     "processors": "",
                     "groups": "WASD",
                     "action": "Use",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e93099ff-2075-466c-9d31-0929c629de3d",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "WASD",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d9580d79-e338-4c54-b35e-0f8a2b60a331",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "IJKL",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "df9e3600-03e5-45ce-b9d7-2e9c1309e6e4",
+                    "path": "<Keyboard>/numpad2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Arrows",
+                    "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

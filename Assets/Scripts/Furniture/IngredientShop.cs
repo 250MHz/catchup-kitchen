@@ -10,11 +10,13 @@ public class IngredientShop : BaseFurniture, IInteractable
     [SerializeField] private Dialog dialog;
     [SerializeField] private UsableObjectSO usableObjectSO;
     [SerializeField] private Transform itemSpawnPoint;
+    [SerializeField] private Transform clerk;
 
     private Outline outline;
 
     public void Interact(Player player)
     {
+        clerk.LookAt(player.transform);
         player.GetShopController().StartShopping(this);
     }
 

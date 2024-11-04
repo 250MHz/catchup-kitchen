@@ -132,10 +132,35 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8668799298831984093}
     m_Modifications:
+    - target: {fileID: 1316252085311200482, guid: afa79de40eea5d9478a9c5ad2ee5dfbb,
+        type: 3}
+      propertyPath: m_text
+      value: 99
+      objectReference: {fileID: 0}
+    - target: {fileID: 1316252085311200482, guid: afa79de40eea5d9478a9c5ad2ee5dfbb,
+        type: 3}
+      propertyPath: m_isRightToLeft
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1316252085311200482, guid: afa79de40eea5d9478a9c5ad2ee5dfbb,
+        type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4920812359346851910, guid: afa79de40eea5d9478a9c5ad2ee5dfbb,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5514851481427946053, guid: afa79de40eea5d9478a9c5ad2ee5dfbb,
         type: 3}
       propertyPath: m_Name
       value: Ingredient Count
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514851481427946053, guid: afa79de40eea5d9478a9c5ad2ee5dfbb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7103458950397428392, guid: afa79de40eea5d9478a9c5ad2ee5dfbb,
         type: 3}

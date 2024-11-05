@@ -13,6 +13,12 @@ public class TrashCan : MonoBehaviour, IInteractable
         if (player.HasUsableObject())
         {
             UsableObject usableObject = player.GetUsableObject();
+            if (usableObject.gameObject.name == "Plate Dirty(Clone)")
+            {
+                // Debug.Log("Cannot interact with the trash can while holding a dirty plate.");
+                return; // Prevent interaction if holding a dirty plate
+            }
+
             player.ClearUsableObject();
             Destroy(usableObject.gameObject);
             if (usableObject is PlateUsableObject)

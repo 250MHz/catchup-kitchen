@@ -41,7 +41,7 @@ public class GlassTable : BaseFurniture, IInteractable
     private void Update()
     {
         // Debug.Log($"Remaining Dishes: {remainingDishes.Count}, Dirty Plates: {dirtyPlates.Count}");
-        Debug.Log($"Table State: {currentOrderState}");
+        // Debug.Log($"Table State: {currentOrderState}");
     }
 
     public void Interact(Player player)

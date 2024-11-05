@@ -97,7 +97,7 @@ MonoBehaviour:
     lines: []
   usableObjectSO: {fileID: 11400000, guid: efbd5d515230a574a81bcd239c8db132, type: 2}
   itemSpawnPoint: {fileID: 7395685474008565348}
-  clerk: {fileID: 5933775680172536929}
+  clerk: {fileID: 4406585432227671158}
 --- !u!1 &7166730008959352112
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,7 +210,15 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: de65ec2d32ef40a40b8eca44d7de6469,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7951880114497899494}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: de65ec2d32ef40a40b8eca44d7de6469,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4406585432227671158}
   m_SourcePrefab: {fileID: 100100000, guid: de65ec2d32ef40a40b8eca44d7de6469, type: 3}
 --- !u!4 &5933775680172536929 stripped
 Transform:
@@ -218,3 +226,42 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6184490086843044746}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6418422382028484315 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: de65ec2d32ef40a40b8eca44d7de6469,
+    type: 3}
+  m_PrefabInstance: {fileID: 6184490086843044746}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7951880114497899494
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6418422382028484315}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: de65ec2d32ef40a40b8eca44d7de6469, type: 3}
+  m_Controller: {fileID: 9100000, guid: 34faa86e2ae9db34d9c1b034f7decde6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4406585432227671158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6418422382028484315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fee6566da188d004ba5ac545b8d11851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

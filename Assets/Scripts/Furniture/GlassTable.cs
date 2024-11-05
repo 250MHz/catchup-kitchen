@@ -211,6 +211,7 @@ public class GlassTable : BaseFurniture, IInteractable
         // ResetTable();
 
         servingProgressBar.gameObject.SetActive(false);
+        HideOrderUI();
     }
 
 
@@ -226,6 +227,7 @@ public class GlassTable : BaseFurniture, IInteractable
         currentOrders.Clear();
         currentOrderState = OrderState.Seating;
         progressBar.SetBarFillAmount(0);  // Reset progress bar
+        HideOrderUI();
         //servingProgressBar.gameObject.SetActive(false);  // Hide the serving progress bar
     }
 

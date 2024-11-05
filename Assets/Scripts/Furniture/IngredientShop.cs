@@ -10,18 +10,20 @@ public class IngredientShop : BaseFurniture, IInteractable
     [SerializeField] private Dialog dialog;
     [SerializeField] private UsableObjectSO usableObjectSO;
     [SerializeField] private Transform itemSpawnPoint;
-    [SerializeField] private Transform clerk;
+    [SerializeField] private ClerkVisual clerk;
 
     private Outline outline;
 
     public void Interact(Player player)
     {
-        clerk.LookAt(player.transform);
+        clerk.transform.LookAt(player.transform);
         player.GetShopController().StartShopping(this);
     }
 
     public void HandlePurchase(Player player, UsableObjectSO ingredient, int count)
     {
+        clerk.HandOff();
+
         GameObject usableGameObject = Instantiate(usableObjectSO.GetPrefab());
         IngredientBox ingredientBox = (IngredientBox)usableGameObject
             .GetComponent<UsableObject>();

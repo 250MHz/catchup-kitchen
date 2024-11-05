@@ -30,6 +30,8 @@ public class GlassTable : BaseFurniture, IInteractable
     private Coroutine orderCountdownCoroutine;
     private Coroutine servingCountdownCoroutine;
 
+    private bool isEating = false;
+
     private void Start()
     {
         outline = gameObject.GetComponent<Outline>();
@@ -39,11 +41,17 @@ public class GlassTable : BaseFurniture, IInteractable
     private void Update()
     {
         // Debug.Log($"Remaining Dishes: {remainingDishes.Count}, Dirty Plates: {dirtyPlates.Count}");
-        // Debug.Log($"Table State: {currentOrderState}");
+        Debug.Log($"Table State: {currentOrderState}");
     }
 
     public void Interact(Player player)
     {
+        if (isEating)
+        {
+            Debug.Log("Cannot interact while eating.");
+            return; // Prevent further interaction, fixed the error that player interact with the table while EatCoruntine() is running
+        }
+
         switch (currentOrderState)
         {
             case OrderState.Seating:
@@ -135,6 +143,8 @@ public class GlassTable : BaseFurniture, IInteractable
 
     private IEnumerator EatCoroutine()
     {
+        isEating = true;
+
         remainingDishes.Clear();
 
         yield return new WaitForSeconds(eatingSeconds);
@@ -158,6 +168,7 @@ public class GlassTable : BaseFurniture, IInteractable
         currentOrders.Clear();
         // No need to reset the table yet, will check in HandleCompleteState
         currentOrderState = OrderState.Complete;
+        isEating = false;
     }
 
     private void StartOrderCountdown()

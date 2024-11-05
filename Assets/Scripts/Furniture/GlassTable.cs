@@ -94,7 +94,7 @@ public class GlassTable : BaseFurniture, IInteractable
             }
         }
 
-        if (remainingDishes.Count > 0)
+        else if (remainingDishes.Count > 0)
         {
             Debug.Log("There are remaining dishes on the table. Allowing player to pick them up.");
             if (!player.HasUsableObject())
@@ -113,6 +113,8 @@ public class GlassTable : BaseFurniture, IInteractable
 
     private IEnumerator EatCoroutine()
     {
+        remainingDishes.Clear();
+
         yield return new WaitForSeconds(eatingSeconds);
 
         foreach (NPCController npc in seatedNPCs)
@@ -126,7 +128,7 @@ public class GlassTable : BaseFurniture, IInteractable
             {
                 UsableObject dish = c.GetUsableObject();
                 dirtyPlates.Add(UsableObject.SpawnUsableObject(plateDirtySO, c));
-                remainingDishes.Add(dish); // Add remaining dishes to the list
+                
                 dish.DestroySelf(); // Remove the dish from the chair
             }
         }

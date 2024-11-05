@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GlassTable : BaseFurniture, IInteractable
 {
     [SerializeField] private Chair[] chairs;
-    [SerializeField] private GameObject orderCardPrefab;
+    [SerializeField] private Image[] orderIcons;
     [SerializeField] private UsableObjectSO[] dishes;
     [SerializeField] private float eatingSeconds = 5f;
     [SerializeField] private UsableObjectSO plateDirtySO;
@@ -17,16 +18,10 @@ public class GlassTable : BaseFurniture, IInteractable
     private List<UsableObjectSO> currentOrders = new List<UsableObjectSO>();
     private List<NPCController> seatedNPCs = new List<NPCController>();
     private List<UsableObject> dirtyPlates = new List<UsableObject>();
-    // TODO: probably change this to just a regular UI element, this is
-    // also bad for showing different orders
-    private GameObject activeOrderCard;
     private NPCSpawner npcSpawner;
     // TODO: probably shouldn't use GameObject for this
     private GameObject npcGroup;
     private List<UsableObject> remainingDishes = new List<UsableObject>();
-
-    // TODO: unused reference??
-    // public Canvas canvas;
 
     // Enum to manage interaction phases
     private enum OrderState { Seating, Ordering, Serving, Complete }
@@ -38,17 +33,12 @@ public class GlassTable : BaseFurniture, IInteractable
     private void Start()
     {
         outline = gameObject.GetComponent<Outline>();
+        HideOrderUI();
     }
 
     private void Update()
     {
-        if (activeOrderCard != null)
-        {
-            // Rotate the order card slowly around the Y-axis
-            activeOrderCard.transform.Rotate(0, 30 * Time.deltaTime, 0);
-        }
         Debug.Log($"Remaining Dishes: {remainingDishes.Count}, Dirty Plates: {dirtyPlates.Count}");
-
     }
 
     public void Interact(Player player)
@@ -59,7 +49,6 @@ public class GlassTable : BaseFurniture, IInteractable
                 if (HasFollowingNPCs(player))
                 {
                     SeatNPCs(player);
-                    ShowOrderUI();
                     currentOrderState = OrderState.Ordering;  // Move to next state
                     StartOrderCountdown();
                 }
@@ -77,6 +66,7 @@ public class GlassTable : BaseFurniture, IInteractable
                 if (currentOrders.Count == 0)
                 {
                     currentOrderState = OrderState.Complete;  // Order is complete
+                    HideOrderUI();
                     StopServingCountdown();
                     StartCoroutine(EatCoroutine());
                 }
@@ -116,34 +106,10 @@ public class GlassTable : BaseFurniture, IInteractable
             }
         }
 
-
         // If no dirty plates or remaining dishes, reset the table
         ResetTable();
         Debug.Log("Table is now reset.");
     }
-
-
-    //private IEnumerator EatCoroutine()
-    //{
-    //    // TODO: Eating animation
-    //    // Customers eat for 5 seconds
-    //    yield return new WaitForSeconds(eatingSeconds);
-    //    // Make customers walk away
-    //    foreach (NPCController npc in seatedNPCs)
-    //    {
-    //        // TODO: this currently just destroys the customers
-    //        npc.WalkAway();
-    //    }
-    //    // Replace dishes with dirty plates
-    //    foreach (Chair c in chairs)
-    //    {
-    //        if (c.GetUsableObject() != null)
-    //        {
-    //            c.GetUsableObject().DestroySelf();
-    //            dirtyPlates.Add(UsableObject.SpawnUsableObject(plateDirtySO, c));
-    //        }
-    //    }
-    //}
 
     private IEnumerator EatCoroutine()
     {
@@ -306,22 +272,6 @@ public class GlassTable : BaseFurniture, IInteractable
         }
     }
 
-    private void ShowOrderUI()
-    {
-        // TODO: should replace this with regular 2D image than this spinning thing
-        // if (activeOrderCard == null)
-        // {
-        //     // Position the order card slightly above the table
-        //     Vector3 orderCardPosition = transform.position + Vector3.up * 1.0f;
-        //     Quaternion orderCardRotation = Quaternion.Euler(0, 180, 0);
-
-        //     // Instantiate the order card as a 3D object
-        //     activeOrderCard = Instantiate(orderCardPrefab, orderCardPosition, orderCardRotation);
-
-        //     activeOrderCard.transform.SetParent(transform, true);
-        // }
-    }
-
     private void PlaceOrder()
     {
         // Assign a random object from dishes for each customer
@@ -338,6 +288,28 @@ public class GlassTable : BaseFurniture, IInteractable
         if (progressBar != null)
         {
             progressBar.gameObject.SetActive(false);
+        }
+        ShowOrderUI();
+    }
+
+    private void ShowOrderUI()
+    {
+        for (int i = 0; i < seatedNPCs.Count; i++)
+        {
+            Image orderIcon = orderIcons[i];
+            orderIcon.gameObject.SetActive(true);
+            // ShowOrderUI() has to be called after PlaceOrder() so that
+            // currentOrders is not empty
+            orderIcon.sprite = currentOrders[i].GetIcon();
+        }
+    }
+
+    private void HideOrderUI()
+    {
+        foreach (Image order in orderIcons)
+        {
+            order.sprite = null;
+            order.gameObject.SetActive(false);
         }
     }
 
@@ -359,6 +331,16 @@ public class GlassTable : BaseFurniture, IInteractable
                     // Add the served dish to the remaining dishes list
                     remainingDishes.Add(playerHeldObject); // Add the plate being served to the remaining dishes list
                     currentOrders.Remove(order); // Remove the served order
+
+                    // Disable the sprite for the order that was served
+                    foreach (Image orderImage in orderIcons)
+                    {
+                        if (orderImage.IsActive() && orderImage.sprite == order.GetIcon())
+                        {
+                            orderImage.gameObject.SetActive(false);
+                            break;
+                        }
+                    }
 
                     // Hide the serving progress bar after serving the dish
                     servingProgressBar.gameObject.SetActive(false);

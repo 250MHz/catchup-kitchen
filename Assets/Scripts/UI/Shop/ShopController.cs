@@ -13,7 +13,6 @@ public class ShopController : MonoBehaviour
         Dialog,
         UsingCountSelector,
         ConfirmPurchase,
-        Busy,
     };
 
     public event Action OnStart;
@@ -100,8 +99,14 @@ public class ShopController : MonoBehaviour
                             countSelectorUI.GetCurrentCount()
                         );
                         Wallet.Instance.TakeMoney(totalPrice);
+                        dialogManager.ShowDialogText("Here you are!\nThank you!");
+                        state = ShopState.Dialog;
                     }
-                    state = ShopState.Browsing;
+                    else
+                    {
+                        dialogManager.CloseDialog();
+                        state = ShopState.Browsing;
+                    }
                 },
                 onChoiceCancel: (choiceIndex) =>
                 {
@@ -114,7 +119,12 @@ public class ShopController : MonoBehaviour
         else if (state == ShopState.ConfirmPurchase)
         {
             dialogManager.OnUse();
+        }
+        else if (state == ShopState.Dialog)
+        {
+            dialogManager.OnUse();
             dialogManager.CloseDialog();
+            state = ShopState.Browsing;
         }
     }
 
@@ -142,7 +152,14 @@ public class ShopController : MonoBehaviour
             countSelectorUI.Close();
             state = ShopState.Browsing;
         }
-        else if (state == ShopState.ConfirmPurchase) {
+        else if (state == ShopState.ConfirmPurchase)
+        {
+            dialogManager.OnCancel();
+            dialogManager.CloseDialog();
+            state = ShopState.Browsing;
+        }
+        else if (state == ShopState.Dialog)
+        {
             dialogManager.OnCancel();
             dialogManager.CloseDialog();
             state = ShopState.Browsing;

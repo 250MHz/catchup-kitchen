@@ -129,7 +129,7 @@ public class NPCController : MonoBehaviour, IInteractable
         {
             // NPC reached the leaving point
             animator.SetBool("IsWalking", false);
-            Destroy(gameObject); // Destroy the NPC after reaching the leaving point
+            DestroyGroup(); // Destroy the NPC after reaching the leaving point
         }
     }
 

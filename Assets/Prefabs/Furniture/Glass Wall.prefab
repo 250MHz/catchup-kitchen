@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7121110705595274686}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4178245957365591452}
   - component: {fileID: 706259726617298029}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Glass Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,6 +170,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: low_wall
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c9847c48404ea35419ce206f4e1f59d0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -281,6 +286,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: glass_panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c9847c48404ea35419ce206f4e1f59d0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

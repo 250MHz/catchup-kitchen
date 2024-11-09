@@ -30,6 +30,8 @@ public class GlassTable : BaseFurniture, IInteractable
     private Coroutine orderCountdownCoroutine;
     private Coroutine servingCountdownCoroutine;
 
+    private bool isEating = false;
+
     private void Start()
     {
         outline = gameObject.GetComponent<Outline>();
@@ -38,11 +40,18 @@ public class GlassTable : BaseFurniture, IInteractable
 
     private void Update()
     {
-        Debug.Log($"Remaining Dishes: {remainingDishes.Count}, Dirty Plates: {dirtyPlates.Count}");
+        // Debug.Log($"Remaining Dishes: {remainingDishes.Count}, Dirty Plates: {dirtyPlates.Count}");
+        // Debug.Log($"Table State: {currentOrderState}");
     }
 
     public void Interact(Player player)
     {
+        if (isEating)
+        {
+            Debug.Log("Cannot interact while eating.");
+            return; // Prevent further interaction, fixed the error that player interact with the table while EatCoruntine() is running
+        }
+
         switch (currentOrderState)
         {
             case OrderState.Seating:
@@ -81,7 +90,34 @@ public class GlassTable : BaseFurniture, IInteractable
 
     private void HandleCompleteState(Player player)
     {
-        // Check if there are dirty plates on the table
+        // Start checking for plates if not already checking
+        if (currentOrderState == OrderState.Complete && orderCountdownCoroutine == null)
+        {
+            StartCoroutine(CheckForPlatesCoroutine());
+        }
+
+        // Allow the player to pick up dirty plates or remaining dishes
+        AllowPlayerToPickUp(player);
+    }
+
+    private IEnumerator CheckForPlatesCoroutine()
+    {
+        while (currentOrderState == OrderState.Complete)
+        {
+            // Check if there are dirty plates or remaining dishes
+            if (dirtyPlates.Count == 0 && remainingDishes.Count == 0)
+            {
+                Debug.Log("No plates on the table. Resetting the table.");
+                ResetTable();
+                yield break; // Exit the coroutine
+            }
+
+            yield return new WaitForSeconds(1f); // Check every second (adjust the interval as needed)
+        }
+    }
+
+    private void AllowPlayerToPickUp(Player player)
+    {
         if (dirtyPlates.Count > 0)
         {
             Debug.Log("There are dirty plates on the table. Allowing player to pick them up.");
@@ -90,11 +126,9 @@ public class GlassTable : BaseFurniture, IInteractable
                 // Allow the player to pick up a dirty plate
                 dirtyPlates[0].SetUsableObjectParent(player);
                 dirtyPlates.RemoveAt(0);
-                return; // Return early if a plate was picked up
             }
         }
-
-        if (remainingDishes.Count > 0)
+        else if (remainingDishes.Count > 0)
         {
             Debug.Log("There are remaining dishes on the table. Allowing player to pick them up.");
             if (!player.HasUsableObject())
@@ -102,17 +136,17 @@ public class GlassTable : BaseFurniture, IInteractable
                 // Allow the player to pick up a remaining dish
                 remainingDishes[0].SetUsableObjectParent(player);
                 remainingDishes.RemoveAt(0);
-                return; // Return early if a dish was picked up
             }
         }
-
-        // If no dirty plates or remaining dishes, reset the table
-        ResetTable();
-        Debug.Log("Table is now reset.");
     }
+
 
     private IEnumerator EatCoroutine()
     {
+        isEating = true;
+
+        remainingDishes.Clear();
+
         yield return new WaitForSeconds(eatingSeconds);
 
         foreach (NPCController npc in seatedNPCs)
@@ -126,13 +160,15 @@ public class GlassTable : BaseFurniture, IInteractable
             {
                 UsableObject dish = c.GetUsableObject();
                 dirtyPlates.Add(UsableObject.SpawnUsableObject(plateDirtySO, c));
-                remainingDishes.Add(dish); // Add remaining dishes to the list
+
                 dish.DestroySelf(); // Remove the dish from the chair
             }
         }
 
         currentOrders.Clear();
         // No need to reset the table yet, will check in HandleCompleteState
+        currentOrderState = OrderState.Complete;
+        isEating = false;
     }
 
     private void StartOrderCountdown()
@@ -195,7 +231,7 @@ public class GlassTable : BaseFurniture, IInteractable
             yield return null;
         }
 
-        currentOrderState = OrderState.Complete;
+        
 
         // Make NPCs walk away
         foreach (NPCController npc in seatedNPCs)
@@ -209,6 +245,10 @@ public class GlassTable : BaseFurniture, IInteractable
         // yield return new WaitForSeconds(1f);
 
         // ResetTable();
+        currentOrderState = OrderState.Complete;
+        HideOrderUI();
+
+        StartCoroutine(CheckForPlatesCoroutine());
 
         servingProgressBar.gameObject.SetActive(false);
         HideOrderUI();

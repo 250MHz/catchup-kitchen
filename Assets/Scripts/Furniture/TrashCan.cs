@@ -6,6 +6,7 @@ public class TrashCan : MonoBehaviour, IInteractable
 {
     [SerializeField] private UsableObjectSO plateUsableObjectSO;
     [SerializeField] private UsableObjectSO potUsableObjectSO;
+    [SerializeField] private UsableObjectSO dirtyPlateUsableObjectSO;
     private Outline outline;
 
     public void Interact(Player player)
@@ -13,6 +14,12 @@ public class TrashCan : MonoBehaviour, IInteractable
         if (player.HasUsableObject())
         {
             UsableObject usableObject = player.GetUsableObject();
+            if (usableObject.GetUsableObjectSO() == dirtyPlateUsableObjectSO)
+            {
+                // Debug.Log("Cannot interact with the trash can while holding a dirty plate.");
+                return; // Prevent interaction if holding a dirty plate
+            }
+
             player.ClearUsableObject();
             Destroy(usableObject.gameObject);
             if (usableObject is PlateUsableObject)

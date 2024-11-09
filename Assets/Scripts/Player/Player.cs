@@ -27,7 +27,7 @@ public class Player : MonoBehaviour, IUsableObjectParent
     [SerializeField] private float rotateSpeed = 720f;
     [SerializeField] private LayerMask interactableLayerMask;
     [SerializeField] private float interactRange;
-    [SerializeField] private Transform usableObjectHoldPoint;
+    [SerializeField] private UsableObjectHoldPoint usableObjectHoldPoint;
     [SerializeField] private DialogManager dialogManager;
     [SerializeField] private ShopController shopController;
 
@@ -131,15 +131,22 @@ public class Player : MonoBehaviour, IUsableObjectParent
 
     private void HandleMovement()
     {
-        Vector3 moveDir = new Vector3(moveAmount.x, 0, moveAmount.y);
-        playerRigidbody.MovePosition(
-            transform.position + moveDir * moveSpeed * Time.fixedDeltaTime
-        );
+        // Use velocity instead of MovePosition to prevent clipping through
+        // walls.
+        Vector3 moveDir = new Vector3(moveAmount.x, 0, moveAmount.y) * moveSpeed;
+        playerRigidbody.velocity = new Vector3(moveDir.x, playerRigidbody.velocity.y, moveDir.z);
 
         IsWalking = moveDir != Vector3.zero;
         if (IsWalking)
         {
-            Quaternion toRotation = Quaternion.LookRotation(moveDir, Vector3.up);
+            // An angularVelocity solution is better than MoveRotation because
+            // if we have a small collider near the usableObjectHoldPoint, the
+            // collider would not get past walls with angularVelocity but it
+            // can with MoveRotation.
+            // But I wasn't able to get rotation to work with the same way with
+            // angular velocity, so settled on creating a bigger collider for
+            // hold point and putting it above the player.
+            Quaternion toRotation = Quaternion.LookRotation(moveDir / moveSpeed, Vector3.up);
             playerRigidbody.MoveRotation(Quaternion.RotateTowards(
                 playerRigidbody.rotation, toRotation,
                 rotateSpeed * Time.fixedDeltaTime
@@ -181,7 +188,7 @@ public class Player : MonoBehaviour, IUsableObjectParent
 
     public Transform GetUsableObjectFollowTransform()
     {
-        return usableObjectHoldPoint;
+        return usableObjectHoldPoint.transform;
     }
 
     public UsableObject GetUsableObject()
@@ -192,11 +199,16 @@ public class Player : MonoBehaviour, IUsableObjectParent
     public void SetUsableObject(UsableObject usableObject)
     {
         this.usableObject = usableObject;
+        if (usableObject != null)
+        {
+            usableObjectHoldPoint.EnableCollider();
+        }
     }
 
     public void ClearUsableObject()
     {
         usableObject = null;
+        usableObjectHoldPoint.DisableCollider();
     }
 
     public bool HasUsableObject()

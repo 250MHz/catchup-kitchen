@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2898729454748936147}
   - component: {fileID: 3343199833122248807}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shop Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3984871892240010323}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 2905850718923519539}
   - component: {fileID: 8081557809436572889}
   - component: {fileID: 5339107430336182517}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

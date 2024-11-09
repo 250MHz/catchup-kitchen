@@ -2259,56 +2259,6 @@ PrefabInstance:
       propertyPath: m_UIInputModule
       value: 
       objectReference: {fileID: 871275847536115309}
-    - target: {fileID: 2651434414244112711, guid: 18885008a913d564996b6ef904ff0dc5,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2651434414244112711, guid: 18885008a913d564996b6ef904ff0dc5,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_ActionId
-      value: 02894b30-3dba-4f87-b6e7-50aecc13be1f
-      objectReference: {fileID: 0}
-    - target: {fileID: 2651434414244112711, guid: 18885008a913d564996b6ef904ff0dc5,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_ActionName
-      value: Player/Cancel[/Keyboard/q,/Keyboard/o,/Keyboard/numpad2]
-      objectReference: {fileID: 0}
-    - target: {fileID: 2651434414244112711, guid: 18885008a913d564996b6ef904ff0dc5,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2651434414244112711, guid: 18885008a913d564996b6ef904ff0dc5,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2651434414244112711, guid: 18885008a913d564996b6ef904ff0dc5,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 2923206105664633823}
-    - target: {fileID: 2651434414244112711, guid: 18885008a913d564996b6ef904ff0dc5,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2651434414244112711, guid: 18885008a913d564996b6ef904ff0dc5,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnCancel
-      objectReference: {fileID: 0}
-    - target: {fileID: 2651434414244112711, guid: 18885008a913d564996b6ef904ff0dc5,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Player, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 2651434414244112711, guid: 18885008a913d564996b6ef904ff0dc5,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 4538813206786508725, guid: 18885008a913d564996b6ef904ff0dc5,
         type: 3}
       propertyPath: dialogManager
@@ -2319,6 +2269,11 @@ PrefabInstance:
       propertyPath: shopController
       value: 
       objectReference: {fileID: 6195942805278525204}
+    - target: {fileID: 4538813206786508725, guid: 18885008a913d564996b6ef904ff0dc5,
+        type: 3}
+      propertyPath: usableObjectHoldPoint
+      value: 
+      objectReference: {fileID: 8469069205397589261}
     - target: {fileID: 6986940181761380659, guid: 18885008a913d564996b6ef904ff0dc5,
         type: 3}
       propertyPath: m_Name
@@ -2385,24 +2340,24 @@ PrefabInstance:
       addedObject: {fileID: 5306153247425460131}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18885008a913d564996b6ef904ff0dc5, type: 3}
---- !u!114 &2923206105664633823 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4538813206786508725, guid: 18885008a913d564996b6ef904ff0dc5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1615748723411270762}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8546376291873615193}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55c8fe9f37108244da811777bcb96d5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &8076796538286703802 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7384427088009705680, guid: 18885008a913d564996b6ef904ff0dc5,
     type: 3}
   m_PrefabInstance: {fileID: 1615748723411270762}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8469069205397589261 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7197991858748027239, guid: 18885008a913d564996b6ef904ff0dc5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1615748723411270762}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c064e13d31f950e48b0cb879198b08ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8546376291873615193 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6986940181761380659, guid: 18885008a913d564996b6ef904ff0dc5,

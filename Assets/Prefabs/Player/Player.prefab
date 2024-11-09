@@ -2075,12 +2075,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  rotateSpeed: 720
+  rotateSpeed: 1440
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 64
   interactRange: 1.5
-  usableObjectHoldPoint: {fileID: 3360894065499342776}
+  usableObjectHoldPoint: {fileID: 7197991858748027239}
+  dialogManager: {fileID: 0}
+  shopController: {fileID: 0}
 --- !u!114 &2651434414244112711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2139,11 +2141,27 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 179246a0-e2bc-42bb-8221-d94a39845a26
     m_ActionName: Player/Use[/Keyboard/e,/Keyboard/u,/Keyboard/numpad1]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4538813206786508725}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnCancel
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 02894b30-3dba-4f87-b6e7-50aecc13be1f
+    m_ActionName: Player/Cancel[/Keyboard/q,/Keyboard/o,/Keyboard/numpad2]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
-  m_Camera: {fileID: 1803371175538231927}
+  m_Camera: {fileID: 0}
 --- !u!136 &-239473175394194260
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2268,6 +2286,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3360894065499342776}
+  - component: {fileID: 7197991858748027239}
+  - component: {fileID: 7037041395208759969}
   m_Layer: 0
   m_Name: UsableObjectHoldPoint
   m_TagString: Untagged
@@ -2290,6 +2310,39 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7384427088009705680}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7197991858748027239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7228687095056436518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c064e13d31f950e48b0cb879198b08ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &7037041395208759969
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7228687095056436518}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.3, y: 0.3, z: 0.3}
+  m_Center: {x: 0, y: 1, z: 0.02}
 --- !u!1 &7275516876783756921
 GameObject:
   m_ObjectHideFlags: 0

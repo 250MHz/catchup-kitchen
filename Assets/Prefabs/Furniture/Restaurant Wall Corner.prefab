@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1673124249281192628}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 8595490684610984696}
   - component: {fileID: 4440737976799928459}
   - component: {fileID: 5061758082268900950}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Restaurant Wall Corner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,6 +201,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: wallCorner
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1778b1304c62c0d4f9fd0939ea211f7c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 1778b1304c62c0d4f9fd0939ea211f7c,
         type: 3}

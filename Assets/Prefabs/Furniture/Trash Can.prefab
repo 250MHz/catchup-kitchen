@@ -89,6 +89,8 @@ MonoBehaviour:
   plateUsableObjectSO: {fileID: 11400000, guid: fd344a9cd57d51545b1f09c7957cc859,
     type: 2}
   potUsableObjectSO: {fileID: 11400000, guid: 6903d0d12cc9b234bb58f5d544a0deb1, type: 2}
+  dirtyPlateUsableObjectSO: {fileID: 11400000, guid: 3632e02f165c8774fa53e2dc4e10e7bd,
+    type: 2}
 --- !u!1 &2727019743631674113
 GameObject:
   m_ObjectHideFlags: 0

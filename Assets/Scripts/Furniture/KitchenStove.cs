@@ -8,6 +8,8 @@ public class KitchenStove : BaseFurniture, IInteractable
     [SerializeField] private UsableObjectSO[] allowedUsableObjectSO;
     private Outline outline;
 
+    private AudioSource cookingSound;
+
     public void Interact(Player player)
     {
         if (!HasUsableObject())
@@ -24,6 +26,17 @@ public class KitchenStove : BaseFurniture, IInteractable
                     if (heldObjectSO.GetObjectName() == so.GetObjectName())
                     {
                         heldObject.SetUsableObjectParent(this);
+
+                        // Check if the held object is a pot
+                        if (heldObject.TryGetPot(out PotUsableObject potUsableObject))
+                        {
+                            // Play cooking sound only if the pot is not empty
+                            if (!potUsableObject.IsEmpty() && !cookingSound.isPlaying)
+                            {
+                                cookingSound.Play();
+                            }
+                        }
+
                         break;
                     }
                 }
@@ -43,6 +56,12 @@ public class KitchenStove : BaseFurniture, IInteractable
                     if (potUsableObject.TryAddIngredient(player.GetUsableObject().GetUsableObjectSO()))
                     {
                         player.GetUsableObject().DestroySelf();
+
+                        // Play cooking sound if the pot now contains ingredients
+                        if (!potUsableObject.IsEmpty() && !cookingSound.isPlaying)
+                        {
+                            cookingSound.Play();
+                        }
                     }
                     // If the player is holding on a plate, try to take the ingredient
                     // from the pot anad put it in the plate
@@ -54,6 +73,12 @@ public class KitchenStove : BaseFurniture, IInteractable
                             objectOnStove.DestroySelf();
                             // Replace the pot with an empty pot
                             UsableObject.SpawnUsableObject(potUsableObjectSO, this);
+
+                            if (cookingSound.isPlaying)
+                            {
+                                cookingSound.Stop();
+                            }
+
                         }
                     }
 
@@ -64,6 +89,11 @@ public class KitchenStove : BaseFurniture, IInteractable
                 // Player is not holding something
                 // Give the player the object on top of the stove
                 GetUsableObject().SetUsableObjectParent(player);
+
+                if (cookingSound.isPlaying)
+                {
+                    cookingSound.Stop();
+                }
             }
         }
     }
@@ -82,6 +112,7 @@ public class KitchenStove : BaseFurniture, IInteractable
     void Start()
     {
         outline = gameObject.GetComponent<Outline>();
+        cookingSound = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame

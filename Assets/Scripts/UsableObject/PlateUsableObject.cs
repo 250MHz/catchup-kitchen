@@ -6,7 +6,6 @@ public class PlateUsableObject : UsableObject
 {
     [SerializeField] private PlateVisual plateVisual;
     [SerializeField] private PlateRecipeSO[] plateRecipeSOArray;
-    [SerializeField] private UsableObjectSO potUsableObjectSO;
     [SerializeField] private PlateRecipeSO currentFullPlateRecipeSO;
 
     // Histogram of ingredients currently on the plate
@@ -99,10 +98,11 @@ public class PlateUsableObject : UsableObject
             if (TryAddIngredient(playerHeldObject.GetUsableObjectSO()))
             {
                 playerHeldObject.DestroySelf();
-                // If it's a Pot, replace the held object with an empty pot
-                if (playerHeldObject is PotUsableObject)
+                // If it's a pot/pan, replace the held object with an empty
+                // pot/pan
+                if (player.GetUsableObject().TryGetPotPan(out PotPanUsableObject potPanUsableObject))
                 {
-                    SpawnUsableObject(potUsableObjectSO, player);
+                    SpawnUsableObject(potPanUsableObject.GetPotPanUsableObjectSO(), player);
                 }
             }
         }

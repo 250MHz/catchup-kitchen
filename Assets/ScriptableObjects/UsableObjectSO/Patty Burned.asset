@@ -10,7 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41cb19f9aba39ce4c9575fe38c794172, type: 3}
-  m_Name: Frying Pan
+  m_Name: Patty Burned
   m_EditorClassIdentifier: 
-  prefab: {fileID: 9083559517228056021, guid: 68a6d64b613d0ab4e8e5541f29702e43, type: 3}
-  objectName: Frying Pan
+  prefab: {fileID: 424298047974439016, guid: 46d600206ffca9f439ccb7e98179a4fe, type: 3}
+  objectName: Patty Burned
+  description: 
+  price: 0
+  icon: {fileID: 0}

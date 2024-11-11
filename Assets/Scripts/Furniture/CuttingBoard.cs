@@ -37,11 +37,11 @@ public class CuttingBoard : BaseFurniture, IInteractable
             if (player.HasUsableObject())
             {
                 // Player is holding something
-                // If player is holding a pot, try to add the object on the
-                // cutting board into the pot.
-                if (player.GetUsableObject().TryGetPot(out PotUsableObject potUsableObject))
+                // If player is holding a pot/pan, try to add the object on the
+                // cutting board into the pot/pan.
+                if (player.GetUsableObject().TryGetPotPan(out PotPanUsableObject potPanUsableObject))
                 {
-                    if (potUsableObject.TryAddIngredient(GetUsableObject().GetUsableObjectSO()))
+                    if (potPanUsableObject.TryAddIngredient(GetUsableObject().GetUsableObjectSO()))
                     {
                         GetUsableObject().DestroySelf();
                     }

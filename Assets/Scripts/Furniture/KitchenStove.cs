@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class KitchenStove : BaseFurniture, IInteractable
 {
-    [SerializeField] private UsableObjectSO potUsableObjectSO;
     [SerializeField] private UsableObjectSO[] allowedUsableObjectSO;
     private Outline outline;
 
@@ -35,17 +34,17 @@ public class KitchenStove : BaseFurniture, IInteractable
             if (player.HasUsableObject())
             {
                 // Player is holding something
-                // If the object on the stove is a pot
-                if (GetUsableObject().TryGetPot(out PotUsableObject potUsableObject))
+                // If the object on the stove is a pot/pan
+                if (GetUsableObject().TryGetPotPan(out PotPanUsableObject potPanUsableObject))
                 {
                     // If player is holding on an ingredient, try to add it to
-                    // the pot
-                    if (potUsableObject.TryAddIngredient(player.GetUsableObject().GetUsableObjectSO()))
+                    // the pot/pan
+                    if (potPanUsableObject.TryAddIngredient(player.GetUsableObject().GetUsableObjectSO()))
                     {
                         player.GetUsableObject().DestroySelf();
                     }
                     // If the player is holding on a plate, try to take the ingredient
-                    // from the pot anad put it in the plate
+                    // from the pot/pan anad put it in the plate
                     else if (player.GetUsableObject().TryGetPlate(out PlateUsableObject plateUsableObject))
                     {
                         if (plateUsableObject.TryAddIngredient(GetUsableObject().GetUsableObjectSO()))
@@ -53,7 +52,9 @@ public class KitchenStove : BaseFurniture, IInteractable
                             UsableObject objectOnStove = GetUsableObject();
                             objectOnStove.DestroySelf();
                             // Replace the pot with an empty pot
-                            UsableObject.SpawnUsableObject(potUsableObjectSO, this);
+                            UsableObject.SpawnUsableObject(
+                                potPanUsableObject.GetPotPanUsableObjectSO(), this
+                            );
                         }
                     }
 

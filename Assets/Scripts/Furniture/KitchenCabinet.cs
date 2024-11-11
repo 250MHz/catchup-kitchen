@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class KitchenCabinet : BaseFurniture, IInteractable
 {
-    [SerializeField] private UsableObjectSO potUsableObjectSO;
     private Outline outline;
 
     public void Interact(Player player)
@@ -29,11 +28,11 @@ public class KitchenCabinet : BaseFurniture, IInteractable
             {
                 // Player is carrying something
                 // If player is holding a pot...
-                if (player.GetUsableObject().TryGetPot(out PotUsableObject potUsableObject))
+                if (player.GetUsableObject().TryGetPotPan(out PotPanUsableObject potPanUsableObject))
                 {
                     UsableObject objectOnCabinet = GetUsableObject();
                     // Try to add the object on the cabinet into the pot.
-                    if (potUsableObject.TryAddIngredient(objectOnCabinet.GetUsableObjectSO()))
+                    if (potPanUsableObject.TryAddIngredient(objectOnCabinet.GetUsableObjectSO()))
                     {
                         objectOnCabinet.DestroySelf();
                     }
@@ -41,10 +40,12 @@ public class KitchenCabinet : BaseFurniture, IInteractable
                     // plate with the pot's contents
                     else if (objectOnCabinet.TryGetPlate(out PlateUsableObject plateUsableObject))
                     {
-                        if (plateUsableObject.TryAddIngredient(potUsableObject.GetUsableObjectSO()))
+                        if (plateUsableObject.TryAddIngredient(potPanUsableObject.GetUsableObjectSO()))
                         {
-                            potUsableObject.DestroySelf();
-                            UsableObject.SpawnUsableObject(potUsableObjectSO, player);
+                            potPanUsableObject.DestroySelf();
+                            UsableObject.SpawnUsableObject(
+                                potPanUsableObject.GetPotPanUsableObjectSO(), player
+                            );
                         }
                     }
 
@@ -57,10 +58,12 @@ public class KitchenCabinet : BaseFurniture, IInteractable
                     {
                         UsableObject objectOnCabinet = GetUsableObject();
                         objectOnCabinet.DestroySelf();
-                        // If the object was a pot, we need to replace it with an empty pot
-                        if (objectOnCabinet is PotUsableObject)
+                        // If the object was a pot/pan, we need to replace it with an empty pot/pan
+                        if (objectOnCabinet.TryGetPotPan(out PotPanUsableObject potPanUsableObject1))
                         {
-                            UsableObject.SpawnUsableObject(potUsableObjectSO, this);
+                            UsableObject.SpawnUsableObject(
+                                potPanUsableObject1.GetPotPanUsableObjectSO(), this
+                            );
                         }
                     }
                 }
@@ -75,9 +78,9 @@ public class KitchenCabinet : BaseFurniture, IInteractable
                 }
                 // If player is holding on an ingredient and the UsableObject
                 // on the cabinet is a pot, try to add the ingredient to the pot
-                else if (GetUsableObject().TryGetPot(out potUsableObject))
+                else if (GetUsableObject().TryGetPotPan(out potPanUsableObject))
                 {
-                    if (potUsableObject.TryAddIngredient(player.GetUsableObject().GetUsableObjectSO()))
+                    if (potPanUsableObject.TryAddIngredient(player.GetUsableObject().GetUsableObjectSO()))
                     {
                         player.GetUsableObject().DestroySelf();
                     }

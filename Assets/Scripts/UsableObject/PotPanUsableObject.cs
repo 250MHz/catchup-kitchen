@@ -2,7 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PotUsableObject : UsableObject
+public class PotPanVisual : MonoBehaviour
+{
+    public virtual void UpdateVisual(Dictionary<UsableObjectSO, int> currentIngredients)
+    {
+        Debug.Log("Base UpdateVisual called");
+    }
+}
+
+public class PotPanUsableObject : UsableObject
 {
     private enum State
     {
@@ -12,13 +20,13 @@ public class PotUsableObject : UsableObject
         Burned,
     }
 
-    [SerializeField] private PotVisual potVisual;
-    // Array of possible recipes the pot can handle
+    [SerializeReference] private PotPanVisual potPanVisual;
+    // Array of possible recipes the pot/pan can handle
     [SerializeField] private CookingRecipeSO[] cookingRecipeSOArray;
     [SerializeField] private ProgressBar progressBar;
-    [SerializeField] private UsableObjectSO potUsableObjectSO;
+    [SerializeField] private UsableObjectSO potPanUsableObjectSO;
 
-    // Histogram of ingredients currently inside the pot
+    // Histogram of ingredients currently inside the pot/pan
     private Dictionary<UsableObjectSO, int> currentIngredients;
     // Initialize fields here instead of in Start() so we can set the state of
     // the new object created in Update()'s switch-case for Cooking
@@ -52,13 +60,13 @@ public class PotUsableObject : UsableObject
                         // Cooked
                         IUsableObjectParent _parent = GetUsableObjectParent();
                         DestroySelf();
-                        PotUsableObject newPotUsableObject = SpawnUsableObject(
+                        PotPanUsableObject newPotPanUsableObject = SpawnUsableObject(
                             currentFullRecipeSO.GetOutput(),
                             _parent
-                        ) as PotUsableObject;
-                        newPotUsableObject.state = State.Cooked;
-                        newPotUsableObject.burningTimer = 0f;
-                        newPotUsableObject.currentFullRecipeSO = currentFullRecipeSO;
+                        ) as PotPanUsableObject;
+                        newPotPanUsableObject.state = State.Cooked;
+                        newPotPanUsableObject.burningTimer = 0f;
+                        newPotPanUsableObject.currentFullRecipeSO = currentFullRecipeSO;
                         progressBar.SetBarFillAmount(0f);
                     }
                     break;
@@ -71,11 +79,11 @@ public class PotUsableObject : UsableObject
                         // Burned
                         IUsableObjectParent _parent = GetUsableObjectParent();
                         DestroySelf();
-                        PotUsableObject newPotUsableObject = SpawnUsableObject(
+                        PotPanUsableObject newPotPanUsableObject = SpawnUsableObject(
                             currentFullRecipeSO.GetBurningOutput(),
                             _parent
-                        ) as PotUsableObject;
-                        newPotUsableObject.state = State.Burned;
+                        ) as PotPanUsableObject;
+                        newPotPanUsableObject.state = State.Burned;
                         progressBar.SetBarFillAmount(0f);
                     }
                     break;
@@ -83,6 +91,11 @@ public class PotUsableObject : UsableObject
                     break;
             }
         }
+    }
+
+    public UsableObjectSO GetPotPanUsableObjectSO()
+    {
+        return potPanUsableObjectSO;
     }
 
     public bool TryFindCompleteRecipe()
@@ -149,14 +162,12 @@ public class PotUsableObject : UsableObject
             {
                 currentIngredients[usableObjectSO]
                     = currentIngredients.GetValueOrDefault(usableObjectSO, 0) + 1;
-                potVisual.UpdateVisual(currentIngredients);
+                potPanVisual.UpdateVisual(currentIngredients);
                 // Set the complete recipe when we add the last ingredient
                 TryFindCompleteRecipe();
-                // Debug.Log("TryAddIngredient true");
                 return true;
             }
         }
-        // Debug.Log("TryAddIngredient false");
         return false;
     }
 
@@ -170,20 +181,20 @@ public class PotUsableObject : UsableObject
         {
             // Player is holding a UsableObject
             UsableObject playerHeldObject = player.GetUsableObject();
-            // If holding a plate, try to take food out from the pot
+            // If holding a plate, try to take food out from the pot/pan
             if (playerHeldObject is PlateUsableObject)
             {
                 PlateUsableObject plate = playerHeldObject as PlateUsableObject;
                 if (plate.TryAddIngredient(GetUsableObjectSO()))
                 {
-                    // If the ingredient was added, replace this pot with an empty pot
-                    IUsableObjectParent potParent = GetUsableObjectParent();
+                    // If the ingredient was added, replace this pot/pan with an empty pot/pan
+                    IUsableObjectParent potPanParent = GetUsableObjectParent();
                     Transform currentTransform = transform;
                     DestroySelf();
-                    SpawnUsableObject(potUsableObjectSO, potParent, currentTransform);
+                    SpawnUsableObject(potPanUsableObjectSO, potPanParent, currentTransform);
                 }
             }
-            // Otherwise, place the UsableObject in the pot if possible
+            // Otherwise, place the UsableObject in the pot/pan if possible
             if (TryAddIngredient(playerHeldObject.GetUsableObjectSO()))
             {
                 playerHeldObject.DestroySelf();

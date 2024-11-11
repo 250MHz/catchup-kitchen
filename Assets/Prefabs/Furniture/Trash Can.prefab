@@ -54,7 +54,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1.05, z: 1.06}
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &3191257697253527174
 MonoBehaviour:
@@ -88,7 +88,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plateUsableObjectSO: {fileID: 11400000, guid: fd344a9cd57d51545b1f09c7957cc859,
     type: 2}
-  potUsableObjectSO: {fileID: 11400000, guid: 6903d0d12cc9b234bb58f5d544a0deb1, type: 2}
   dirtyPlateUsableObjectSO: {fileID: 11400000, guid: 3632e02f165c8774fa53e2dc4e10e7bd,
     type: 2}
 --- !u!1 &2727019743631674113

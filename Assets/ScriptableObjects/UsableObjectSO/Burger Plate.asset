@@ -16,4 +16,4 @@ MonoBehaviour:
   objectName: Burger Plate
   description: 
   price: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 32062a07fcebdac42b26566fd12e0a12, type: 3}

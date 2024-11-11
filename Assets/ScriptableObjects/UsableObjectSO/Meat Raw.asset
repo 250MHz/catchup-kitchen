@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 8061537737498103547, guid: e4ee97dda2f76e742b2a03b0d5edb1d0, type: 3}
   objectName: Meat Raw
-  description: It can be cut into a patty which can be cooked and used in burgers.
+  description: A cut of beef that may be chopped into a patty which can be cooked
+    and used to make burgers.
   price: 8
   icon: {fileID: 21300000, guid: 3caa2fcf9e7a35b41abca8e26582de30, type: 3}

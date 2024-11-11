@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 67177605288495108, guid: 9ad140d5d1c385c428102a2066556bb6, type: 3}
   objectName: Lettuce
-  description: A raw ingredient. It may be used in salads and burgers.
+  description: A sweet and tender cultivar. It may be used in salads and burgers.
   price: 4
   icon: {fileID: 21300036, guid: 37607ec1aab56e349af84a980f685a4b, type: 3}

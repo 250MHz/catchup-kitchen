@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41cb19f9aba39ce4c9575fe38c794172, type: 3}
   m_Name: Pan
   m_EditorClassIdentifier: 
-  prefab: {fileID: 9083559517228056021, guid: 68a6d64b613d0ab4e8e5541f29702e43, type: 3}
-  objectName: Frying Pan
+  prefab: {fileID: 5698215784351052557, guid: e4a30f4140691b74ab3043d9a87aa302, type: 3}
+  objectName: Pan
+  description: 
+  price: 0
+  icon: {fileID: 0}

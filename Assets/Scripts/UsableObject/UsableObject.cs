@@ -7,9 +7,9 @@ public class UsableObject : MonoBehaviour, IInteractable
     [SerializeField] private UsableObjectSO usableObjectSO;
 
     private IUsableObjectParent usableObjectParent;
-    private Outline outline;
-    private Rigidbody rb;
-    private Collider _collider;
+    protected Outline outline;
+    protected Rigidbody rb;
+    protected Collider _collider;
 
     public virtual void Interact(Player player)
     {

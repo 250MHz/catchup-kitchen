@@ -42,6 +42,13 @@ public class PotPanUsableObject : UsableObject
         cookingTimer = 0f;
     }
 
+    void Awake()
+    {
+        outline = gameObject.GetComponentInChildren<Outline>();
+        rb = gameObject.GetComponent<Rigidbody>();
+        _collider = gameObject.GetComponent<Collider>();
+    }
+
     private void Update()
     {
         if (GetUsableObjectParent() is KitchenStove)

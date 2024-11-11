@@ -12,6 +12,10 @@ public class KitchenSink : BaseFurniture, IInteractable
     private Outline outline;
     private int cleaningProgress;
 
+    private AudioSource waterAudioSource;
+    private AudioSource plateCleaningAudioSource;
+    private bool isWashing = false;
+
     public void Interact(Player player)
     {
         if (!HasUsableObject())
@@ -27,6 +31,7 @@ public class KitchenSink : BaseFurniture, IInteractable
                     heldObject.SetUsableObjectParent(this);
                     cleaningProgress = 0;
                     UpdateProgressBar();
+                    StartWashing();
                 }
             }
         }
@@ -42,11 +47,16 @@ public class KitchenSink : BaseFurniture, IInteractable
                 {
                     cleaningProgress++;
                     UpdateProgressBar();
+
+                    plateCleaningAudioSource.Play();
+
                     if (cleaningProgress >= cleaningProgressMax)
                     {
                         currentUsableObject.DestroySelf();
                         // Once clean, make the player hold a clean plate
                         UsableObject.SpawnUsableObject(plateSO, player);
+
+                        StopWashing();
                     }
                 }
             }
@@ -68,10 +78,30 @@ public class KitchenSink : BaseFurniture, IInteractable
         outline.enabled = false;
     }
 
+    private void StartWashing()
+    {
+        if (!isWashing)
+        {
+            isWashing = true;
+            waterAudioSource.Play();
+        }
+    }
+
+    private void StopWashing()
+    {
+        if (isWashing)
+        {
+            isWashing = false;
+            waterAudioSource.Stop();
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         outline = gameObject.GetComponent<Outline>();
+        waterAudioSource = gameObject.GetComponents<AudioSource>()[0];
+        plateCleaningAudioSource = gameObject.GetComponents<AudioSource>()[1];
     }
 
     // Update is called once per frame

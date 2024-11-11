@@ -16,6 +16,8 @@ public class KitchenSink : BaseFurniture, IInteractable
     private AudioSource plateCleaningAudioSource;
     private bool isWashing = false;
 
+    [SerializeField] private ParticleSystem waterFlowEffect;
+
     public void Interact(Player player)
     {
         if (!HasUsableObject())
@@ -84,6 +86,11 @@ public class KitchenSink : BaseFurniture, IInteractable
         {
             isWashing = true;
             waterAudioSource.Play();
+
+            if (!waterFlowEffect.isPlaying)
+            {
+                waterFlowEffect.Play();
+            }
         }
     }
 
@@ -93,6 +100,11 @@ public class KitchenSink : BaseFurniture, IInteractable
         {
             isWashing = false;
             waterAudioSource.Stop();
+
+            if (waterFlowEffect.isPlaying)
+            {
+                waterFlowEffect.Stop();
+            }
         }
     }
 

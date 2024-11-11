@@ -10,6 +10,8 @@ public class KitchenStove : BaseFurniture, IInteractable
 
     private AudioSource cookingSound;
 
+    [SerializeField] private ParticleSystem flameEffect;
+
     public void Interact(Player player)
     {
         if (!HasUsableObject())
@@ -34,6 +36,12 @@ public class KitchenStove : BaseFurniture, IInteractable
                             if (!potUsableObject.IsEmpty() && !cookingSound.isPlaying)
                             {
                                 cookingSound.Play();
+
+                            }
+
+                            if (!flameEffect.isPlaying)
+                            {
+                                flameEffect.Play();
                             }
                         }
 
@@ -93,6 +101,11 @@ public class KitchenStove : BaseFurniture, IInteractable
                 if (cookingSound.isPlaying)
                 {
                     cookingSound.Stop();
+                }
+
+                if (flameEffect.isPlaying)
+                {
+                    flameEffect.Stop();
                 }
             }
         }

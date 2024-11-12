@@ -129,15 +129,9 @@ public class KitchenStove : BaseFurniture, IInteractable
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        outline = gameObject.GetComponent<Outline>();
+        outline = gameObject.GetComponentInChildren<Outline>();
         cookingSound = gameObject.GetComponent<AudioSource>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

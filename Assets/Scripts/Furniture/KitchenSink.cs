@@ -109,16 +109,10 @@ public class KitchenSink : BaseFurniture, IInteractable
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        outline = gameObject.GetComponent<Outline>();
+        outline = gameObject.GetComponentInChildren<Outline>();
         waterAudioSource = gameObject.GetComponents<AudioSource>()[0];
         plateCleaningAudioSource = gameObject.GetComponents<AudioSource>()[1];
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

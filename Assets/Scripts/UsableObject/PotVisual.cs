@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PotVisual : MonoBehaviour
+public class PotVisual : PotPanVisual
 {
     // Can't think of a better way to do this. Idea is to make
     // different assets in the visual active depending on
-    // state of currentIngredients in PotUsableObject
+    // state of currentIngredients in PotPanUsableObject
     [SerializeField] private GameObject tomatoSoup1;
     [SerializeField] private GameObject tomatoSoup2;
     [SerializeField] private GameObject tomatoSoup3;
     [SerializeField] private UsableObjectSO tomatoChoppedSO;
 
-    public void UpdateVisual(Dictionary<UsableObjectSO, int> currentIngredients)
+    public override void UpdateVisual(Dictionary<UsableObjectSO, int> currentIngredients)
     {
         SetAllInactive();
         if (currentIngredients.ContainsKey(tomatoChoppedSO))

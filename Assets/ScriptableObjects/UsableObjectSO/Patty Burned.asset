@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41cb19f9aba39ce4c9575fe38c794172, type: 3}
+  m_Name: Patty Burned
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1986092327989761702, guid: 483d33d65db003148b32ad2667750149, type: 3}
+  objectName: Patty Burned
+  description: 
+  price: 0
+  icon: {fileID: 0}

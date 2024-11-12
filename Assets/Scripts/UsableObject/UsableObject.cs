@@ -7,9 +7,9 @@ public class UsableObject : MonoBehaviour, IInteractable
     [SerializeField] private UsableObjectSO usableObjectSO;
 
     private IUsableObjectParent usableObjectParent;
-    private Outline outline;
-    private Rigidbody rb;
-    private Collider _collider;
+    protected Outline outline;
+    protected Rigidbody rb;
+    protected Collider _collider;
 
     public virtual void Interact(Player player)
     {
@@ -22,16 +22,16 @@ public class UsableObject : MonoBehaviour, IInteractable
         else
         {
             // Player is holding something
-            // If player is holding a pot, try to add the object into the pot.
-            if (player.GetUsableObject().TryGetPot(out PotUsableObject potUsableObject))
+            // If player is holding a pot/pan, try to add the object into the pot/pan.
+            if (player.GetUsableObject().TryGetPotPan(out PotPanUsableObject potPanUsableObject))
             {
-                if (potUsableObject.TryAddIngredient(usableObjectSO))
+                if (potPanUsableObject.TryAddIngredient(usableObjectSO))
                 {
                     DestroySelf();
                 }
             }
             // If player is holding a plate, try to add the object into the plate
-            // Don't handle the Pot interaction here, that's overriden in PotUsableObject
+            // Don't handle the pot/pan interaction here, that's overriden in PotPanUsableObject
             else if (player.GetUsableObject().TryGetPlate(out PlateUsableObject plateUsableObject))
             {
                 if (plateUsableObject.TryAddIngredient(usableObjectSO))
@@ -135,16 +135,16 @@ public class UsableObject : MonoBehaviour, IInteractable
         Destroy(gameObject);
     }
 
-    public bool TryGetPot(out PotUsableObject potUsableObject)
+    public bool TryGetPotPan(out PotPanUsableObject potPanUsableObject)
     {
-        if (this is PotUsableObject)
+        if (this is PotPanUsableObject)
         {
-            potUsableObject = this as PotUsableObject;
+            potPanUsableObject = this as PotPanUsableObject;
             return true;
         }
         else
         {
-            potUsableObject = null;
+            potPanUsableObject = null;
             return false;
         }
     }

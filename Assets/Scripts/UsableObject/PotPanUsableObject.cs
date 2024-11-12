@@ -208,4 +208,10 @@ public class PotPanUsableObject : UsableObject
             }
         }
     }
+
+    public bool IsEmpty()
+    {
+        return currentIngredients.Count == 0;
+    }
+
 }

@@ -10,6 +10,8 @@ public class CuttingBoard : BaseFurniture, IInteractable
     private Outline outline;
     private int cuttingProgress;
 
+    private AudioSource choppingAudioSource;
+
     public void Interact(Player player)
     {
         // TODO: Only certain items here
@@ -66,12 +68,20 @@ public class CuttingBoard : BaseFurniture, IInteractable
                 );
                 if (outputUsableObjectSO != null)
                 {
+                    int previousCuttingProgress = cuttingProgress;
+
                     cuttingProgress++;
                     CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(
                         currentUsableObject.GetUsableObjectSO()
                     );
                     int progressMax = cuttingRecipeSO.GetCuttingProgressMax();
                     UpdateProgressBar(progressMax);
+
+                    if (cuttingProgress > previousCuttingProgress)
+                    {
+                        choppingAudioSource.Play();
+                    }
+
                     if (cuttingProgress >= progressMax)
                     {
                         currentUsableObject.DestroySelf();
@@ -129,6 +139,7 @@ public class CuttingBoard : BaseFurniture, IInteractable
     void Start()
     {
         outline = gameObject.GetComponent<Outline>();
+        choppingAudioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame

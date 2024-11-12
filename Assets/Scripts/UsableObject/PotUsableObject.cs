@@ -190,4 +190,10 @@ public class PotUsableObject : UsableObject
             }
         }
     }
+
+    public bool IsEmpty()
+    {
+        return currentIngredients.Count == 0;
+    }
+
 }

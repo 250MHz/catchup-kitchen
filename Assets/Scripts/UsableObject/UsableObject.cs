@@ -31,7 +31,7 @@ public class UsableObject : MonoBehaviour, IInteractable
                 }
             }
             // If player is holding a plate, try to add the object into the plate
-            // Don't handle the Pot interaction here, that's overriden in PotPanUsableObject
+            // Don't handle the pot/pan interaction here, that's overriden in PotPanUsableObject
             else if (player.GetUsableObject().TryGetPlate(out PlateUsableObject plateUsableObject))
             {
                 if (plateUsableObject.TryAddIngredient(usableObjectSO))

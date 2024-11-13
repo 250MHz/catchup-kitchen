@@ -56,7 +56,7 @@ public class Wallet : MonoBehaviour
         {
             yield return new WaitForSeconds(roundInterval);
             TakeMoney(deductionAmount);
-            Debug.Log($"Deducted {deductionAmount}. Current money: {money}");
+            // Debug.Log($"Deducted {deductionAmount}. Current money: {money}");
         }
     }
 

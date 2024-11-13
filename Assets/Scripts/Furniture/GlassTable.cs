@@ -32,6 +32,8 @@ public class GlassTable : BaseFurniture, IInteractable
 
     private bool isEating = false;
 
+    private int check;
+
     private void Start()
     {
         outline = gameObject.GetComponent<Outline>();
@@ -74,6 +76,9 @@ public class GlassTable : BaseFurniture, IInteractable
                 TryServeOrder(player.GetUsableObject());
                 if (currentOrders.Count == 0)
                 {
+                    check = CalculateCheck();
+                    Debug.Log($"Order reward calculated: ${check}");
+
                     currentOrderState = OrderState.Complete;  // Order is complete
                     HideOrderUI();
                     StopServingCountdown();
@@ -87,6 +92,21 @@ public class GlassTable : BaseFurniture, IInteractable
                 break;
         }
     }
+
+    private int CalculateCheck()
+    {
+        int totalReward = 0;
+        foreach (UsableObject servedDish in remainingDishes)
+        {
+            UsableObjectSO dishSO = (servedDish as PlateUsableObject)?.GetCurrentFullPlateRecipeSO();
+            if (dishSO != null)
+            {
+                totalReward += Mathf.RoundToInt(dishSO.GetPrice());
+            }
+        }
+        return totalReward;
+    }
+
 
     private void HandleCompleteState(Player player)
     {
@@ -144,6 +164,13 @@ public class GlassTable : BaseFurniture, IInteractable
     private IEnumerator EatCoroutine()
     {
         isEating = true;
+
+        if (check > 0)
+        {
+            Wallet.Instance.AddMoney(check);
+            // Debug.Log($"Player received ${orderReward} for completed order.");
+            check = 0;
+        }
 
         remainingDishes.Clear();
 

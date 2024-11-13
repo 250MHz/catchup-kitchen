@@ -207,7 +207,8 @@ public class GlassTable : BaseFurniture, IInteractable
         {
             StopCoroutine(servingCountdownCoroutine);
         }
-        servingCountdownCoroutine = StartCoroutine(ServingCountdownCoroutine());
+        float totalPreparationTime = CalculateTotalPreparationTime();
+        servingCountdownCoroutine = StartCoroutine(ServingCountdownCoroutine(totalPreparationTime));
     }
 
     private void StopServingCountdown()
@@ -219,15 +220,15 @@ public class GlassTable : BaseFurniture, IInteractable
         }
     }
 
-    private IEnumerator ServingCountdownCoroutine()
+    private IEnumerator ServingCountdownCoroutine(float totalTime)
     {
-        float countdown = 30f; // Serving wait time
+        float countdown = totalTime; // Serving wait time, number of NPCs times 20 seconds
         servingProgressBar.gameObject.SetActive(true);
 
         while (countdown > 0)
         {
             countdown -= Time.deltaTime;
-            servingProgressBar.SetBarFillAmount(countdown / 30f); // Update progress bar
+            servingProgressBar.SetBarFillAmount(countdown / totalTime); // Update progress bar
             yield return null;
         }
 
@@ -253,6 +254,15 @@ public class GlassTable : BaseFurniture, IInteractable
         servingProgressBar.gameObject.SetActive(false);
         HideOrderUI();
     }
+
+    private float CalculateTotalPreparationTime()
+    {
+        // Each NPC takes 20 seconds for food preparation, can change to another value, 20 seconds are for testing purpose
+        float preparationTimePerNPC = 20f;
+        int npcCount = seatedNPCs.Count;
+        return npcCount * preparationTimePerNPC;
+    }
+
 
 
     private void ResetTable()

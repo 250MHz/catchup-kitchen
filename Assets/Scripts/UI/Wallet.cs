@@ -12,7 +12,7 @@ public class Wallet : MonoBehaviour
     [SerializeField] private TextMeshProUGUI floatingTextPrefab;
 
     [SerializeField] private int deductionAmount;
-    [SerializeField] private float roundInterval;
+    [SerializeField] public float roundInterval;
     private bool isGameOver = false;
 
     private void Awake()

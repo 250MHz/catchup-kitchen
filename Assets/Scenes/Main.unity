@@ -3801,7 +3801,9 @@ MonoBehaviour:
   maxGroups: 3
   groupSpacing: 5
   minGroupSize: 1
-  maxGroupSize: 4
+  maxGroupSizeRound1: 2
+  maxGroupSizeRound2: 3
+  maxGroupSizeRound3: 4
   leavingPoint: {fileID: 0}
 --- !u!4 &236838392
 Transform:
@@ -27444,7 +27446,7 @@ MonoBehaviour:
   moneyText: {fileID: 567160415}
   floatingTextPrefab: {fileID: 406969278}
   deductionAmount: 100000
-  roundInterval: 5
+  roundInterval: 20
 --- !u!1001 &1762957666
 PrefabInstance:
   m_ObjectHideFlags: 0

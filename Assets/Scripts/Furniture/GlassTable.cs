@@ -34,6 +34,10 @@ public class GlassTable : BaseFurniture, IInteractable
 
     private int check;
 
+    private float totalPreparationTime;
+    private float remainingServingTime;
+
+
     private void Start()
     {
         outline = gameObject.GetComponent<Outline>();
@@ -167,8 +171,15 @@ public class GlassTable : BaseFurniture, IInteractable
 
         if (check > 0)
         {
-            Wallet.Instance.AddMoney(check);
-            // Debug.Log($"Player received ${orderReward} for completed order.");
+            int tip = CalculateTip();
+
+            Wallet.Instance.AddMoney(check, tip);
+
+            if (tip > 0)
+            {
+                Debug.Log($"Player received an additional tip of ${tip}.");
+            }
+
             check = 0;
         }
 
@@ -234,7 +245,8 @@ public class GlassTable : BaseFurniture, IInteractable
         {
             StopCoroutine(servingCountdownCoroutine);
         }
-        float totalPreparationTime = CalculateTotalPreparationTime();
+        totalPreparationTime = CalculateTotalPreparationTime();
+        remainingServingTime = totalPreparationTime;
         servingCountdownCoroutine = StartCoroutine(ServingCountdownCoroutine(totalPreparationTime));
     }
 
@@ -255,6 +267,7 @@ public class GlassTable : BaseFurniture, IInteractable
         while (countdown > 0)
         {
             countdown -= Time.deltaTime;
+            remainingServingTime = countdown;
             servingProgressBar.SetBarFillAmount(countdown / totalTime); // Update progress bar
             yield return null;
         }
@@ -404,6 +417,13 @@ public class GlassTable : BaseFurniture, IInteractable
             {
                 if (order.GetObjectName() == playerHeldObjectSO.GetObjectName())
                 {
+
+                    int totalCheck = CalculateCheck();
+                    int tip = CalculateTip();
+
+                    totalCheck += tip;
+                    Debug.Log($"Total Reward with Tip: ${totalCheck}");
+
                     // Assign the plate to the chair of the last order
                     playerHeldObject.SetUsableObjectParent(chairs[currentOrders.Count - 1]);
 
@@ -428,6 +448,18 @@ public class GlassTable : BaseFurniture, IInteractable
                 }
             }
         }
+    }
+
+    private int CalculateTip()
+    {
+        // Tip is 10% if the player served with more than 60% time remaining
+        if (remainingServingTime > totalPreparationTime * 0.6f)
+        {
+            return Mathf.RoundToInt(CalculateCheck() * 0.1f); // 0.1f represents that 10% of the check will be given as an additional tip, can change the value here
+        }
+
+        // No tip if time is less than 50%
+        return 0;
     }
 
     public void EnableOutline() => outline.enabled = true;

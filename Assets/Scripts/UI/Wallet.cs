@@ -34,10 +34,18 @@ public class Wallet : MonoBehaviour
 
     public float Money => money;
 
-    public void AddMoney(int amount)
+    public void AddMoney(int checkAmount, int tipAmount)
     {
-        money += amount;
-        ShowFloatingText("+ $ " + amount, Color.green);
+        int totalAmount = checkAmount + tipAmount;
+        money += totalAmount;
+
+        string displayText = $"+ $ {checkAmount} (Check)";
+        if (tipAmount > 0)
+        {
+            displayText += $"\n+ $ {tipAmount} (Tip)";
+        }
+
+        ShowFloatingText(displayText, Color.green);
         UpdateMoneyText();
     }
 
@@ -93,7 +101,7 @@ public class Wallet : MonoBehaviour
 
     private IEnumerator FadeAndDestroyText(TextMeshProUGUI floatingText)
     {
-        float duration = 1f;
+        float duration = 2f;
         float elapsed = 0f;
         Color originalColor = floatingText.color;
 

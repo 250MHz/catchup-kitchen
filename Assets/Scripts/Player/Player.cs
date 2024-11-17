@@ -118,6 +118,11 @@ public class Player : MonoBehaviour, IUsableObjectParent
     // Update is called once per frame
     private void FixedUpdate()
     {
+        if (!RoundSystem.Instance.isGameActive)
+        {
+            playerRigidbody.velocity = Vector3.zero;
+            return;
+        }
         if (state == State.Playing)
         {
             HandleMovement();

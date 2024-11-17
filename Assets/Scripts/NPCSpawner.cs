@@ -4,6 +4,7 @@ using UnityEngine;
 public class NPCSpawner : MonoBehaviour
 {
     public NPCController npcPrefab;
+    public Transform leavingPoint;
     public int maxGroups = 3; // Maximum number of groups that can exist at a time
     public float groupSpacing = 5f; // Distance between groups
     public int minGroupSize = 1; // Minimum number of NPCs in a group
@@ -12,22 +13,12 @@ public class NPCSpawner : MonoBehaviour
     public int maxGroupSizeRound3 = 4;
 
     private List<GameObject> npcGroups = new List<GameObject>();
-
-    public Transform leavingPoint;
-
     private float roundInterval;
-    private float elapsedTime = 0f;
 
     private void Start()
     {
-        roundInterval = Wallet.Instance.roundInterval;
         // Start spawning NPC groups at regular intervals
         InvokeRepeating(nameof(SpawnNPCGroup), 0f, 5f);
-    }
-
-    private void Update()
-    {
-        elapsedTime += Time.deltaTime;
     }
 
     private void SpawnNPCGroup()
@@ -40,8 +31,7 @@ public class NPCSpawner : MonoBehaviour
             return;
         }
 
-        int currentRound = GetCurrentRound();
-        int maxGroupSize = GetMaxGroupSizeForRound(currentRound);
+        int maxGroupSize = GetMaxGroupSizeForRound();
 
         GameObject npcGroup = new GameObject("NPCGroup");
 
@@ -76,25 +66,18 @@ public class NPCSpawner : MonoBehaviour
         // Debug.Log("NPC group spawned successfully.");
     }
 
-    private int GetCurrentRound()
+    private int GetMaxGroupSizeForRound()
     {
-        int currentRound = Mathf.FloorToInt(elapsedTime / 20f) + 1; // 20 seconds is the round interval I set in Wallet.cs, and it needs to be the same in order for the rounds to calculate correctly
-        return currentRound;
-    }
-
-    private int GetMaxGroupSizeForRound(int round)
-    {
-        if (round == 1)
+        int round = RoundSystem.Instance.roundNumber;
+        // Use <= since RoundSystem.Instance.roundNumber might not be updated
+        // yet when game starts
+        if (round <= 1)
         {
             return maxGroupSizeRound1;
         }
         else if (round == 2)
         {
             return maxGroupSizeRound2;
-        }
-        else if (round == 3)
-        {
-            return maxGroupSizeRound3;
         }
         else
         {

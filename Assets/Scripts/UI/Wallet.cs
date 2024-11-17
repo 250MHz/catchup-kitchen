@@ -11,19 +11,10 @@ public class Wallet : MonoBehaviour
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI floatingTextPrefab;
 
-    [SerializeField] private int deductionAmount;
-    [SerializeField] public float roundInterval;
-    private bool isGameOver = false;
-
     private void Awake()
     {
         Instance = this;
         UpdateMoneyText();
-    }
-
-    private void Start()
-    {
-        StartCoroutine(RoundDeductionRoutine());
     }
 
     private void UpdateMoneyText()
@@ -39,63 +30,37 @@ public class Wallet : MonoBehaviour
         int totalAmount = checkAmount + tipAmount;
         money += totalAmount;
 
-        string displayText = $"+ $ {checkAmount} (Check)";
+        string displayText = $"+ ${checkAmount} (Check)";
         if (tipAmount > 0)
         {
-            displayText += $"\n+ $ {tipAmount} (Tip)";
+            displayText += $"\n+ ${tipAmount} (Tip)";
         }
 
         ShowFloatingText(displayText, Color.green);
         UpdateMoneyText();
     }
 
-    public void TakeMoney(int amount)
+    public void TakeMoney(int amount, string description = null)
     {
-
         money -= amount;
-        ShowFloatingText("- $ " + amount, Color.red);
+        string displayText = $"- ${amount}";
+        if (description != null)
+        {
+            displayText += $" ({description})";
+        }
+        ShowFloatingText(displayText, Color.red);
         UpdateMoneyText();
-        CheckGameOver();
-    }
-
-    private IEnumerator RoundDeductionRoutine()
-    {
-        while (!isGameOver)
-        {
-            yield return new WaitForSeconds(roundInterval);
-            TakeMoney(deductionAmount);
-            // Debug.Log($"Deducted {deductionAmount}. Current money: {money}");
-        }
-    }
-
-    private void CheckGameOver()
-    {
-        if (Money < 0 && !isGameOver)
-        {
-            isGameOver = true;
-            GameOver();
-        }
-    }
-
-    private void GameOver()
-    {
-        
-        Debug.Log("Game Over! You have run out of money.");
-        
-        Time.timeScale = 0f;
     }
 
     private void ShowFloatingText(string text, Color color)
     {
-        
+
         TextMeshProUGUI floatingText = Instantiate(floatingTextPrefab, moneyText.transform.parent);
         floatingText.text = text;
         floatingText.color = color;
 
-        
-        floatingText.transform.localPosition = moneyText.transform.localPosition + new Vector3(0, -60, 0);
+        floatingText.transform.localPosition = moneyText.transform.localPosition + new Vector3(0, -90, 0);
 
-        
         StartCoroutine(FadeAndDestroyText(floatingText));
     }
 
@@ -108,12 +73,10 @@ public class Wallet : MonoBehaviour
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            
             floatingText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1 - (elapsed / duration));
             yield return null;
         }
 
-        
         Destroy(floatingText.gameObject);
     }
 }

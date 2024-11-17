@@ -42,6 +42,14 @@ public class ItemSlotUI : MonoBehaviour
     public void SetNameAndPrice(UsableObjectSO usableObjectSO)
     {
         nameText.text = usableObjectSO.GetObjectName();
-        priceText.text = $"$ {usableObjectSO.GetPrice()}";
+        if (usableObjectSO.GetObjectName() == "Table")
+        {
+            int price = TableManager.Instance.GetNextTablePrice();
+            priceText.text = $"$ {price}";
+        }
+        else
+        {
+            priceText.text = $"$ {usableObjectSO.GetPrice()}";
+        }
     }
 }

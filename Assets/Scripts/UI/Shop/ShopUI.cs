@@ -74,7 +74,7 @@ public class ShopUI : MonoBehaviour
         return availableItems[selectedItem];
     }
 
-    private void UpdateItemList()
+    public void UpdateItemList()
     {
         // Clear all the existing items
         foreach (Transform child in itemList.transform)
@@ -85,6 +85,11 @@ public class ShopUI : MonoBehaviour
         slotUIList = new List<ItemSlotUI>();
         foreach (UsableObjectSO item in availableItems)
         {
+            if (item.GetObjectName() == "Table"
+                && !TableManager.Instance.HasInactiveTable())
+            {
+                continue;
+            }
             ItemSlotUI slotUIObj = Instantiate(itemSlotUI, itemList.transform);
             slotUIObj.SetNameAndPrice(item);
             slotUIList.Add(slotUIObj);

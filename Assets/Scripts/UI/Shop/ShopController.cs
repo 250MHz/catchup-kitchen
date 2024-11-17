@@ -77,7 +77,51 @@ public class ShopController : MonoBehaviour
 
         if (state == ShopState.Browsing)
         {
-            ShowCountSelector(shopUI.GetSelectedItem());
+            UsableObjectSO selectedItem = shopUI.GetSelectedItem();
+            if (selectedItem.GetObjectName() == "Table")
+            {
+                dialogManager.ShowDialogText(
+                    $"Unlocking this table will cost "
+                    + $"${TableManager.Instance.GetNextTablePrice()}. OK?",
+                    choices: new List<string>() { "Yes", "No" },
+                    onChoiceSelected: (choiceIndex) =>
+                    {
+                        if (choiceIndex == 0)
+                        {
+                            // Yes
+                            // This shop item may still show up even if all
+                            // tables are bought if multiple players have the
+                            // shop UI open
+                            if (TableManager.Instance.HasInactiveTable())
+                            {
+                                // Don't store totalPrice as a variable to let players
+                                // cheat the price (if two people open the menu and one
+                                // pays, the other still shows $30, but if they try to
+                                // buy it'll still cost $60.)
+                                Wallet.Instance.TakeMoney(TableManager.Instance.GetNextTablePrice());
+                                TableManager.Instance.ActivateNextTable();
+                            }
+                            shopUI.UpdateItemList();
+                            dialogManager.ShowDialogText("Here you are!\nThank you!");
+                            state = ShopState.Dialog;
+                        }
+                        else
+                        {
+                            dialogManager.CloseDialog();
+                            state = ShopState.Browsing;
+                        }
+                    },
+                    onChoiceCancel: (choiceIndex) =>
+                    {
+                        state = ShopState.Browsing;
+                    }
+                );
+                state = ShopState.ConfirmPurchase;
+            }
+            else
+            {
+                ShowCountSelector(selectedItem);
+            }
         }
         else if (state == ShopState.UsingCountSelector)
         {

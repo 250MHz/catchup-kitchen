@@ -15,5 +15,5 @@ MonoBehaviour:
   prefab: {fileID: 8448985704183310527, guid: 05978d38c75f61e4f8400bfd22e973ea, type: 3}
   objectName: Salad Plate
   description: 
-  price: 25
+  price: 8
   icon: {fileID: 21300000, guid: 84cdb3e10c33d664a98fe5d804e865f2, type: 3}

@@ -15,5 +15,5 @@ MonoBehaviour:
   prefab: {fileID: 8448985704183310527, guid: c01f30c9eb7aab343a6c5dd00b07b06e, type: 3}
   objectName: Tomato Soup Plate
   description: 
-  price: 15
+  price: 5
   icon: {fileID: 21300000, guid: 6007176375af4a8479b744e1a2a74cff, type: 3}

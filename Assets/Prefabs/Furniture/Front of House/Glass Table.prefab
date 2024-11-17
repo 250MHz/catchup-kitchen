@@ -142,8 +142,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 59771051f62368243a2ef5a9839cd233, type: 2}
   eatingSeconds: 5
   plateDirtySO: {fileID: 11400000, guid: 3632e02f165c8774fa53e2dc4e10e7bd, type: 2}
-  progressBar: {fileID: 0}
-  servingProgressBar: {fileID: 0}
+  progressBar: {fileID: 3598716003454139015}
+  servingProgressBar: {fileID: 5980315320938821746}
 --- !u!1001 &102683921839633850
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -439,6 +439,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f668ca4330760c44b457c51c1d334ee, type: 3}
+--- !u!114 &3598716003454139015 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1002612667549959429, guid: 7f668ca4330760c44b457c51c1d334ee,
+    type: 3}
+  m_PrefabInstance: {fileID: 4330435117978419074}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 407665f6e61ded94cb852189dcd67a7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6812896805093178666 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7103458950397428392, guid: 7f668ca4330760c44b457c51c1d334ee,
@@ -655,6 +667,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6852130015186599287}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5980315320938821746 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1002612667549959429, guid: 7f668ca4330760c44b457c51c1d334ee,
+    type: 3}
+  m_PrefabInstance: {fileID: 6852130015186599287}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 407665f6e61ded94cb852189dcd67a7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7077621497079579431
 PrefabInstance:
   m_ObjectHideFlags: 0

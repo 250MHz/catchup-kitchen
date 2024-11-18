@@ -30,6 +30,7 @@ public class DialogManager : MonoBehaviour
         bool invokeOnCloseDialog = true)
     {
         OnShowDialog?.Invoke(); // changes player state to Dialog
+        currentLine = 0;
         this.dialog = dialog;
         this.choices = choices;
         this.onChoiceSelected = onChoiceSelected;
@@ -51,6 +52,7 @@ public class DialogManager : MonoBehaviour
         {
             OnShowDialog?.Invoke(); // changes player state to Dialog
         }
+        currentLine = 0;
         dialog = new Dialog(new List<string> { text });
         this.choices = choices;
         this.onChoiceSelected = onChoiceSelected;

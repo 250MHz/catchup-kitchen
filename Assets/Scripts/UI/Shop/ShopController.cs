@@ -24,6 +24,8 @@ public class ShopController : MonoBehaviour
     [SerializeField] private float cameraMoveXOffset;
     [SerializeField] private UsableObjectSO tableSO;
     [SerializeField] private UsableObjectSO plateSO;
+    [SerializeField] private UsableObjectSO potSO;
+    [SerializeField] private UsableObjectSO panSO;
 
     private IngredientShop ingredientShop;
     private ShopState state;
@@ -138,6 +140,78 @@ public class ShopController : MonoBehaviour
                             {
                                 ingredientShop.HandleSingleItemPurchase(player, plateSO);
                                 Wallet.Instance.TakeMoney(platePrice);
+                            }
+                            shopUI.RemoveItemsIfPossible();
+                            dialogManager.ShowDialogText("Here you are!\nThank you!");
+                            state = ShopState.Dialog;
+                        }
+                        else
+                        {
+                            dialogManager.CloseDialog();
+                            state = ShopState.Browsing;
+                        }
+                    },
+                    onChoiceCancel: (choiceIndex) =>
+                    {
+                        state = ShopState.Browsing;
+                    }
+                );
+                state = ShopState.ConfirmPurchase;
+            }
+            else if (selectedItem == potSO)
+            {
+                int potPrice = potSO.GetPrice();
+                dialogManager.ShowDialogText(
+                    $"Pot, and you want one.\nThat will be ${potPrice}. OK?",
+                    choices: new List<string>() { "Yes", "No" },
+                    onChoiceSelected: (choiceIndex) =>
+                    {
+                        if (choiceIndex == 0)
+                        {
+                            // Yes
+                            // This shop item may still show up even if all
+                            // pots are bought if multiple players have the
+                            // shop UI open
+                            if (PotPanManager.Instance.TryIncreasePotCount())
+                            {
+                                ingredientShop.HandleSingleItemPurchase(player, potSO);
+                                Wallet.Instance.TakeMoney(potPrice);
+                            }
+                            shopUI.RemoveItemsIfPossible();
+                            dialogManager.ShowDialogText("Here you are!\nThank you!");
+                            state = ShopState.Dialog;
+                        }
+                        else
+                        {
+                            dialogManager.CloseDialog();
+                            state = ShopState.Browsing;
+                        }
+                    },
+                    onChoiceCancel: (choiceIndex) =>
+                    {
+                        state = ShopState.Browsing;
+                    }
+                );
+                state = ShopState.ConfirmPurchase;
+            }
+            else if (selectedItem == panSO)
+            {
+                int panPrice = panSO.GetPrice();
+                dialogManager.ShowDialogText(
+                    $"Pan, and you want one.\nThat will be ${panPrice}. OK?",
+                    choices: new List<string>() { "Yes", "No" },
+                    onChoiceSelected: (choiceIndex) =>
+                    {
+                        if (choiceIndex == 0)
+                        {
+                            // Yes
+                            // This shop item may still show up even if all
+                            // pans are bought if multiple players have the
+                            // shop UI open
+                            if (PotPanManager.Instance.TryIncreasePanCount())
+                            {
+                                ingredientShop.HandleSingleItemPurchase(player, panSO);
+                                Wallet.Instance.TakeMoney(panPrice);
                             }
                             shopUI.RemoveItemsIfPossible();
                             dialogManager.ShowDialogText("Here you are!\nThank you!");

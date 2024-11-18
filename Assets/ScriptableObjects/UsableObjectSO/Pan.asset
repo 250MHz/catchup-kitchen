@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 5698215784351052557, guid: e4a30f4140691b74ab3043d9a87aa302, type: 3}
   objectName: Pan
-  description: 
-  price: 0
-  icon: {fileID: 0}
+  description: A frying pan that can be used to cook patties. The restaurant may
+    have up to 2 pans.
+  price: 50
+  icon: {fileID: 21300000, guid: eb92af32ee842404088d6fbdd9a42134, type: 3}

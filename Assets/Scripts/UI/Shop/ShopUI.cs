@@ -20,6 +20,8 @@ public class ShopUI : MonoBehaviour
 
     [SerializeField] private UsableObjectSO tableSO;
     [SerializeField] private UsableObjectSO plateSO;
+    [SerializeField] private UsableObjectSO potSO;
+    [SerializeField] private UsableObjectSO panSO;
 
 
     private List<UsableObjectSO> availableItems;
@@ -27,7 +29,7 @@ public class ShopUI : MonoBehaviour
 
     private List<ItemSlotUI> slotUIList;
 
-    private const int itemsInViewport = 8;
+    private const int itemsInViewport = 6;
     private RectTransform itemListRectTransform;
 
     private void Awake()
@@ -80,11 +82,10 @@ public class ShopUI : MonoBehaviour
     public void RemoveItemsIfPossible() {
         List<UsableObjectSO> newAvailableItems = new List<UsableObjectSO>();
         foreach (UsableObjectSO item in availableItems) {
-            if (item == tableSO && !TableManager.Instance.HasInactiveTable())
-            {
-                continue;
-            }
-            if (item == plateSO && PlateManager.Instance.MaxPlateCountReached())
+            if ((item == tableSO && !TableManager.Instance.HasInactiveTable())
+                || (item == plateSO && PlateManager.Instance.MaxPlateCountReached())
+                || (item == potSO && PotPanManager.Instance.MaxPotCountReached())
+                || (item == panSO && PotPanManager.Instance.MaxPanCountReached()))
             {
                 continue;
             }

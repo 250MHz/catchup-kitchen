@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 9039224547573100239, guid: 78b6efce3aac97d4983d034b43c9b81d, type: 3}
   objectName: Plate
+  description: A plate is used to serve dishes. The restaurant can have up to 16
+    plates.
+  price: 15
+  icon: {fileID: 21300000, guid: 12d7327583a5ea041b44d6b4bd71161a, type: 3}

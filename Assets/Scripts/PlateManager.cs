@@ -10,7 +10,7 @@ public class PlateManager : MonoBehaviour
     [SerializeField] private KitchenCabinet[] cabinetsToSpawnPlatesOn;
     [SerializeField] private UsableObjectSO plateSO;
     [SerializeField] private int maxPlateCount = 16;
-    private int plateCount;
+    private int plateCount = 0;
 
     private void Awake()
     {

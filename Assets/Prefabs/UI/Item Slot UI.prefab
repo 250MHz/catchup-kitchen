@@ -274,6 +274,7 @@ MonoBehaviour:
   selectedBorder: {fileID: 6352217849823897582}
   nameText: {fileID: 75504323646481025}
   priceText: {fileID: 3991885419183062875}
+  tableSO: {fileID: 11400000, guid: c9e672c12dce2014492747c037407e86, type: 2}
 --- !u!1 &7585517362257630805
 GameObject:
   m_ObjectHideFlags: 0

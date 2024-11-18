@@ -32,6 +32,12 @@ public class GlassTable : BaseFurniture, IInteractable
 
     private bool isEating = false;
 
+    private int check;
+
+    private float totalPreparationTime;
+    private float remainingServingTime;
+
+
     private void Start()
     {
         outline = gameObject.GetComponent<Outline>();
@@ -74,6 +80,9 @@ public class GlassTable : BaseFurniture, IInteractable
                 TryServeOrder(player.GetUsableObject());
                 if (currentOrders.Count == 0)
                 {
+                    check = CalculateCheck();
+                    Debug.Log($"Order reward calculated: ${check}");
+
                     currentOrderState = OrderState.Complete;  // Order is complete
                     HideOrderUI();
                     StopServingCountdown();
@@ -87,6 +96,21 @@ public class GlassTable : BaseFurniture, IInteractable
                 break;
         }
     }
+
+    private int CalculateCheck()
+    {
+        int totalReward = 0;
+        foreach (UsableObject servedDish in remainingDishes)
+        {
+            UsableObjectSO dishSO = (servedDish as PlateUsableObject)?.GetCurrentFullPlateRecipeSO();
+            if (dishSO != null)
+            {
+                totalReward += Mathf.RoundToInt(dishSO.GetPrice());
+            }
+        }
+        return totalReward;
+    }
+
 
     private void HandleCompleteState(Player player)
     {
@@ -144,6 +168,20 @@ public class GlassTable : BaseFurniture, IInteractable
     private IEnumerator EatCoroutine()
     {
         isEating = true;
+
+        if (check > 0)
+        {
+            int tip = CalculateTip();
+
+            Wallet.Instance.AddMoney(check, tip);
+
+            if (tip > 0)
+            {
+                Debug.Log($"Player received an additional tip of ${tip}.");
+            }
+
+            check = 0;
+        }
 
         remainingDishes.Clear();
 
@@ -207,7 +245,9 @@ public class GlassTable : BaseFurniture, IInteractable
         {
             StopCoroutine(servingCountdownCoroutine);
         }
-        servingCountdownCoroutine = StartCoroutine(ServingCountdownCoroutine());
+        totalPreparationTime = CalculateTotalPreparationTime();
+        remainingServingTime = totalPreparationTime;
+        servingCountdownCoroutine = StartCoroutine(ServingCountdownCoroutine(totalPreparationTime));
     }
 
     private void StopServingCountdown()
@@ -219,15 +259,16 @@ public class GlassTable : BaseFurniture, IInteractable
         }
     }
 
-    private IEnumerator ServingCountdownCoroutine()
+    private IEnumerator ServingCountdownCoroutine(float totalTime)
     {
-        float countdown = 30f; // Serving wait time
+        float countdown = totalTime; // Serving wait time, number of NPCs times 20 seconds
         servingProgressBar.gameObject.SetActive(true);
 
         while (countdown > 0)
         {
             countdown -= Time.deltaTime;
-            servingProgressBar.SetBarFillAmount(countdown / 30f); // Update progress bar
+            remainingServingTime = countdown;
+            servingProgressBar.SetBarFillAmount(countdown / totalTime); // Update progress bar
             yield return null;
         }
 
@@ -253,6 +294,15 @@ public class GlassTable : BaseFurniture, IInteractable
         servingProgressBar.gameObject.SetActive(false);
         HideOrderUI();
     }
+
+    private float CalculateTotalPreparationTime()
+    {
+        // Each NPC takes 20 seconds for food preparation, can change to another value, 20 seconds are for testing purpose
+        float preparationTimePerNPC = 20f;
+        int npcCount = seatedNPCs.Count;
+        return npcCount * preparationTimePerNPC;
+    }
+
 
 
     private void ResetTable()
@@ -367,6 +417,13 @@ public class GlassTable : BaseFurniture, IInteractable
             {
                 if (order.GetObjectName() == playerHeldObjectSO.GetObjectName())
                 {
+
+                    int totalCheck = CalculateCheck();
+                    int tip = CalculateTip();
+
+                    totalCheck += tip;
+                    Debug.Log($"Total Reward with Tip: ${totalCheck}");
+
                     // Assign the plate to the chair of the last order
                     playerHeldObject.SetUsableObjectParent(chairs[currentOrders.Count - 1]);
 
@@ -391,6 +448,18 @@ public class GlassTable : BaseFurniture, IInteractable
                 }
             }
         }
+    }
+
+    private int CalculateTip()
+    {
+        // Tip is 10% if the player served with more than 60% time remaining
+        if (remainingServingTime > totalPreparationTime * 0.6f)
+        {
+            return Mathf.RoundToInt(CalculateCheck() * 0.1f); // 0.1f represents that 10% of the check will be given as an additional tip, can change the value here
+        }
+
+        // No tip if time is less than 50%
+        return 0;
     }
 
     public void EnableOutline() => outline.enabled = true;

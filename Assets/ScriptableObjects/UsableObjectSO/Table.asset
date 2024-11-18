@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41cb19f9aba39ce4c9575fe38c794172, type: 3}
+  m_Name: Table
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 0}
+  objectName: Table
+  description: Place another table in your restaurant. Comes with four chairs.
+  price: 30
+  icon: {fileID: 21300000, guid: 92f44336ae25ffc4a8201d8d0db5eeb6, type: 3}

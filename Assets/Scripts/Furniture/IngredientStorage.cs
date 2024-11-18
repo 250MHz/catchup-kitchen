@@ -10,9 +10,9 @@ public class IngredientStorage : BaseFurniture, IInteractable
     [SerializeField] private UsableObjectSO emptyBoxSO;
     [SerializeField] private Image ingredientImage;
     [SerializeField] private TextMeshProUGUI numberText;
+    [SerializeField] private int count = 0;
 
     private Outline outline;
-    private int count;
 
     public void Interact(Player player)
     {
@@ -57,7 +57,6 @@ public class IngredientStorage : BaseFurniture, IInteractable
             Debug.LogError("UsableObjectSO can't be null");
         }
         ingredientImage.sprite = usableObjectSO.GetIcon();
-        count = 0;
         UpdateVisual();
     }
 

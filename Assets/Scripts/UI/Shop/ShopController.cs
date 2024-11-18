@@ -22,6 +22,10 @@ public class ShopController : MonoBehaviour
     [SerializeField] private CountSelectorUI countSelectorUI;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private float cameraMoveXOffset;
+    [SerializeField] private UsableObjectSO tableSO;
+    [SerializeField] private UsableObjectSO plateSO;
+    [SerializeField] private UsableObjectSO potSO;
+    [SerializeField] private UsableObjectSO panSO;
 
     private IngredientShop ingredientShop;
     private ShopState state;
@@ -77,7 +81,159 @@ public class ShopController : MonoBehaviour
 
         if (state == ShopState.Browsing)
         {
-            ShowCountSelector(shopUI.GetSelectedItem());
+            UsableObjectSO selectedItem = shopUI.GetSelectedItem();
+            if (selectedItem == tableSO)
+            {
+                dialogManager.ShowDialogText(
+                    $"Unlocking this table will cost "
+                    + $"${TableManager.Instance.GetNextTablePrice()}. OK?",
+                    choices: new List<string>() { "Yes", "No" },
+                    onChoiceSelected: (choiceIndex) =>
+                    {
+                        if (choiceIndex == 0)
+                        {
+                            // Yes
+                            // This shop item may still show up even if all
+                            // tables are bought if multiple players have the
+                            // shop UI open
+                            if (TableManager.Instance.HasInactiveTable())
+                            {
+                                // Don't store totalPrice as a variable to let players
+                                // cheat the price (if two people open the menu and one
+                                // pays, the other still shows $30, but if they try to
+                                // buy it'll still cost $60.)
+                                Wallet.Instance.TakeMoney(TableManager.Instance.GetNextTablePrice());
+                                TableManager.Instance.ActivateNextTable();
+                            }
+                            shopUI.RemoveItemsIfPossible();
+                            dialogManager.ShowDialogText("Here you are!\nThank you!");
+                            state = ShopState.Dialog;
+                        }
+                        else
+                        {
+                            dialogManager.CloseDialog();
+                            state = ShopState.Browsing;
+                        }
+                    },
+                    onChoiceCancel: (choiceIndex) =>
+                    {
+                        state = ShopState.Browsing;
+                    }
+                );
+                state = ShopState.ConfirmPurchase;
+            }
+            else if (selectedItem == plateSO)
+            {
+                int platePrice = plateSO.GetPrice();
+                dialogManager.ShowDialogText(
+                    $"Plate, and you want one.\nThat will be ${platePrice}. OK?",
+                    choices: new List<string>() { "Yes", "No" },
+                    onChoiceSelected: (choiceIndex) =>
+                    {
+                        if (choiceIndex == 0)
+                        {
+                            // Yes
+                            // This shop item may still show up even if all
+                            // plates are bought if multiple players have the
+                            // shop UI open
+                            if (PlateManager.Instance.TryIncreasePlateCount())
+                            {
+                                ingredientShop.HandleSingleItemPurchase(player, plateSO);
+                                Wallet.Instance.TakeMoney(platePrice);
+                            }
+                            shopUI.RemoveItemsIfPossible();
+                            dialogManager.ShowDialogText("Here you are!\nThank you!");
+                            state = ShopState.Dialog;
+                        }
+                        else
+                        {
+                            dialogManager.CloseDialog();
+                            state = ShopState.Browsing;
+                        }
+                    },
+                    onChoiceCancel: (choiceIndex) =>
+                    {
+                        state = ShopState.Browsing;
+                    }
+                );
+                state = ShopState.ConfirmPurchase;
+            }
+            else if (selectedItem == potSO)
+            {
+                int potPrice = potSO.GetPrice();
+                dialogManager.ShowDialogText(
+                    $"Pot, and you want one.\nThat will be ${potPrice}. OK?",
+                    choices: new List<string>() { "Yes", "No" },
+                    onChoiceSelected: (choiceIndex) =>
+                    {
+                        if (choiceIndex == 0)
+                        {
+                            // Yes
+                            // This shop item may still show up even if all
+                            // pots are bought if multiple players have the
+                            // shop UI open
+                            if (PotPanManager.Instance.TryIncreasePotCount())
+                            {
+                                ingredientShop.HandleSingleItemPurchase(player, potSO);
+                                Wallet.Instance.TakeMoney(potPrice);
+                            }
+                            shopUI.RemoveItemsIfPossible();
+                            dialogManager.ShowDialogText("Here you are!\nThank you!");
+                            state = ShopState.Dialog;
+                        }
+                        else
+                        {
+                            dialogManager.CloseDialog();
+                            state = ShopState.Browsing;
+                        }
+                    },
+                    onChoiceCancel: (choiceIndex) =>
+                    {
+                        state = ShopState.Browsing;
+                    }
+                );
+                state = ShopState.ConfirmPurchase;
+            }
+            else if (selectedItem == panSO)
+            {
+                int panPrice = panSO.GetPrice();
+                dialogManager.ShowDialogText(
+                    $"Pan, and you want one.\nThat will be ${panPrice}. OK?",
+                    choices: new List<string>() { "Yes", "No" },
+                    onChoiceSelected: (choiceIndex) =>
+                    {
+                        if (choiceIndex == 0)
+                        {
+                            // Yes
+                            // This shop item may still show up even if all
+                            // pans are bought if multiple players have the
+                            // shop UI open
+                            if (PotPanManager.Instance.TryIncreasePanCount())
+                            {
+                                ingredientShop.HandleSingleItemPurchase(player, panSO);
+                                Wallet.Instance.TakeMoney(panPrice);
+                            }
+                            shopUI.RemoveItemsIfPossible();
+                            dialogManager.ShowDialogText("Here you are!\nThank you!");
+                            state = ShopState.Dialog;
+                        }
+                        else
+                        {
+                            dialogManager.CloseDialog();
+                            state = ShopState.Browsing;
+                        }
+                    },
+                    onChoiceCancel: (choiceIndex) =>
+                    {
+                        state = ShopState.Browsing;
+                    }
+                );
+                state = ShopState.ConfirmPurchase;
+            }
+            else
+            {
+                ShowCountSelector(selectedItem);
+            }
         }
         else if (state == ShopState.UsingCountSelector)
         {
@@ -93,7 +249,7 @@ public class ShopController : MonoBehaviour
                     if (choiceIndex == 0)
                     {
                         // Yes
-                        ingredientShop.HandlePurchase(
+                        ingredientShop.HandleIngredientBoxPurchase(
                             player,
                             shopUI.GetSelectedItem(),
                             countSelectorUI.GetCurrentCount()

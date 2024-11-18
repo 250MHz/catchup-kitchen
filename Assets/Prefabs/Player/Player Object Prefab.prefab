@@ -236,6 +236,10 @@ MonoBehaviour:
     type: 3}
   itemIcon: {fileID: 3383528813777183163}
   itemDescription: {fileID: 6930304500619837838}
+  tableSO: {fileID: 11400000, guid: c9e672c12dce2014492747c037407e86, type: 2}
+  plateSO: {fileID: 11400000, guid: fd344a9cd57d51545b1f09c7957cc859, type: 2}
+  potSO: {fileID: 11400000, guid: 6903d0d12cc9b234bb58f5d544a0deb1, type: 2}
+  panSO: {fileID: 11400000, guid: b3918d4d5fcde284ba54d22bc703daff, type: 2}
 --- !u!1 &396205686245377164
 GameObject:
   m_ObjectHideFlags: 0
@@ -1730,6 +1734,10 @@ MonoBehaviour:
   countSelectorUI: {fileID: 5668413440209577158}
   cameraController: {fileID: 6229585609416855749}
   cameraMoveXOffset: 2
+  tableSO: {fileID: 11400000, guid: c9e672c12dce2014492747c037407e86, type: 2}
+  plateSO: {fileID: 11400000, guid: fd344a9cd57d51545b1f09c7957cc859, type: 2}
+  potSO: {fileID: 11400000, guid: 6903d0d12cc9b234bb58f5d544a0deb1, type: 2}
+  panSO: {fileID: 11400000, guid: b3918d4d5fcde284ba54d22bc703daff, type: 2}
 --- !u!1 &6453983993503281711
 GameObject:
   m_ObjectHideFlags: 0

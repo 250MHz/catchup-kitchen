@@ -18,6 +18,9 @@ public class ShopUI : MonoBehaviour
     // [SerializeField] private Image upArrow;
     // [SerializeField] private Image downArrow;
 
+    [SerializeField] private UsableObjectSO tableSO;
+    [SerializeField] private UsableObjectSO plateSO;
+
 
     private List<UsableObjectSO> availableItems;
     private int selectedItem;
@@ -36,7 +39,7 @@ public class ShopUI : MonoBehaviour
     {
         this.availableItems = availableItems;
         gameObject.SetActive(true);
-        UpdateItemList();
+        RemoveItemsIfPossible();
     }
 
     public void OnMove(Vector2 moveAmount)
@@ -74,6 +77,23 @@ public class ShopUI : MonoBehaviour
         return availableItems[selectedItem];
     }
 
+    public void RemoveItemsIfPossible() {
+        List<UsableObjectSO> newAvailableItems = new List<UsableObjectSO>();
+        foreach (UsableObjectSO item in availableItems) {
+            if (item == tableSO && !TableManager.Instance.HasInactiveTable())
+            {
+                continue;
+            }
+            if (item == plateSO && PlateManager.Instance.MaxPlateCountReached())
+            {
+                continue;
+            }
+            newAvailableItems.Add(item);
+        }
+        availableItems = newAvailableItems;
+        UpdateItemList();
+    }
+
     public void UpdateItemList()
     {
         // Clear all the existing items
@@ -85,11 +105,6 @@ public class ShopUI : MonoBehaviour
         slotUIList = new List<ItemSlotUI>();
         foreach (UsableObjectSO item in availableItems)
         {
-            if (item.GetObjectName() == "Table"
-                && !TableManager.Instance.HasInactiveTable())
-            {
-                continue;
-            }
             ItemSlotUI slotUIObj = Instantiate(itemSlotUI, itemList.transform);
             slotUIObj.SetNameAndPrice(item);
             slotUIList.Add(slotUIObj);

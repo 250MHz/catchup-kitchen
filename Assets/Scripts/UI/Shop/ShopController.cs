@@ -22,6 +22,8 @@ public class ShopController : MonoBehaviour
     [SerializeField] private CountSelectorUI countSelectorUI;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private float cameraMoveXOffset;
+    [SerializeField] private UsableObjectSO tableSO;
+    [SerializeField] private UsableObjectSO plateSO;
 
     private IngredientShop ingredientShop;
     private ShopState state;
@@ -78,7 +80,7 @@ public class ShopController : MonoBehaviour
         if (state == ShopState.Browsing)
         {
             UsableObjectSO selectedItem = shopUI.GetSelectedItem();
-            if (selectedItem.GetObjectName() == "Table")
+            if (selectedItem == tableSO)
             {
                 dialogManager.ShowDialogText(
                     $"Unlocking this table will cost "
@@ -101,7 +103,43 @@ public class ShopController : MonoBehaviour
                                 Wallet.Instance.TakeMoney(TableManager.Instance.GetNextTablePrice());
                                 TableManager.Instance.ActivateNextTable();
                             }
-                            shopUI.UpdateItemList();
+                            shopUI.RemoveItemsIfPossible();
+                            dialogManager.ShowDialogText("Here you are!\nThank you!");
+                            state = ShopState.Dialog;
+                        }
+                        else
+                        {
+                            dialogManager.CloseDialog();
+                            state = ShopState.Browsing;
+                        }
+                    },
+                    onChoiceCancel: (choiceIndex) =>
+                    {
+                        state = ShopState.Browsing;
+                    }
+                );
+                state = ShopState.ConfirmPurchase;
+            }
+            else if (selectedItem == plateSO)
+            {
+                int platePrice = plateSO.GetPrice();
+                dialogManager.ShowDialogText(
+                    $"Plate, and you want one.\nThat will be ${platePrice}. OK?",
+                    choices: new List<string>() { "Yes", "No" },
+                    onChoiceSelected: (choiceIndex) =>
+                    {
+                        if (choiceIndex == 0)
+                        {
+                            // Yes
+                            // This shop item may still show up even if all
+                            // plates are bought if multiple players have the
+                            // shop UI open
+                            if (PlateManager.Instance.TryIncreasePlateCount())
+                            {
+                                ingredientShop.HandleSingleItemPurchase(player, plateSO);
+                                Wallet.Instance.TakeMoney(platePrice);
+                            }
+                            shopUI.RemoveItemsIfPossible();
                             dialogManager.ShowDialogText("Here you are!\nThank you!");
                             state = ShopState.Dialog;
                         }
@@ -137,7 +175,7 @@ public class ShopController : MonoBehaviour
                     if (choiceIndex == 0)
                     {
                         // Yes
-                        ingredientShop.HandlePurchase(
+                        ingredientShop.HandleIngredientBoxPurchase(
                             player,
                             shopUI.GetSelectedItem(),
                             countSelectorUI.GetCurrentCount()

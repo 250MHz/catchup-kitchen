@@ -96,6 +96,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9e5e89b076049a447865898c66d00443, type: 2}
   - {fileID: 11400000, guid: b15fc7659f6b0c440a39c77c87626516, type: 2}
   - {fileID: 11400000, guid: c9e672c12dce2014492747c037407e86, type: 2}
+  - {fileID: 11400000, guid: fd344a9cd57d51545b1f09c7957cc859, type: 2}
   dialog:
     lines: []
   usableObjectSO: {fileID: 11400000, guid: efbd5d515230a574a81bcd239c8db132, type: 2}

@@ -9,6 +9,7 @@ public class ItemSlotUI : MonoBehaviour
     [SerializeField] private Image selectedBorder;
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI priceText;
+    [SerializeField] private UsableObjectSO tableSO;
 
     private RectTransform rectTransform;
     private RectTransform borderRt;
@@ -42,7 +43,7 @@ public class ItemSlotUI : MonoBehaviour
     public void SetNameAndPrice(UsableObjectSO usableObjectSO)
     {
         nameText.text = usableObjectSO.GetObjectName();
-        if (usableObjectSO.GetObjectName() == "Table")
+        if (usableObjectSO == tableSO)
         {
             int price = TableManager.Instance.GetNextTablePrice();
             priceText.text = $"$ {price}";

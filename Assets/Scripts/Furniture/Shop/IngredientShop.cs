@@ -20,7 +20,23 @@ public class IngredientShop : BaseFurniture, IInteractable
         player.GetShopController().StartShopping(this);
     }
 
-    public void HandlePurchase(Player player, UsableObjectSO ingredient, int count)
+    public void HandleSingleItemPurchase(Player player, UsableObjectSO so)
+    {
+        clerk.HandOff();
+
+        UsableObject usableGameObject = Instantiate(so.GetPrefab()).GetComponent<UsableObject>();
+        if (!player.HasUsableObject())
+        {
+            usableGameObject.SetUsableObjectParent(player);
+        }
+        else
+        {
+            // Spawn next to shop if player is already holding something
+            usableGameObject.transform.position = itemSpawnPoint.position;
+        }
+    }
+
+    public void HandleIngredientBoxPurchase(Player player, UsableObjectSO ingredient, int count)
     {
         clerk.HandOff();
 

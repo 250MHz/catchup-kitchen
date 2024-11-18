@@ -6,11 +6,13 @@ using UnityEngine.InputSystem;
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private GameObject player1Prefab;
+    [SerializeField] private Vector3 player1SpawnVector;
     [SerializeField] private GameObject player2Prefab;
+    [SerializeField] private Vector3 player2SpawnVector;
     [SerializeField] private GameObject player3Prefab;
+    [SerializeField] private Vector3 player3SpawnVector;
 
-    // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
         var player1 = PlayerInput.Instantiate(
             player1Prefab, playerIndex: 0, controlScheme: "WASD",
@@ -24,15 +26,8 @@ public class PlayerManager : MonoBehaviour
             player3Prefab, playerIndex: 2, controlScheme: "Arrows",
             pairWithDevice: Keyboard.current
         );
-        player1.transform.parent.transform.position = new Vector3(0, 0, -3);
-        player2.transform.parent.transform.position = new Vector3(-3, 0, -1.5f);
-        player3.transform.parent.transform.position = new Vector3(-3, 0, -3);
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        player1.transform.parent.transform.position = player1SpawnVector;
+        player2.transform.parent.transform.position = player2SpawnVector;
+        player3.transform.parent.transform.position = player3SpawnVector;
     }
 }

@@ -10,6 +10,7 @@ public class Wallet : MonoBehaviour
     [SerializeField] private int money;
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI floatingTextPrefab;
+    [SerializeField] private bool isPractice;
 
     private void Awake()
     {
@@ -19,16 +20,26 @@ public class Wallet : MonoBehaviour
 
     private void UpdateMoneyText()
     {
-        // TODO: make this red if negative, green if positive / 0
-        moneyText.text = "Money\n$ " + money;
+        if (isPractice)
+        {
+            moneyText.text = "Money\n$ ∞";
+        }
+        else
+        {
+            // TODO: make this red if negative, green if positive / 0
+            moneyText.text = "Money\n$ " + money;
+        }
     }
 
     public float Money => money;
 
     public void AddMoney(int checkAmount, int tipAmount)
     {
-        int totalAmount = checkAmount + tipAmount;
-        money += totalAmount;
+        if (!isPractice)
+        {
+            int totalAmount = checkAmount + tipAmount;
+            money += totalAmount;
+        }
 
         string displayText = $"+ ${checkAmount} (Check)";
         if (tipAmount > 0)
@@ -42,7 +53,10 @@ public class Wallet : MonoBehaviour
 
     public void TakeMoney(int amount, string description = null)
     {
-        money -= amount;
+        if (!isPractice)
+        {
+            money -= amount;
+        }
         string displayText = $"- ${amount}";
         if (description != null)
         {

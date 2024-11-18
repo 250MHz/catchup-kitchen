@@ -10,6 +10,12 @@ public class GlassTable : BaseFurniture, IInteractable
     [SerializeField] private UsableObjectSO[] dishes;
     [SerializeField] private float eatingSeconds = 5f;
     [SerializeField] private UsableObjectSO plateDirtySO;
+    [Space(10)]
+    [SerializeField] private float baseOrderTime;
+    [SerializeField, Tooltip(
+        "For each extra customer at table, increase order time by this amount")
+    ] private float extraTimePerCustomer;
+
 
     [SerializeField] private ProgressBar progressBar;
     [SerializeField] private ProgressBar servingProgressBar;
@@ -272,8 +278,6 @@ public class GlassTable : BaseFurniture, IInteractable
             yield return null;
         }
 
-        
-
         // Make NPCs walk away
         foreach (NPCController npc in seatedNPCs)
         {
@@ -297,13 +301,8 @@ public class GlassTable : BaseFurniture, IInteractable
 
     private float CalculateTotalPreparationTime()
     {
-        // Each NPC takes 20 seconds for food preparation, can change to another value, 20 seconds are for testing purpose
-        float preparationTimePerNPC = 20f;
-        int npcCount = seatedNPCs.Count;
-        return npcCount * preparationTimePerNPC;
+        return baseOrderTime + (seatedNPCs.Count - 1) * extraTimePerCustomer;
     }
-
-
 
     private void ResetTable()
     {

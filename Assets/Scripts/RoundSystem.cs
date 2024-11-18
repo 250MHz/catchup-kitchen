@@ -17,6 +17,7 @@ public class RoundSystem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gameOverText;
     [SerializeField] private Button retryButton;
     [SerializeField] private Button returnMainMenuButton;
+    [SerializeField] private bool isPractice;
 
     [Header("Round system logic")]
     [SerializeField, Tooltip("Amount to be paid after round 3 ends")]
@@ -120,6 +121,10 @@ public class RoundSystem : MonoBehaviour
 
     private void CheckGameOver()
     {
+        if (isPractice)
+        {
+            return;
+        }
         if (Wallet.Instance.Money < 0)
         {
             gameOverText.gameObject.SetActive(true);

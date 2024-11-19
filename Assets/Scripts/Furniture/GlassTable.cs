@@ -43,11 +43,15 @@ public class GlassTable : BaseFurniture, IInteractable
     private float totalPreparationTime;
     private float remainingServingTime;
 
+    private AudioSource plateSound;
+
 
     private void Start()
     {
         outline = gameObject.GetComponent<Outline>();
         HideOrderUI();
+
+        plateSound = gameObject.GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -426,6 +430,8 @@ public class GlassTable : BaseFurniture, IInteractable
                     // Assign the plate to the chair of the last order
                     playerHeldObject.SetUsableObjectParent(chairs[currentOrders.Count - 1]);
 
+                    PlayPlateSound();
+
                     // Add the served dish to the remaining dishes list
                     remainingDishes.Add(playerHeldObject); // Add the plate being served to the remaining dishes list
                     currentOrders.Remove(order); // Remove the served order
@@ -446,6 +452,14 @@ public class GlassTable : BaseFurniture, IInteractable
                     return;
                 }
             }
+        }
+    }
+
+    private void PlayPlateSound()
+    {
+        if (plateSound != null && !plateSound.isPlaying)
+        {
+            plateSound.Play();
         }
     }
 

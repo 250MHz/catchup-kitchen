@@ -6,6 +6,8 @@ public class KitchenCabinet : BaseFurniture, IInteractable
 {
     private Outline outline;
 
+    private AudioSource plateSound;
+
     public void Interact(Player player)
     {
         if (!HasUsableObject())
@@ -13,6 +15,14 @@ public class KitchenCabinet : BaseFurniture, IInteractable
             // There is no UsableObject here
             if (player.HasUsableObject())
             {
+                UsableObject heldObject = player.GetUsableObject();
+
+
+                if (heldObject.TryGetPlate(out PlateUsableObject plateUsableObject))
+                {
+                    PlayPlateSound();
+                }
+
                 // Player is carrying something
                 player.GetUsableObject().SetUsableObjectParent(this);
             }
@@ -94,6 +104,14 @@ public class KitchenCabinet : BaseFurniture, IInteractable
         }
     }
 
+    private void PlayPlateSound()
+    {
+        if (plateSound != null && !plateSound.isPlaying)
+        {
+            plateSound.Play();
+        }
+    }
+
     public void EnableOutline()
     {
         outline.enabled = true;
@@ -108,6 +126,7 @@ public class KitchenCabinet : BaseFurniture, IInteractable
     private void Start()
     {
         outline = gameObject.GetComponent<Outline>();
+        plateSound = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame

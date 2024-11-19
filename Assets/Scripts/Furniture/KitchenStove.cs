@@ -8,6 +8,7 @@ public class KitchenStove : BaseFurniture, IInteractable
     private Outline outline;
 
     private AudioSource cookingSound;
+    private AudioSource sizzlingSound;
 
     [SerializeField] private ParticleSystem flameEffect;
 
@@ -35,7 +36,7 @@ public class KitchenStove : BaseFurniture, IInteractable
                             // pot/pan has a complete recipe
                             if (potPanUsableObject.TryFindCompleteRecipe())
                             {
-                                PlayEffects();
+                                PlayEffects(potPanUsableObject.GetPotPanUsableObjectSO());
                             }
                         }
 
@@ -63,7 +64,7 @@ public class KitchenStove : BaseFurniture, IInteractable
                         // be cooked.
                         if (potPanUsableObject.TryFindCompleteRecipe())
                         {
-                            PlayEffects();
+                            PlayEffects(potPanUsableObject.GetPotPanUsableObjectSO());
                         }
                     }
                     // If the player is holding on a plate, try to take the ingredient
@@ -94,12 +95,23 @@ public class KitchenStove : BaseFurniture, IInteractable
         }
     }
 
-    private void PlayEffects()
+    private void PlayEffects(UsableObjectSO potPanUsableObjectSO)
     {
-        if (!cookingSound.isPlaying)
+        if (potPanUsableObjectSO.GetObjectName() == "Pan")
         {
-            cookingSound.Play();
+            if (!sizzlingSound.isPlaying)
+            {
+                sizzlingSound.Play();
+            }
         }
+        else
+        {
+            if (!cookingSound.isPlaying)
+            {
+                cookingSound.Play();
+            }
+        }
+
         if (!flameEffect.isPlaying)
         {
             flameEffect.Play();
@@ -112,6 +124,11 @@ public class KitchenStove : BaseFurniture, IInteractable
         {
             cookingSound.Stop();
         }
+        if (sizzlingSound.isPlaying)
+        {
+            sizzlingSound.Stop();
+        }
+
         if (flameEffect.isPlaying)
         {
             flameEffect.Stop();
@@ -132,6 +149,8 @@ public class KitchenStove : BaseFurniture, IInteractable
     private void Start()
     {
         outline = gameObject.GetComponentInChildren<Outline>();
-        cookingSound = gameObject.GetComponent<AudioSource>();
+        AudioSource[] audioSources = gameObject.GetComponents<AudioSource>();
+        cookingSound = audioSources[0];
+        sizzlingSound = audioSources[1];
     }
 }

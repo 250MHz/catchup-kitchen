@@ -35,6 +35,8 @@ public class PotPanUsableObject : UsableObject
     private float cookingTimer;
     private float burningTimer;
 
+    private AudioSource beepingAudioSource;
+
 
     private void Start()
     {
@@ -47,6 +49,10 @@ public class PotPanUsableObject : UsableObject
         outline = gameObject.GetComponentInChildren<Outline>();
         rb = gameObject.GetComponent<Rigidbody>();
         _collider = gameObject.GetComponent<Collider>();
+
+        beepingAudioSource = GetComponent<AudioSource>();
+
+
     }
 
     private void Update()
@@ -78,11 +84,14 @@ public class PotPanUsableObject : UsableObject
                     }
                     break;
                 case State.Cooked:
+                    StartBeepingSound();
                     burningTimer += Time.deltaTime;
                     progressBar.SetDangerColor();
                     progressBar.SetBarFillAmount(burningTimer / currentFullRecipeSO.GetBurningTimerMax());
+
                     if (burningTimer > currentFullRecipeSO.GetBurningTimerMax())
                     {
+                        StopBeepingSound();
                         // Burned
                         IUsableObjectParent _parent = GetUsableObjectParent();
                         DestroySelf();
@@ -97,6 +106,26 @@ public class PotPanUsableObject : UsableObject
                 case State.Burned:
                     break;
             }
+        }
+        else
+        {
+            StopBeepingSound();
+        }
+    }
+
+    public void StartBeepingSound()
+    {
+        if (beepingAudioSource != null && !beepingAudioSource.isPlaying)
+        {
+            beepingAudioSource.Play();
+        }
+    }
+
+    public void StopBeepingSound()
+    {
+        if (beepingAudioSource != null && beepingAudioSource.isPlaying)
+        {
+            beepingAudioSource.Stop();
         }
     }
 

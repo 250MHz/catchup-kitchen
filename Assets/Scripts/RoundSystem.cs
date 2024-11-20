@@ -50,7 +50,7 @@ public class RoundSystem : MonoBehaviour
         // Wallet, so we need to subtract earlier
         rentPayment = initialRentPayment - stageOneRentIncrease;
         roundNumber = 0;
-        UpdateRentMessageText(initialRentPayment, 3);
+        UpdateRentMessageText(initialRentPayment, 6);
     }
 
     private void Update()
@@ -72,9 +72,9 @@ public class RoundSystem : MonoBehaviour
         if (roundNumber >= 0 && roundNumber <= 21)
         {
             roundTimer = stageOneDuration;
-            if (roundNumber >= 3 && roundNumber % 3 == 0)
+            if (roundNumber >= 6 && roundNumber % 3 == 0)
             {
-                // 3, 6, 9, 12, 15, 18, 21
+                // 6, 9, 12, 15, 18, 21
                 rentPayment += stageOneRentIncrease;
                 Wallet.Instance.TakeMoney(rentPayment, "Rent");
                 CheckGameOver();

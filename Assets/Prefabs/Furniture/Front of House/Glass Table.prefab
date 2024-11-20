@@ -143,8 +143,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 59771051f62368243a2ef5a9839cd233, type: 2}
   eatingSeconds: 5
   plateDirtySO: {fileID: 11400000, guid: 3632e02f165c8774fa53e2dc4e10e7bd, type: 2}
-  baseOrderTime: 60
-  extraTimePerCustomer: 15
+  baseOrderTime: 90
+  extraTimePerCustomer: 30
   progressBar: {fileID: 3598716003454139015}
   servingProgressBar: {fileID: 5980315320938821746}
 --- !u!82 &7797517417896217648

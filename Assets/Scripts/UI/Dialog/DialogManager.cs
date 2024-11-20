@@ -12,7 +12,7 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private GameObject dialogPanel;
     [SerializeField] private ChoicePanel choicePanel;
     [SerializeField] private TextMeshProUGUI dialogText;
-    [SerializeField] int lettersPerSecond;
+    [SerializeField] int wordsPerSecond;
 
     private Dialog dialog;
     private List<string> choices;
@@ -142,10 +142,10 @@ public class DialogManager : MonoBehaviour
     {
         isTyping = true;
         dialogText.text = "";
-        foreach (var letter in line.ToCharArray())
+        foreach (var letter in line.Split(' '))
         {
-            dialogText.text += letter;
-            yield return new WaitForSeconds(1.0f / lettersPerSecond);
+            dialogText.text += letter + ' ';
+            yield return new WaitForSecondsRealtime(1f / wordsPerSecond);
         }
         isTyping = false;
         // If this is the last line and there are choices to be made,

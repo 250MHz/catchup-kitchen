@@ -912,7 +912,7 @@ MonoBehaviour:
   dialogPanel: {fileID: 4166910741781845696}
   choicePanel: {fileID: 8621064209718616136}
   dialogText: {fileID: 2992100935355029329}
-  lettersPerSecond: 120
+  wordsPerSecond: 60
 --- !u!1 &3978706932727406335
 GameObject:
   m_ObjectHideFlags: 0

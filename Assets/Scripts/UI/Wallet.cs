@@ -7,7 +7,10 @@ public class Wallet : MonoBehaviour
 {
     public static Wallet Instance { get; private set; }
 
+    public int revenue { get; private set; }
+
     [SerializeField] private int money;
+    [SerializeField] private TextMeshProUGUI revenueText;
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI floatingTextPrefab;
     [SerializeField] private bool isPractice;
@@ -15,6 +18,7 @@ public class Wallet : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        revenue = 0;
         UpdateMoneyText();
     }
 
@@ -31,15 +35,21 @@ public class Wallet : MonoBehaviour
         }
     }
 
+    private void UpdateRevenueText()
+    {
+        revenueText.text = $"Revenue: ${revenue}";
+    }
+
     public float Money => money;
 
     public void AddMoney(int checkAmount, int tipAmount)
     {
+        int totalAmount = checkAmount + tipAmount;
         if (!isPractice)
         {
-            int totalAmount = checkAmount + tipAmount;
             money += totalAmount;
         }
+        revenue += totalAmount;
 
         string displayText = $"+ ${checkAmount} (Check)";
         if (tipAmount > 0)
@@ -49,6 +59,7 @@ public class Wallet : MonoBehaviour
 
         ShowFloatingText(displayText, Color.green);
         UpdateMoneyText();
+        UpdateRevenueText();
     }
 
     public void TakeMoney(int amount, string description = null)

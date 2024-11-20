@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 756124003030378810}
   - component: {fileID: 1568987471156498554}
   - component: {fileID: 7039801614028644640}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Computer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8026325358383171937}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d817ea9a5ea7e4b4e8727462660e4fed,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5287344302264114643, guid: d817ea9a5ea7e4b4e8727462660e4fed,
         type: 3}
@@ -249,7 +249,7 @@ PrefabInstance:
     - target: {fileID: 5528078466911944822, guid: d817ea9a5ea7e4b4e8727462660e4fed,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -348,7 +348,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: fa6efd5086bceb249923809a48ce5ce8,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -447,7 +447,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 4ea7ec5cb2717484fb2c0daa8d7d4421,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -546,7 +546,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b79754fa6de5a634fb86954df5d0732d,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

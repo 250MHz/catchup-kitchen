@@ -7,13 +7,13 @@ public class Wallet : MonoBehaviour
 {
     public static Wallet Instance { get; private set; }
 
+    public int revenue { get; private set; }
+
     [SerializeField] private int money;
     [SerializeField] private TextMeshProUGUI revenueText;
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI floatingTextPrefab;
     [SerializeField] private bool isPractice;
-
-    private int revenue;
 
     private void Awake()
     {

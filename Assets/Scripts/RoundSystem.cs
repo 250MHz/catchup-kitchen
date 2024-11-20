@@ -14,9 +14,7 @@ public class RoundSystem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI roundText;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI rentMessageText;
-    [SerializeField] private TextMeshProUGUI gameOverText;
-    [SerializeField] private Button retryButton;
-    [SerializeField] private Button returnMainMenuButton;
+    [SerializeField] private GameOverUI gameOverUI;
     [SerializeField] private bool isPractice;
 
     [Header("Round system logic")]
@@ -127,16 +125,9 @@ public class RoundSystem : MonoBehaviour
         }
         if (Wallet.Instance.Money < 0)
         {
-            gameOverText.gameObject.SetActive(true);
-            retryButton.gameObject.SetActive(true);
-            returnMainMenuButton.gameObject.SetActive(true);
+            gameOverUI.ShowGameOverUI(Wallet.Instance.revenue, roundNumber);
             isGameActive = false;
         }
-    }
-
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ReturnMainMenu()

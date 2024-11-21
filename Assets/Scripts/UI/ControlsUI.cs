@@ -23,11 +23,17 @@ public class ControlsUI : MonoBehaviour
         keyValuePairs = new Dictionary<string, string>
         {
             { "Up", "↑" },
+            { "Up Arrow", "↑" },
             { "Down", "↓" },
+            { "Down Arrow", "↓" },
             { "Left", "←"},
+            { "Left Arrow", "←"},
             { "Right", "→"},
+            { "Right Arrow", "→"},
             { "Num 1", "1"},
+            { "Numpad 1", "1"},
             { "Num 2", "2"},
+            { "Numpad 2", "2"},
         };
     }
 

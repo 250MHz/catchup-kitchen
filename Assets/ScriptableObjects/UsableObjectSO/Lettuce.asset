@@ -16,4 +16,4 @@ MonoBehaviour:
   objectName: Lettuce
   description: A sweet and tender cultivar. It may be used in salads and burgers.
   price: 4
-  icon: {fileID: 21300036, guid: 37607ec1aab56e349af84a980f685a4b, type: 3}
+  icon: {fileID: 21300000, guid: 652f59fff93b63d4c9610d031ba3f9dd, type: 3}

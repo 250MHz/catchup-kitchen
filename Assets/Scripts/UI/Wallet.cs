@@ -7,7 +7,10 @@ public class Wallet : MonoBehaviour
 {
     public static Wallet Instance { get; private set; }
 
+    public int revenue { get; private set; }
+
     [SerializeField] private int money;
+    [SerializeField] private TextMeshProUGUI revenueText;
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI floatingTextPrefab;
     [SerializeField] private bool isPractice;
@@ -15,6 +18,7 @@ public class Wallet : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        revenue = 0;
         UpdateMoneyText();
     }
 
@@ -22,33 +26,40 @@ public class Wallet : MonoBehaviour
     {
         if (isPractice)
         {
-            moneyText.text = "Money\n$ ∞";
+            moneyText.text = "Money: $ ∞";
         }
         else
         {
             // TODO: make this red if negative, green if positive / 0
-            moneyText.text = "Money\n$ " + money;
+            moneyText.text = "Money: $ " + money;
         }
+    }
+
+    private void UpdateRevenueText()
+    {
+        revenueText.text = $"Revenue: $ {revenue}";
     }
 
     public float Money => money;
 
     public void AddMoney(int checkAmount, int tipAmount)
     {
+        int totalAmount = checkAmount + tipAmount;
         if (!isPractice)
         {
-            int totalAmount = checkAmount + tipAmount;
             money += totalAmount;
         }
+        revenue += totalAmount;
 
-        string displayText = $"+ ${checkAmount} (Check)";
+        string displayText = $"+ $ {checkAmount} (Check)";
         if (tipAmount > 0)
         {
-            displayText += $"\n+ ${tipAmount} (Tip)";
+            displayText += $"\n+ $ {tipAmount} (Tip)";
         }
 
         ShowFloatingText(displayText, Color.green);
         UpdateMoneyText();
+        UpdateRevenueText();
     }
 
     public void TakeMoney(int amount, string description = null)
@@ -57,7 +68,7 @@ public class Wallet : MonoBehaviour
         {
             money -= amount;
         }
-        string displayText = $"- ${amount}";
+        string displayText = $"- $ {amount}";
         if (description != null)
         {
             displayText += $" ({description})";
@@ -73,7 +84,7 @@ public class Wallet : MonoBehaviour
         floatingText.text = text;
         floatingText.color = color;
 
-        floatingText.transform.localPosition = moneyText.transform.localPosition + new Vector3(0, -90, 0);
+        // floatingText.transform.localPosition = moneyText.transform.localPosition + new Vector3(0, -90, 0);
 
         StartCoroutine(FadeAndDestroyText(floatingText));
     }

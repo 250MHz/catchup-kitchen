@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public static class Util
 {
@@ -24,5 +25,33 @@ public static class Util
     {
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newWidth);
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newHeight);
+    }
+
+    // https://www.reddit.com/r/Unity3D/comments/18zdq3k/comment/l6ykshz/
+    public static string GetBindingDisplayStringOrCompositeName(string scheme, InputAction action)
+    {
+        int count = action.bindings.Count;
+        for (int i = 0; i < count; i++)
+        {
+            InputBinding binding = action.bindings[i];
+            bool isBindingMatchingScheme = InputBinding.MaskByGroup(scheme).Matches(binding);
+            if (isBindingMatchingScheme && !binding.isComposite && !binding.isPartOfComposite)
+            {
+                return action.GetBindingDisplayString(i);
+            }
+            bool isNextBindingWithinRange = i + 1 < count;
+            if (isNextBindingWithinRange && binding.isComposite)
+            {
+                InputBinding nextBinding = action.bindings[i + 1];
+                bool isNextBindingMatchingScheme = InputBinding.MaskByGroup(scheme).Matches(nextBinding);
+                if (isNextBindingMatchingScheme)
+                {
+                    // return binding.name;
+                    // alternatively use this for built-in composite string constructor:
+                    return action.GetBindingDisplayString(i);
+                }
+            }
+        }
+        return string.Empty;
     }
 }

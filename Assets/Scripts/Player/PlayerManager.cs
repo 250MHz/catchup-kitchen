@@ -14,18 +14,21 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
-        var player1 = PlayerInput.Instantiate(
+        Player player1 = PlayerInput.Instantiate(
             player1Prefab, playerIndex: 0, controlScheme: "WASD",
             pairWithDevice: Keyboard.current
-        );
-        var player2 = PlayerInput.Instantiate(
+        ).GetComponent<Player>();
+        player1.SetControlScheme("WASD");
+        Player player2 = PlayerInput.Instantiate(
             player2Prefab, playerIndex: 1, controlScheme: "IJKL",
             pairWithDevice: Keyboard.current
-        );
-        var player3 = PlayerInput.Instantiate(
+        ).GetComponent<Player>();
+        player2.SetControlScheme("IJKL");
+        Player player3 = PlayerInput.Instantiate(
             player3Prefab, playerIndex: 2, controlScheme: "Arrows",
             pairWithDevice: Keyboard.current
-        );
+        ).GetComponent<Player>();
+        player3.SetControlScheme("Arrows");
         player1.transform.parent.transform.position = player1SpawnVector;
         player2.transform.parent.transform.position = player2SpawnVector;
         player3.transform.parent.transform.position = player3SpawnVector;

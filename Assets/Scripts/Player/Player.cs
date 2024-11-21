@@ -30,13 +30,16 @@ public class Player : MonoBehaviour, IUsableObjectParent
     [SerializeField] private UsableObjectHoldPoint usableObjectHoldPoint;
     [SerializeField] private DialogManager dialogManager;
     [SerializeField] private ShopController shopController;
+    [SerializeField] private ControlsUI controlsUI;
 
+    private PlayerInput playerInput;
     private Rigidbody playerRigidbody;
     private CapsuleCollider playerCollider;
     private Vector2 moveAmount;
     private IInteractable selectedInteractable;
     private UsableObject usableObject;
     private State state;
+    private string controlScheme; // WASD, IJKL, or Arrows
 
     // Start is called before the first frame update
     private void Start()
@@ -44,6 +47,11 @@ public class Player : MonoBehaviour, IUsableObjectParent
         state = State.Playing;
         playerRigidbody = GetComponent<Rigidbody>();
         playerCollider = GetComponent<CapsuleCollider>();
+        playerInput = GetComponent<PlayerInput>();
+
+        controlsUI.gameObject.SetActive(true);
+        controlsUI.SetKeyText(controlScheme, playerInput);
+        controlsUI.ShowTemporarily();
 
         dialogManager.OnShowDialog += () => { state = State.Dialog; };
         // N.b. in the video https://youtu.be/2CmG7ZtrWso there are multiple
@@ -53,6 +61,11 @@ public class Player : MonoBehaviour, IUsableObjectParent
         dialogManager.OnCloseDialog += () => { state = State.Playing; };
         shopController.OnStart += () => { state = State.Shop; };
         shopController.OnFinish += () => { state = State.Playing; };
+    }
+
+    public void SetControlScheme(string scheme)
+    {
+        controlScheme = scheme;
     }
 
     public DialogManager GetDialogManager()

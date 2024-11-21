@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RoundSystem : MonoBehaviour
@@ -14,9 +13,8 @@ public class RoundSystem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI roundText;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI rentMessageText;
-    [SerializeField] private TextMeshProUGUI gameOverText;
-    [SerializeField] private Button retryButton;
-    [SerializeField] private Button returnMainMenuButton;
+    [SerializeField] private PauseUI pauseUI;
+    [SerializeField] private GameOverUI gameOverUI;
     [SerializeField] private bool isPractice;
 
     [Header("Round system logic")]
@@ -45,12 +43,13 @@ public class RoundSystem : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        pauseUI.gameObject.SetActive(false);
         isGameActive = true;
         // UpdateRound() increases rentPayment before it's taking money from
         // Wallet, so we need to subtract earlier
         rentPayment = initialRentPayment - stageOneRentIncrease;
         roundNumber = 0;
-        UpdateRentMessageText(initialRentPayment, 3);
+        UpdateRentMessageText(initialRentPayment, 6);
     }
 
     private void Update()
@@ -72,9 +71,9 @@ public class RoundSystem : MonoBehaviour
         if (roundNumber >= 0 && roundNumber <= 21)
         {
             roundTimer = stageOneDuration;
-            if (roundNumber >= 3 && roundNumber % 3 == 0)
+            if (roundNumber >= 6 && roundNumber % 3 == 0)
             {
-                // 3, 6, 9, 12, 15, 18, 21
+                // 6, 9, 12, 15, 18, 21
                 rentPayment += stageOneRentIncrease;
                 Wallet.Instance.TakeMoney(rentPayment, "Rent");
                 CheckGameOver();
@@ -127,21 +126,16 @@ public class RoundSystem : MonoBehaviour
         }
         if (Wallet.Instance.Money < 0)
         {
-            gameOverText.gameObject.SetActive(true);
-            retryButton.gameObject.SetActive(true);
-            returnMainMenuButton.gameObject.SetActive(true);
+            gameOverUI.gameObject.SetActive(true);
+            gameOverUI.ShowGameOverUI(Wallet.Instance.revenue, roundNumber);
             isGameActive = false;
         }
     }
 
-    public void RestartGame()
+    public void OpenPauseUI()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public void ReturnMainMenu()
-    {
-        SceneManager.LoadScene(0);
+        pauseUI.gameObject.SetActive(true);
+        pauseUI.Pause();
     }
 
     private void UpdateRentMessageText(int nextPayment, int nextRound)

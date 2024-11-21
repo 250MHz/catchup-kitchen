@@ -10,7 +10,7 @@ EditorBuildSettings:
     guid: eebff25abd2437d46959a5b966206f8b
   - enabled: 1
     path: Assets/Scenes/Main.unity
-    guid: 2987d73c2d2a2564cb3a9f2af1dc9f48
+    guid: 0e264c7285b7b0f44a5ef033bcb24175
   - enabled: 1
     path: Assets/Scenes/Practice.unity
     guid: 2798acae18fbed641a808d72d194651e

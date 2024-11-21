@@ -6,6 +6,7 @@ public class DogAnimator : MonoBehaviour
 {
     [SerializeField] private bool isEating;
     [SerializeField] private bool isSitting;
+    [SerializeField] private bool isIdle;
 
     private Animator animator;
 
@@ -20,8 +21,14 @@ public class DogAnimator : MonoBehaviour
         {
             animator.SetFloat("Speed_f", 0f);
             animator.SetBool("Eat_b", isEating);
-        } else if (isSitting) {
+        }
+        else if (isSitting)
+        {
             animator.SetBool("Sit_b", isSitting);
+        }
+        else if (isIdle)
+        {
+            animator.SetFloat("Speed_f", 0f);
         }
     }
 }

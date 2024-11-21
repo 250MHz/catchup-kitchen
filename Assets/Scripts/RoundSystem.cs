@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RoundSystem : MonoBehaviour
@@ -14,6 +13,7 @@ public class RoundSystem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI roundText;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI rentMessageText;
+    [SerializeField] private PauseUI pauseUI;
     [SerializeField] private GameOverUI gameOverUI;
     [SerializeField] private bool isPractice;
 
@@ -43,6 +43,7 @@ public class RoundSystem : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        pauseUI.gameObject.SetActive(false);
         isGameActive = true;
         // UpdateRound() increases rentPayment before it's taking money from
         // Wallet, so we need to subtract earlier
@@ -130,9 +131,10 @@ public class RoundSystem : MonoBehaviour
         }
     }
 
-    public void ReturnMainMenu()
+    public void OpenPauseUI()
     {
-        SceneManager.LoadScene(0);
+        pauseUI.gameObject.SetActive(true);
+        pauseUI.Pause();
     }
 
     private void UpdateRentMessageText(int nextPayment, int nextRound)

@@ -26,18 +26,18 @@ public class Wallet : MonoBehaviour
     {
         if (isPractice)
         {
-            moneyText.text = "Money\n$ ∞";
+            moneyText.text = "Money: $ ∞";
         }
         else
         {
             // TODO: make this red if negative, green if positive / 0
-            moneyText.text = "Money\n$ " + money;
+            moneyText.text = "Money: $ " + money;
         }
     }
 
     private void UpdateRevenueText()
     {
-        revenueText.text = $"Revenue: ${revenue}";
+        revenueText.text = $"Revenue: $ {revenue}";
     }
 
     public float Money => money;
@@ -51,10 +51,10 @@ public class Wallet : MonoBehaviour
         }
         revenue += totalAmount;
 
-        string displayText = $"+ ${checkAmount} (Check)";
+        string displayText = $"+ $ {checkAmount} (Check)";
         if (tipAmount > 0)
         {
-            displayText += $"\n+ ${tipAmount} (Tip)";
+            displayText += $"\n+ $ {tipAmount} (Tip)";
         }
 
         ShowFloatingText(displayText, Color.green);
@@ -68,7 +68,7 @@ public class Wallet : MonoBehaviour
         {
             money -= amount;
         }
-        string displayText = $"- ${amount}";
+        string displayText = $"- $ {amount}";
         if (description != null)
         {
             displayText += $" ({description})";
@@ -84,7 +84,7 @@ public class Wallet : MonoBehaviour
         floatingText.text = text;
         floatingText.color = color;
 
-        floatingText.transform.localPosition = moneyText.transform.localPosition + new Vector3(0, -90, 0);
+        // floatingText.transform.localPosition = moneyText.transform.localPosition + new Vector3(0, -90, 0);
 
         StartCoroutine(FadeAndDestroyText(floatingText));
     }

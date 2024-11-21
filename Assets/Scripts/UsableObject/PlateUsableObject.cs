@@ -97,10 +97,10 @@ public class PlateUsableObject : UsableObject
             // Try to place the held object onto the plate if possible
             if (TryAddIngredient(playerHeldObject.GetUsableObjectSO()))
             {
-                playerHeldObject.DestroySelf();
                 // If it's a pot/pan, replace the held object with an empty
                 // pot/pan
-                if (player.GetUsableObject().TryGetPotPan(out PotPanUsableObject potPanUsableObject))
+                playerHeldObject.DestroySelf();
+                if (playerHeldObject.TryGetPotPan(out PotPanUsableObject potPanUsableObject))
                 {
                     SpawnUsableObject(potPanUsableObject.GetPotPanUsableObjectSO(), player);
                 }

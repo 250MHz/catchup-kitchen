@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +15,8 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private Image itemIcon;
     [SerializeField] private TextMeshProUGUI itemDescription;
 
-    // TODO: our lists aren't large enough to need arrows yet
-    // [SerializeField] private Image upArrow;
-    // [SerializeField] private Image downArrow;
+    [SerializeField] private Image upArrow;
+    [SerializeField] private Image downArrow;
 
     [SerializeField] private UsableObjectSO tableSO;
     [SerializeField] private UsableObjectSO plateSO;
@@ -79,9 +79,11 @@ public class ShopUI : MonoBehaviour
         return availableItems[selectedItem];
     }
 
-    public void RemoveItemsIfPossible() {
+    public void RemoveItemsIfPossible()
+    {
         List<UsableObjectSO> newAvailableItems = new List<UsableObjectSO>();
-        foreach (UsableObjectSO item in availableItems) {
+        foreach (UsableObjectSO item in availableItems)
+        {
             if ((item == tableSO && !TableManager.Instance.HasInactiveTable())
                 || (item == plateSO && PlateManager.Instance.MaxPlateCountReached())
                 || (item == potSO && PotPanManager.Instance.MaxPotCountReached())
@@ -136,7 +138,12 @@ public class ShopUI : MonoBehaviour
     {
         // TODO: this doesn't seem like a great solution when the UI list
         // is dynamically sized
-        if (slotUIList.Count <= itemsInViewport) return;
+        if (slotUIList.Count <= itemsInViewport)
+        {
+            upArrow.gameObject.SetActive(false);
+            downArrow.gameObject.SetActive(false);
+            return;
+        }
 
         float scrollPos = Mathf.Clamp(
                 selectedItem - itemsInViewport / 2, 0, selectedItem
@@ -146,10 +153,10 @@ public class ShopUI : MonoBehaviour
             scrollPos
         );
 
-        // TODO: check if this works when we add arrows
-        // bool showUpArrow = selectedItem > itemsInViewport / 2;
-        // upArrow.gameObject.SetActive(showUpArrow);
-        // bool showDownArrow = selectedItem * itemsInViewport / 2 < slotUIList.Count;
-        // downArrow.gameObject.SetActive(showDownArrow);
+        bool showUpArrow = selectedItem > itemsInViewport / 2;
+        Debug.Log(availableItems.Count);
+        upArrow.gameObject.SetActive(showUpArrow);
+        bool showDownArrow = selectedItem * itemsInViewport / 2 < slotUIList.Count;
+        downArrow.gameObject.SetActive(showDownArrow);
     }
 }

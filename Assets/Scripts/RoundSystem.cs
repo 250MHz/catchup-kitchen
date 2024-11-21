@@ -126,6 +126,7 @@ public class RoundSystem : MonoBehaviour
         }
         if (Wallet.Instance.Money < 0)
         {
+            gameOverUI.gameObject.SetActive(true);
             gameOverUI.ShowGameOverUI(Wallet.Instance.revenue, roundNumber);
             isGameActive = false;
         }

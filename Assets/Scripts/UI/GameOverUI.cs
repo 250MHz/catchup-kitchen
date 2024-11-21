@@ -9,7 +9,7 @@ public class GameOverUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI revenueText;
     [SerializeField] private TextMeshProUGUI roundText;
 
-    private void Start()
+    private void Awake()
     {
         gameObject.SetActive(false);
     }
